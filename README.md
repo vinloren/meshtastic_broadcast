@@ -10,4 +10,6 @@ La seconda checkbox presente serve a eventualmente registrare tutti i messaggi i
 
 ### Note
 Il programma è stato provato con meshtastic Python API 1.1.46 e node firmware 1.1.42. Nel log python ogn tanto appare la scritta WARNING:root:Ignoring old position/user message. Recommend you update firmware to 1.1.20 or later cosa bizzarra perchè il firmware sul node è 1.1.42 e il livello API python è 1.1.46.
-In corrispondenza di questo avviso manca poi nel pacchetto ricevuto il campo 'data' e quindi 'portnum' che descive il tipo di messaggi che invece qui è assente. Su questo vedrò di investigare con meshtastic.discounse.group quanto prima
+In corrispondenza di questo avviso manca poi nel pacchetto ricevuto il campo 'data' e quindi 'portnum' che descive il tipo di messaggi che invece qui è assente. Su questo vedrò di investigare con meshtastic.discounse.group quanto prima.
+
+Il 14 Feb aperto problema at meshtastic.discourse.group e geeksville ha recepito la questione richiedendo una fix per Android App che pare essere lei a inviare i dati GPS in vecchio stile che non viene ticonosciuto da python API che genera poi il warning. Vedi https://github.com/meshtastic/Meshtastic-Android/issues/247
