@@ -1,7 +1,9 @@
-import sys,math
+import sys,math,io
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTabWidget, \
             QTableWidgetItem,QVBoxLayout,QHBoxLayout,QLineEdit,QTextEdit,QLabel,QCheckBox          
 from PyQt5.QtGui import QIcon
+import folium
+from PyQt5 import QtWidgets, QtWebEngineWidgets
 
 import meshtastic
 from pubsub import pub
@@ -51,6 +53,7 @@ class App(QWidget):
         self.tabs = QTabWidget()
         self.tab1 = QWidget()
         self.tab2 = QWidget()
+        self.tab3 = QWidget()
         self.inText = QLineEdit()
         self.inText.setMaximumWidth(250)
         self.inText.setText("cq de I1LOZ")
@@ -68,7 +71,33 @@ class App(QWidget):
         # Add tabs
         self.tabs.addTab(self.tab1,"Messaggi")
         self.tabs.addTab(self.tab2,"Connessi")
+        self.tabs.addTab(self.tab3,"GeoMap")
+
+        self.map = folium.Map(
+            location=[45.641174,9.114828], tiles="OpenStreetMap", zoom_start=13
+        )
+        folium.Marker([45.641174,9.114828],
+          #Make color/style changes here
+          icon = folium.Icon(color='blue'),
+          popup = 'Home node',
+          ).add_to(self.map)
+
+        folium.Marker([45.644174,9.115828],
+          #Make color/style changes here
+          icon = folium.Icon(color='red'),
+          popup = 'Second node',
+          ).add_to(self.map)
         
+        data = io.BytesIO()
+        self.map.save(data, close_file=False)
+
+        self.map = QtWebEngineWidgets.QWebEngineView()
+        self.map.setHtml(data.getvalue().decode())
+
+        self.tab3.layout = QVBoxLayout()
+        self.tab3.layout.addWidget(self.map)
+        self.tab3.setLayout(self.tab3.layout)
+
         self.table = QTableWidget()
         self.table.setColumnCount(len(self.labels))
         self.table.setHorizontalHeaderLabels(self.labels)
@@ -427,4 +456,5 @@ if __name__ == '__main__':
     pub.subscribe(onReceive, "meshtastic.receive")
     pub.subscribe(onConnection, "meshtastic.connection.established")
     interface = meshtastic.SerialInterface()
+    ex.map.show()
     sys.exit(app.exec_())  
