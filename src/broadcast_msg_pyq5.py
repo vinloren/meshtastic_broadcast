@@ -1,5 +1,5 @@
-import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget, \
+import sys,math
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTabWidget, \
             QTableWidgetItem,QVBoxLayout,QHBoxLayout,QLineEdit,QTextEdit,QLabel,QCheckBox          
 from PyQt5.QtGui import QIcon
 
@@ -12,6 +12,8 @@ import datetime
 
 
 count = 0
+userc = 0
+nodeInfo = []
 
 class App(QWidget):
     
@@ -22,9 +24,33 @@ class App(QWidget):
         
     def initUI(self):
         self.labels = ['data ora','origine','destinazione','tipo messaggio','payload','utente', \
-            'da_id','a_id','altitudine','latitudine','longitudine','rxSnr']
+            'da_id','a_id','altitudine','latitudine','longitudine','rxSnr','distanza','rilevamento']
+        self.labels1 = ['data ora','user','altitudine','latitudine','longitudine','batteria%', \
+            'rxsnr','distanza','rilevamento']
         self.csvFile = open('meshtastic_data.csv','wt')
+        mylatlbl = QLabel("Home lat:")
+        mylonlbl = QLabel("Home lon:")
+        voidlbl = QLabel("")
+        voidlbl.setMinimumWidth(880)
+        self.mylat = QLineEdit()
+        self.mylon = QLineEdit()
+        mylatlbl.setMaximumWidth(80)
+        mylonlbl.setMaximumWidth(80)
+        self.mylat.setMaximumWidth(80)
+        self.mylon.setMaximumWidth(80)
+        self.mylat.setText('45.641174')
+        self.mylon.setText('9.114828')
+        hhome = QHBoxLayout()
+        hhome.addWidget(mylatlbl)
+        hhome.addWidget(self.mylat)
+        hhome.addWidget(mylonlbl)
+        hhome.addWidget(self.mylon)
+        hhome.addWidget(voidlbl)
+        self.layout = QVBoxLayout(self)
         self.setWindowTitle(self.title)
+        self.tabs = QTabWidget()
+        self.tab1 = QWidget()
+        self.tab2 = QWidget()
         self.inText = QLineEdit()
         self.inText.setMaximumWidth(250)
         self.inText.setText("cq de I1LOZ")
@@ -39,20 +65,36 @@ class App(QWidget):
         hbox.addWidget(self.inText) 
         hbox.addWidget(self.rbtn1)
         hbox.addWidget(self.rbtn2)
-        vbox = QVBoxLayout()
+        # Add tabs
+        self.tabs.addTab(self.tab1,"Messaggi")
+        self.tabs.addTab(self.tab2,"Connessi")
+        
         self.table = QTableWidget()
-        self.table.setColumnCount(12)
+        self.table.setColumnCount(len(self.labels))
         self.table.setHorizontalHeaderLabels(self.labels)
+        self.tab1.layout = QVBoxLayout()
+        self.tab1.layout.addWidget(self.table)
+        self.tab1.setLayout(self.tab1.layout)
+
+        self.table1 = QTableWidget()
+        self.table1.setColumnCount(len(self.labels1))
+        self.table1.setHorizontalHeaderLabels(self.labels1)
+        self.table1.setMaximumWidth(1200)
+        self.tab2.layout = QVBoxLayout()
+        self.tab2.layout.addWidget(self.table1)
+        self.tab2.setLayout(self.tab2.layout)
+
         label = QLabel("Log dati ricevuti")
         self.log = QTextEdit()
         self.log.setMaximumHeight(180)
-        vbox.addWidget(self.table)
-        vbox.addWidget(label)
-        vbox.addWidget(self.log)
-        vbox.addLayout(hbox)
-        self.setLayout(vbox)
-        self.setGeometry(100, 100, 1200, 700)
         self.rbtn2.clicked.connect(self.handleFile)
+        self.layout.addLayout(hhome)
+        self.layout.addWidget(self.tabs)
+        self.layout.addWidget(label)
+        self.layout.addWidget(self.log)
+        self.layout.addLayout(hbox)
+
+        self.setGeometry(100, 100, 1200,700)
         self.show()
 
     def handleFile(self):
@@ -97,15 +139,104 @@ class RepeatedTimer(object): # Timer helper class
 
 
 
+#riempi table1 con valori in nodeInfo
+def showInfo():
+    r = 0
+    ex.table1.setRowCount(r)
+    for info in nodeInfo:
+        ex.table1.setRowCount(r+1)
+        item0 = QTableWidgetItem()
+        item0.setText(info['time'])
+        ex.table1.setItem(r,0,item0)
+        item1 = QTableWidgetItem()
+        item1.setText(info['user'])
+        ex.table1.setItem(r,1,item1)
+        item2 = QTableWidgetItem()
+        if('alt' in info):
+            item2.setText(str(info['alt']))
+            ex.table1.setItem(r,2,item2)
+            item3 = QTableWidgetItem()
+            item3.setText(str(info['lat'])[0:8])
+            ex.table1.setItem(r,3,item3)
+            item4 = QTableWidgetItem()
+            item4.setText(str(info['lon'])[0:8])
+            ex.table1.setItem(r,4,item4)
+        if('batt' in info):
+            item5 = QTableWidgetItem()
+            item5.setText(str(info['batt']))
+            ex.table1.setItem(r,5,item5)
+        if('snr' in info):
+            item6 = QTableWidgetItem()
+            item6.setText(str(info['snr']))
+            ex.table1.setItem(r,6,item6)
+        if('distance' in info):
+            item7 = QTableWidgetItem()
+            item7.setText(str(round(info['distance'])))
+            ex.table1.setItem(r,7,item7)
+        if('rilevamento' in info):
+            item8 = QTableWidgetItem()
+            item8.setText(str(round(info['rilevamento']*10)/10))
+            ex.table1.setItem(r,8,item8)
+        r += 1
+
+
+#inserisci nuovo user in dictionary
+def insertUser(user,id):
+    n = len(nodeInfo)
+    i = 0
+    while(i<n):
+        if (id == nodeInfo[i]['id']):
+            break
+        else:
+            i += 1
+    if(i==n):   #id non esiste, aggiungi nuovo user e id
+        print(i)
+        newuser = {}
+        newuser['user']=user
+        newuser['id'] = id
+        newuser['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")
+        nodeInfo.append(newuser)
+        print(nodeInfo)
+
+def updateUser(id,coord,altitude,distance,rilev):
+    #trova id in nodeInfo
+    i = 0
+    for info in nodeInfo:
+        if(info['id'] == id):
+            lat, lon = coord
+            nodeInfo[i].update({'lat': lat})
+            nodeInfo[i].update({'lon': lon})
+            nodeInfo[i].update({'alt': altitude})
+            nodeInfo[i].update({'distance': distance})
+            nodeInfo[i].update({'rilevamento': rilev})
+            nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+            break
+        i += 1
+    print(nodeInfo)
+
+def updateSnr(id,snr):
+    #trova id in nodeInfo
+    i = 0
+    for info in nodeInfo:
+        if(info['id'] == id):
+            nodeInfo[i].update({'snr': snr})
+            nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+            break
+        i += 1
+    print(nodeInfo)
+
+
 def onReceive(packet, interface): # called when a packet arrives
     print(f"Received: {packet}")
-    row = [';',';',';',';',';',';',';',';',';',';',';',' \n']
+    row = [';',';',';',';', \
+           ';',';',';',';', \
+           ';',';',';',';',';',' \n']
     dataora = datetime.datetime.now().strftime("%d/%m/%y %T")
     row[0] = dataora+';'
     ex.log.append(dataora+" "+f"{packet}")
     item = QTableWidgetItem()
     item.setText(dataora)
-    global count
+    global count,userc
     r = count
     ex.table.setRowCount(count+1)
     ex.table.setItem(r,0,item)
@@ -141,9 +272,14 @@ def onReceive(packet, interface): # called when a packet arrives
         ex.table.setItem(r,4,item4)
         if (packet['decoded']['data']['portnum'] == 'NODEINFO_APP'):
             item5 = QTableWidgetItem()
+            item01 = QTableWidgetItem()
             item5.setText(packet['decoded']['data']['user']['longName'])
             row[5] = packet['decoded']['data']['user']['longName']+';'
             ex.table.setItem(r,5,item5)
+            item01.setText(dataora)
+            ex.table1.setItem(userc,0,item01)
+            insertUser(packet['decoded']['data']['user']['longName'],packet['fromId'])
+            showInfo()
         if (packet['decoded']['data']['portnum'] == 'POSITION_APP'):
             if('altitude' in packet['decoded']['data']['position']):
                 item8 = QTableWidgetItem()
@@ -158,11 +294,34 @@ def onReceive(packet, interface): # called when a packet arrives
                 item10.setText(str(packet['decoded']['data']['position']['longitude'])[0:8])
                 row[10] = str(packet['decoded']['data']['position']['longitude'])[0:8]+';'
                 ex.table.setItem(r,10,item10)
+                #calcola e inserisci distanza
+                coord1 = [float(ex.mylat.text()),float(ex.mylon.text())]
+                coord2 = [packet['decoded']['data']['position']['latitude'],packet['decoded']['data']['position']['longitude']]
+                distance = haversine(coord1,coord2)
+                row[12] = str(round(distance))+';'
+                print(distance)
+                #calcola e inserisci rilevamento
+                rilev = calcBearing(coord1,coord2)
+                item12 = QTableWidgetItem()
+                item12.setText(str(int(distance)))
+                item13 = QTableWidgetItem()
+                item13.setText(str(round(rilev*10)/10))
+                ex.table.setItem(r,12,item12)
+                ex.table.setItem(r,13,item13)
+                row[13] = str(round(rilev*10)/10)+'\n'
+                print(rilev)
+                # aggiorna nodeInfo
+                updateUser(packet['fromId'],coord2,packet['decoded']['data']['position']['altitude'],distance,rilev)
+                showInfo()
+
             if('rxSnr' in packet):
                 item11 = QTableWidgetItem()
                 item11.setText(str(packet['rxSnr']))
-                row[11] = str(packet['rxSnr'])+'\n'
+                row[11] = str(packet['rxSnr'])+';'
                 ex.table.setItem(r,11,item11)
+                updateSnr(packet['fromId'],str(packet['rxSnr']))
+                showInfo()
+            
     else:
         item6 = QTableWidgetItem()
         item6.setText(packet['fromId'])
@@ -188,8 +347,29 @@ def onReceive(packet, interface): # called when a packet arrives
             if('rxSnr' in packet):
                 item11 = QTableWidgetItem()
                 item11.setText(str(packet['rxSnr']))
-                row[11] = str(packet['rxSnr'])+'\n'
+                row[11] = str(packet['rxSnr'])+';'
                 ex.table.setItem(r,11,item11)
+                updateSnr(packet['fromId'],str(packet['rxSnr']))
+                showInfo()
+            #calcola e inserisci distanza
+            coord1 = [float(ex.mylat.text()),float(ex.mylon.text())]
+            coord2 = [packet['decoded']['position']['latitudeI']/10000000,packet['decoded']['position']['longitudeI']/10000000]
+            distance = haversine(coord1,coord2)
+            row[12] = str(round(distance))+';'
+            print(distance)
+            #calcola e inserisci rilevamento
+            rilev = calcBearing(coord1,coord2)
+            item12 = QTableWidgetItem()
+            item12.setText(str(int(distance)))
+            item13 = QTableWidgetItem()
+            item13.setText(str(round(rilev*10)/10))
+            print(rilev)
+            row[13] = str(round(rilev*10)/10)+'\n'
+            ex.table.setItem(r,12,item12)
+            ex.table.setItem(r,13,item13) 
+            updateUser(packet['fromId'],coord2,packet['decoded']['position']['altitude'],distance,rilev)
+            showInfo()
+
     if(ex.rbtn2.isChecked()):
         i = 0
         while(i < len(row)):
@@ -212,6 +392,33 @@ def sendText(): # called every x seconds
         ex.log.append("Sending "+" "+msg)
         print("Message sent: " + msg)
 
+
+#Horisontal Bearing
+def calcBearing(coord1, coord2):
+    lat1,lon1 = coord1
+    lat2,lon2 = coord2
+    lon1, lat1, lon2, lat2 = map(math.radians, [lon1, lat1, lon2, lat2])
+    dLon = lon2 - lon1
+    y = math.sin(dLon) * math.cos(lat2)
+    x = math.cos(lat1) * math.sin(lat2) \
+        - math.sin(lat1) * math.cos(lat2) * math.cos(dLon)
+    bearing = math.atan2(y, x)
+    bearing = math.degrees(bearing)
+    return bearing
+
+def haversine(coord1, coord2):
+    R = 6372800  # Earth radius in meters
+    lat1, lon1 = coord1
+    lat2, lon2 = coord2
+    
+    phi1, phi2 = math.radians(lat1), math.radians(lat2) 
+    dphi       = math.radians(lat2 - lat1)
+    dlambda    = math.radians(lon2 - lon1)
+    
+    a = math.sin(dphi/2)**2 + \
+        math.cos(phi1)*math.cos(phi2)*math.sin(dlambda/2)**2
+    
+    return 2*R*math.atan2(math.sqrt(a), math.sqrt(1 - a))
  
 
 if __name__ == '__main__':

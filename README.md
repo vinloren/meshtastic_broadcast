@@ -8,6 +8,8 @@ Attraverso interfaccia GUI si può gestire registrazione del colluquio in mesh c
 
 La seconda checkbox presente serve a eventualmente registrare tutti i messaggi intercorsi nel mesh su file .csv in modo da ottenere poi un excel file da analizzare in seguito. Marcando la checkbox viene aprto in scrittura il file meshtastic_data.csv. La registrazione continua fino a quando non smarchiamo di nuovo la checkbox (il mark viene tolto), momento in cui il .csv file viene chiuso e i relativi dati sono diaponibile per elaborazione excel. Ogni volta che si riapre il file esso viene reinizializzato daccapo.
 
+Oltre alla visualizzazione dei messaggi intercorsi nel mesh in tab1 widget (sotto label "Messaggi"), questa applicazione mostra anche tutti i nodi connessi in mesh con coordinate geografiche, distanza e rilevamento dal punto di home (il geo point del nodo connesso al PC), rxSnr e livello batteria se presente. Questi dati sono in tab2 sotto label "Connessi".
+
 ### Note
 Il programma è stato provato con meshtastic Python API 1.1.46 e node firmware 1.1.42. Nel log python ogn tanto appare la scritta WARNING:root:Ignoring old position/user message. Recommend you update firmware to 1.1.20 or later cosa bizzarra perchè il firmware sul node è 1.1.42 e il livello API python è 1.1.46.
 In corrispondenza di questo avviso manca poi nel pacchetto ricevuto il campo 'data' e quindi 'portnum' che descive il tipo di messaggi che invece qui è assente. Su questo vedrò di investigare con meshtastic.discounse.group quanto prima.
