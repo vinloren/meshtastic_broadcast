@@ -10,8 +10,20 @@ La seconda checkbox presente serve a eventualmente registrare tutti i messaggi i
 
 Oltre alla visualizzazione dei messaggi intercorsi nel mesh in tab1 widget (sotto label "Messaggi"), questa applicazione mostra anche tutti i nodi connessi in mesh con coordinate geografiche, distanza e rilevamento dal punto di home (il geo point del nodo connesso al PC), rxSnr e livello batteria se presente. Questi dati sono in tab2 sotto label "Connessi".
 
+## OpenStreet Map dei nodi in mesh
+Ho aggiunto un ulteriore Tab (tab3 "GeoMap") per mostrare la mappa con al centro la posizione di Home riportata nei QLineEdit field in "Home lat" e "Home lon" marcata con marker blu e poi i marker in rosso per ciascun nodo rilevato in mesh.
+
+Per creare la mappa ho usato python folium richiamato da PyQt5 QtWidgets, QtWebEngineWidgets poi per mostrarla ho posto un QPushButton("SHOW MAP") accanto a riferimenti di posizione home sopra descritti. Il problema che si pone è quello di mostrare dinamicamente tutti i nuovi marker che via via si devono inserire in funzione delle nuove acquisizini POSITION_APP rilevate nel mesh. Una volta che la mappa è mostrata nuovi marker non possono essera apposti per problemi di thread protection e occorre quindi generare una nuova mappa ogni volta nello stesso thread di PyQt5. Ho dovuto allora trovare soluzione con un PushButton che va a richiamare la distruzione della mappa preedente ovvero la distruzione del tab3 e la sua ricostruzione con nuova mappa che mostra tuttii nodi rilevati. I nodi rilevati con la lorocaratterstiche sono visibili in Tab2 e quindi è facile identificare il momento in cui è opportuno mostrare la nuiova mappa.
+
+Ho scelto la soluzione python folium perche esso mi pare ben fatto e soddisfacente; l'alternativa sarebbe stata quella di creare una pagina web con OpenLayer 3.0 e tutti i relativi javascript di gestione  e poi sarebbe stato anche necessario un python web socket server per fare da interfaccia fra protocollo webtastic Python API e pagina web sopra menzionata per accedere alle mappe OpenStreet.  
+
+
+## Installazione folium
+Deve preesistere un'instalaazione python 3.7 o superiore, pip install folium carica l'ambiente richiesto che prevede anche PyQt5 installato (pip install pyqt5)
+
+
 ### Note
-Il programma è stato provato con meshtastic Python API 1.1.46 e node firmware 1.1.42. Nel log python ogn tanto appare la scritta WARNING:root:Ignoring old position/user message. Recommend you update firmware to 1.1.20 or later cosa bizzarra perchè il firmware sul node è 1.1.42 e il livello API python è 1.1.46.
+Il programma è stato provato con meshtastic Python API 1.1.46 e node firmware 1.1.48. Nel log python ogn tanto appare la scritta WARNING:root:Ignoring old position/user message. Recommend you update firmware to 1.1.20 or later cosa bizzarra perchè il firmware sul node è 1.1.48 e il livello API python è 1.1.46.
 In corrispondenza di questo avviso manca poi nel pacchetto ricevuto il campo 'data' e quindi 'portnum' che descive il tipo di messaggi che invece qui è assente. Su questo vedrò di investigare con meshtastic.discounse.group quanto prima.
 
 Il 14 Feb aperto problema at meshtastic.discourse.group e geeksville ha recepito la questione richiedendo una fix per Android App che pare essere lei a inviare i dati GPS in vecchio stile che non viene ticonosciuto da python API che genera poi il warning. Vedi https://github.com/meshtastic/Meshtastic-Android/issues/247

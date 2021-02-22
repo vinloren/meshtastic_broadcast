@@ -1,6 +1,6 @@
 import sys,math,io
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTabWidget, \
-            QTableWidgetItem,QVBoxLayout,QHBoxLayout,QLineEdit,QTextEdit,QLabel,QCheckBox          
+            QTableWidgetItem,QVBoxLayout,QHBoxLayout,QLineEdit,QTextEdit,QLabel,QCheckBox,QPushButton         
 from PyQt5.QtGui import QIcon
 import folium
 from PyQt5 import QtWidgets, QtWebEngineWidgets
@@ -12,9 +12,9 @@ import time
 from time import sleep
 import datetime
 
-
+RUNNING = False
 count = 0
-userc = 0
+homeLoc = {}
 nodeInfo = []
 
 class App(QWidget):
@@ -38,6 +38,9 @@ class App(QWidget):
         self.mylon = QLineEdit()
         mylatlbl.setMaximumWidth(80)
         mylonlbl.setMaximumWidth(80)
+        mapbtn =  QPushButton("SHOW MAP",self)
+        mapbtn.setMaximumWidth(100)
+        mapbtn.clicked.connect(self.showMap)
         self.mylat.setMaximumWidth(80)
         self.mylon.setMaximumWidth(80)
         self.mylat.setText('45.641174')
@@ -47,6 +50,7 @@ class App(QWidget):
         hhome.addWidget(self.mylat)
         hhome.addWidget(mylonlbl)
         hhome.addWidget(self.mylon)
+        hhome.addWidget(mapbtn)
         hhome.addWidget(voidlbl)
         self.layout = QVBoxLayout(self)
         self.setWindowTitle(self.title)
@@ -63,7 +67,10 @@ class App(QWidget):
         self.rbtn2 = QCheckBox('Genera csv file')
         self.rbtn1.setMaximumWidth(150)
         self.rbtn2.setMinimumWidth(730)
+        startb = QPushButton("START",self)
+        startb.clicked.connect(self.start_click)
         hbox = QHBoxLayout()
+        hbox.addWidget(startb)
         hbox.addWidget(label2)
         hbox.addWidget(self.inText) 
         hbox.addWidget(self.rbtn1)
@@ -72,32 +79,7 @@ class App(QWidget):
         self.tabs.addTab(self.tab1,"Messaggi")
         self.tabs.addTab(self.tab2,"Connessi")
         self.tabs.addTab(self.tab3,"GeoMap")
-
-        self.map = folium.Map(
-            location=[45.641174,9.114828], tiles="OpenStreetMap", zoom_start=13
-        )
-        folium.Marker([45.641174,9.114828],
-          #Make color/style changes here
-          icon = folium.Icon(color='blue'),
-          popup = 'Home node',
-          ).add_to(self.map)
-
-        folium.Marker([45.644174,9.115828],
-          #Make color/style changes here
-          icon = folium.Icon(color='red'),
-          popup = 'Second node',
-          ).add_to(self.map)
         
-        data = io.BytesIO()
-        self.map.save(data, close_file=False)
-
-        self.map = QtWebEngineWidgets.QWebEngineView()
-        self.map.setHtml(data.getvalue().decode())
-
-        self.tab3.layout = QVBoxLayout()
-        self.tab3.layout.addWidget(self.map)
-        self.tab3.setLayout(self.tab3.layout)
-
         self.table = QTableWidget()
         self.table.setColumnCount(len(self.labels))
         self.table.setHorizontalHeaderLabels(self.labels)
@@ -112,7 +94,6 @@ class App(QWidget):
         self.tab2.layout = QVBoxLayout()
         self.tab2.layout.addWidget(self.table1)
         self.tab2.setLayout(self.tab2.layout)
-
         label = QLabel("Log dati ricevuti")
         self.log = QTextEdit()
         self.log.setMaximumHeight(180)
@@ -122,9 +103,74 @@ class App(QWidget):
         self.layout.addWidget(label)
         self.layout.addWidget(self.log)
         self.layout.addLayout(hbox)
-
         self.setGeometry(100, 100, 1200,700)
         self.show()
+
+
+    def showMap(self):
+        homeLoc['lat'] = float(self.mylat.text())
+        homeLoc['lon'] = float(self.mylon.text())
+        self.map1 = folium.Map(
+            location=[homeLoc['lat'],homeLoc['lon']], tiles="OpenStreetMap", zoom_start=13
+        )
+        folium.Marker([homeLoc['lat'],homeLoc['lon']],
+          #Make color/style changes here
+          icon = folium.Icon(color='blue'),
+          popup = 'Home node',
+          ).add_to(self.map1)
+        #add a marker for each node in nodeInfo
+        for node in nodeInfo:
+            if('lat' in node):
+                dist = haversine([homeLoc['lat'],homeLoc['lon']],[node['lat'],node['lon']])
+                dist = round(dist)
+                dist = dist/1000
+                if(dist > 0.01):
+                    folium.Marker([node['lat'],node['lon']],
+                        icon = folium.Icon(color='red'),
+                        popup = node['user']+'<br>Km: '+str(dist),
+                    ).add_to(self.map1)
+        data = io.BytesIO()
+        self.map1.save(data, close_file=False)
+        self.map1 = QtWebEngineWidgets.QWebEngineView()
+        self.map1.setHtml(data.getvalue().decode())
+        self.tabs.removeTab(2)
+        self.tab3.destroy()
+        self.tab3 = QWidget()
+        self.tabs.addTab(self.tab3,"GeoMap")
+        self.tab3.layout = QVBoxLayout()
+        self.tab3.layout.addWidget(self.map1)
+        self.tab3.setLayout(self.tab3.layout)
+        self.map1.show()
+
+
+
+    def start_click(self):
+        global RUNNING,interface
+        if(RUNNING==True):
+            return
+        interface = meshtastic.SerialInterface()
+        RUNNING = True
+
+
+    def placeMark(self,user,coord,dist):
+        dist = round(dist*10)
+        self.map1 = folium.Map(
+            location=[homeLoc['lat'],homeLoc['lon']], tiles="OpenStreetMap", zoom_start=13
+        )
+        folium.Marker(coord,
+            #Make color/style changes here
+            icon = folium.Icon(color='red'),
+            popup = user+'\n'+str(dist)+' Km',
+        ).add_to(self.map1)
+        data = io.BytesIO()
+        self.map1.save(data, close_file=False)
+        self.map1 = QtWebEngineWidgets.QWebEngineView()
+        self.map1.setHtml(data.getvalue().decode())
+        self.tab3.layout = QVBoxLayout()
+        self.tab3.layout.addWidget(self.map1)
+        self.tab3.setLayout(self.tab3.layout)
+        self.map1.show()
+
 
     def handleFile(self):
         if(self.rbtn2.isChecked()):
@@ -165,6 +211,8 @@ class RepeatedTimer(object): # Timer helper class
   def stop(self):
     self._timer.cancel()
     self.is_running = False
+
+
 
 
 
@@ -227,6 +275,7 @@ def insertUser(user,id):
         nodeInfo.append(newuser)
         print(nodeInfo)
 
+
 def updateUser(id,coord,altitude,distance,rilev):
     #trova id in nodeInfo
     i = 0
@@ -242,6 +291,7 @@ def updateUser(id,coord,altitude,distance,rilev):
             break
         i += 1
     print(nodeInfo)
+
 
 def updateSnr(id,snr):
     #trova id in nodeInfo
@@ -265,7 +315,7 @@ def onReceive(packet, interface): # called when a packet arrives
     ex.log.append(dataora+" "+f"{packet}")
     item = QTableWidgetItem()
     item.setText(dataora)
-    global count,userc
+    global count
     r = count
     ex.table.setRowCount(count+1)
     ex.table.setItem(r,0,item)
@@ -301,12 +351,9 @@ def onReceive(packet, interface): # called when a packet arrives
         ex.table.setItem(r,4,item4)
         if (packet['decoded']['data']['portnum'] == 'NODEINFO_APP'):
             item5 = QTableWidgetItem()
-            item01 = QTableWidgetItem()
             item5.setText(packet['decoded']['data']['user']['longName'])
             row[5] = packet['decoded']['data']['user']['longName']+';'
             ex.table.setItem(r,5,item5)
-            item01.setText(dataora)
-            ex.table1.setItem(userc,0,item01)
             insertUser(packet['decoded']['data']['user']['longName'],packet['fromId'])
             showInfo()
         if (packet['decoded']['data']['portnum'] == 'POSITION_APP'):
@@ -455,6 +502,4 @@ if __name__ == '__main__':
     ex = App()
     pub.subscribe(onReceive, "meshtastic.receive")
     pub.subscribe(onConnection, "meshtastic.connection.established")
-    interface = meshtastic.SerialInterface()
-    ex.map.show()
     sys.exit(app.exec_())  
