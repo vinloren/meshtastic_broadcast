@@ -33,7 +33,7 @@ class App(QWidget):
         mylatlbl = QLabel("Home lat:")
         mylonlbl = QLabel("Home lon:")
         voidlbl = QLabel("")
-        voidlbl.setMinimumWidth(880)
+        voidlbl.setMinimumWidth(780)
         self.mylat = QLineEdit()
         self.mylon = QLineEdit()
         mylatlbl.setMaximumWidth(80)
@@ -143,33 +143,12 @@ class App(QWidget):
         self.map1.show()
 
 
-
     def start_click(self):
         global RUNNING,interface
         if(RUNNING==True):
             return
         interface = meshtastic.SerialInterface()
         RUNNING = True
-
-
-    def placeMark(self,user,coord,dist):
-        dist = round(dist*10)
-        self.map1 = folium.Map(
-            location=[homeLoc['lat'],homeLoc['lon']], tiles="OpenStreetMap", zoom_start=13
-        )
-        folium.Marker(coord,
-            #Make color/style changes here
-            icon = folium.Icon(color='red'),
-            popup = user+'\n'+str(dist)+' Km',
-        ).add_to(self.map1)
-        data = io.BytesIO()
-        self.map1.save(data, close_file=False)
-        self.map1 = QtWebEngineWidgets.QWebEngineView()
-        self.map1.setHtml(data.getvalue().decode())
-        self.tab3.layout = QVBoxLayout()
-        self.tab3.layout.addWidget(self.map1)
-        self.tab3.setLayout(self.tab3.layout)
-        self.map1.show()
 
 
     def handleFile(self):
@@ -211,8 +190,6 @@ class RepeatedTimer(object): # Timer helper class
   def stop(self):
     self._timer.cancel()
     self.is_running = False
-
-
 
 
 
