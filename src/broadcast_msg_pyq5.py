@@ -1,10 +1,12 @@
 import sys,math,io
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTabWidget, \
-            QTableWidgetItem,QVBoxLayout,QHBoxLayout,QLineEdit,QTextEdit,QLabel,QCheckBox,QPushButton         
+            QTableWidgetItem,QVBoxLayout,QHBoxLayout,QLineEdit,QTextEdit,QLabel,QCheckBox, \
+            QPushButton,QRadioButton,QComboBox       
 from PyQt5.QtGui import QIcon
 import folium
 from PyQt5 import QtWidgets, QtWebEngineWidgets
 
+import sqlite3 as dba
 import meshtastic
 from pubsub import pub
 import threading
@@ -33,13 +35,25 @@ class App(QWidget):
         mylatlbl = QLabel("Home lat:")
         mylonlbl = QLabel("Home lon:")
         voidlbl = QLabel("")
-        voidlbl.setMinimumWidth(780)
+        voidlbl.setMinimumWidth(280)
         self.mylat = QLineEdit()
         self.mylon = QLineEdit()
-        mylatlbl.setMaximumWidth(80)
-        mylonlbl.setMaximumWidth(80)
+        mylatlbl.setMaximumWidth(60)
+        mylonlbl.setMaximumWidth(60)
         mapbtn =  QPushButton("SHOW MAP",self)
-        mapbtn.setMaximumWidth(100)
+        mapbtn.setMaximumWidth(110)
+        self.radiob = QRadioButton('Storico giorno:')
+        self.setMaximumWidth(100)
+        self.combobox = QComboBox(self)
+        self.combobox.setMinimumWidth(100)
+        fra = QLabel("fra")
+        self.fragiorno = QLineEdit()
+        self.fragiorno.setText('21/01/01')
+        self.fragiorno.setMaximumSize(70,24)
+        et = QLabel("e")
+        self.egiorno = QLineEdit()
+        self.egiorno.setText('21/03/31')
+        self.egiorno.setMaximumSize(70,24)
         mapbtn.clicked.connect(self.showMap)
         self.mylat.setMaximumWidth(80)
         self.mylon.setMaximumWidth(80)
@@ -51,6 +65,12 @@ class App(QWidget):
         hhome.addWidget(mylonlbl)
         hhome.addWidget(self.mylon)
         hhome.addWidget(mapbtn)
+        hhome.addWidget(self.radiob)
+        hhome.addWidget(self.combobox)
+        hhome.addWidget(fra)
+        hhome.addWidget(self.fragiorno)
+        hhome.addWidget(et)
+        hhome.addWidget(self.egiorno)
         hhome.addWidget(voidlbl)
         self.layout = QVBoxLayout(self)
         self.setWindowTitle(self.title)
@@ -66,7 +86,7 @@ class App(QWidget):
         self.rbtn1 = QCheckBox('Solo ricezione') 
         self.rbtn2 = QCheckBox('Genera csv file')
         self.rbtn1.setMaximumWidth(150)
-        self.rbtn2.setMinimumWidth(730)
+        self.rbtn2.setMinimumWidth(600)
         startb = QPushButton("START",self)
         startb.clicked.connect(self.start_click)
         hbox = QHBoxLayout()
@@ -90,7 +110,7 @@ class App(QWidget):
         self.table1 = QTableWidget()
         self.table1.setColumnCount(len(self.labels1))
         self.table1.setHorizontalHeaderLabels(self.labels1)
-        self.table1.setMaximumWidth(1200)
+        #self.table1.setMaximumWidth(1200)
         self.tab2.layout = QVBoxLayout()
         self.tab2.layout.addWidget(self.table1)
         self.tab2.setLayout(self.tab2.layout)
@@ -114,21 +134,44 @@ class App(QWidget):
             location=[homeLoc['lat'],homeLoc['lon']], tiles="OpenStreetMap", zoom_start=13
         )
         folium.Marker([homeLoc['lat'],homeLoc['lon']],
-          #Make color/style changes here
-          icon = folium.Icon(color='blue'),
-          popup = 'Home node',
+            #Make color/style changes here
+            icon = folium.Icon(color='blue'),
+            popup = 'Home node',
           ).add_to(self.map1)
-        #add a marker for each node in nodeInfo
-        for node in nodeInfo:
-            if('lat' in node):
-                dist = haversine([homeLoc['lat'],homeLoc['lon']],[node['lat'],node['lon']])
-                dist = round(dist)
-                dist = dist/1000
-                if(dist > 0.01):
-                    folium.Marker([node['lat'],node['lon']],
+        if(self.radiob.isChecked()):
+            #read connessioni in meshDB and mark all record = combobox selected
+            qr = "select user,lat,lon,dist from connessioni where data = '"+self.combobox.currentText()+"'"
+            conn = dba.connect('meshDB.db')
+            cur = conn.cursor()
+            rows = cur.execute(qr)
+            datas = rows.fetchall()
+            prevd = 0
+            for row in datas:
+                user = row[0]
+                lat = row[1]
+                lon = row[2]
+                dist = row[3]/1000
+                if(abs(dist-prevd)>0.01):
+                    prevd = dist
+                    folium.Marker([lat,lon],
                         icon = folium.Icon(color='red'),
-                        popup = node['user']+'<br>Km: '+str(dist),
+                        popup = user+'<br>Km: '+str(dist),
                     ).add_to(self.map1)
+                    print("Mark added")
+            cur.close()
+            conn.close()
+        else:
+            #add a marker for each node in nodeInfo
+            for node in nodeInfo:
+                if('lat' in node):
+                    dist = haversine([homeLoc['lat'],homeLoc['lon']],[node['lat'],node['lon']])
+                    dist = round(dist)
+                    dist = dist/1000
+                    if(dist > 0.01):
+                        folium.Marker([node['lat'],node['lon']],
+                            icon = folium.Icon(color='red'),
+                            popup = node['user']+'<br>Km: '+str(dist),
+                        ).add_to(self.map1)
         data = io.BytesIO()
         self.map1.save(data, close_file=False)
         self.map1 = QtWebEngineWidgets.QWebEngineView()
@@ -196,6 +239,7 @@ class RepeatedTimer(object): # Timer helper class
 #riempi table1 con valori in nodeInfo
 def showInfo():
     r = 0
+    fieldn = 0
     ex.table1.setRowCount(r)
     for info in nodeInfo:
         ex.table1.setRowCount(r+1)
@@ -215,6 +259,7 @@ def showInfo():
             item4 = QTableWidgetItem()
             item4.setText(str(info['lon'])[0:8])
             ex.table1.setItem(r,4,item4)
+            fieldn += 1
         if('batt' in info):
             item5 = QTableWidgetItem()
             item5.setText(str(info['batt']))
@@ -223,15 +268,48 @@ def showInfo():
             item6 = QTableWidgetItem()
             item6.setText(str(info['snr']))
             ex.table1.setItem(r,6,item6)
+            fieldn += 1
         if('distance' in info):
             item7 = QTableWidgetItem()
             item7.setText(str(round(info['distance'])))
             ex.table1.setItem(r,7,item7)
+            fieldn += 1
         if('rilevamento' in info):
             item8 = QTableWidgetItem()
             item8.setText(str(round(info['rilevamento']*10)/10))
             ex.table1.setItem(r,8,item8)
+            fieldn += 1
+        #if all fields but batt are there insert record in DB
+        batt = "N/A"
+        if('batt' in info):
+            batt = str(info['batt'])
+        if(fieldn > 3):
+            data = datetime.datetime.now().strftime("%y/%m/%d")
+            ora = datetime.datetime.now().strftime('%T')
+            query = "insert into connessioni values("+"'"+data+"','"+ora+"','"+info['user']+ \
+                "',"+str(info['alt'])+","+str(info['lat'])+","+str(info['lon'])+ \
+                ",'"+batt+"',"+str(info['snr'])+","+str(round(info['distance'])) + \
+                ","+str(str(round(info['rilevamento']*10)/10))+")"
+            print(query)
+            insertDB(query)
+        fieldn = 0
         r += 1
+
+
+def insertDB(query):
+    global conn,cur
+    conn = dba.connect('meshDB.db')
+    cur = conn.cursor()
+    try:
+        cur.execute(query)
+        conn.commit()
+        print("Insert OK")
+    except dba.Error as er:
+        print('SQLite error: %s' % (' '.join(er.args)))
+        print("Exception class is: ", er.__class__)
+    cur.close()
+    conn.close()
+    
 
 
 #inserisci nuovo user in dictionary
@@ -479,4 +557,15 @@ if __name__ == '__main__':
     ex = App()
     pub.subscribe(onReceive, "meshtastic.receive")
     pub.subscribe(onConnection, "meshtastic.connection.established")
+    conn = dba.connect('meshDB.db')
+    cur = conn.cursor()
+    #riempi combobox con loista dei giorni presenti in db
+    qr = "select DISTINCT data from connessioni where data > '"+ex.fragiorno.text()+ \
+        "' and data < '"+ex.egiorno.text()+"' order by data ASC"
+    rows = cur.execute(qr)
+    datas = rows.fetchall()
+    for giorno in datas:
+        ex.combobox.addItem(giorno[0])
+    cur.close()
+    conn.close()
     sys.exit(app.exec_())  

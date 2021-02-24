@@ -18,6 +18,10 @@ Per creare la mappa ho usato python folium richiamato da PyQt5 QtWidgets, QtWebE
 Ho scelto la soluzione python folium perche esso mi pare ben fatto e soddisfacente; l'alternativa sarebbe stata quella di creare una pagina web con OpenLayer 3.0 e tutti i relativi javascript di gestione  e poi sarebbe stato anche necessario un python web socket server per fare da interfaccia fra protocollo webtastic Python API e pagina web sopra menzionata per accedere alle mappe OpenStreet.  
 
 
+## Storico dei collegamenti avuti nel tempo
+I dati riassuntivi aggiornati all'ultimo contatto nodo per nodo sono mostrati in tabella in Tab 2 e visualizzabili su geomap in Tab 3, i dati dinanici di ciauscun collegamento sono anche contestualmente salvati in Sqlite3 DB (meshDB.db) nella directory che ospita l'applicazione python. Ho aggiunto accanto al bottone di "SHOW MAP" un radio button che permette di mostrare su geomap lo storico dei collegamneti avuti nel tempo selezionabili scegliendo il giorno che vogliamo compreso fra data minima e data massima, anziché mostrare lo stato riassuntivo momentaneo.
+
+
 ## Installazione folium
 Deve preesistere un'instalaazione python 3.7 o superiore, pip install folium carica l'ambiente richiesto che prevede anche PyQt5 installato (pip install pyqt5)
 
