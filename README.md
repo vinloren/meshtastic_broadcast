@@ -22,6 +22,13 @@ Ho scelto la soluzione python folium perche esso mi pare ben fatto e soddisfacen
 I dati riassuntivi aggiornati all'ultimo contatto nodo per nodo sono mostrati in tabella in Tab 2 e visualizzabili su geomap in Tab 3, i dati dinanici di ciauscun collegamento sono anche contestualmente salvati in Sqlite3 DB (meshDB.db) nella directory che ospita l'applicazione python. Ho aggiunto accanto al bottone di "SHOW MAP" un radio button che permette di mostrare su geomap lo storico dei collegamneti avuti nel tempo selezionabili scegliendo il giorno che vogliamo compreso fra data minima e data massima, anziché mostrare lo stato riassuntivo momentaneo.
 
 
+## Come vengono posti i marker delle coordinate geo dei nodi in mesh
+Esiste un python dictionary in memoria coi dati dinamici di ciascun nodo ingaggiato in mesh originato dai messaggi NODEINFO_APP. Ad ogni messaggio POSITION_APP ricevuto dai nodi il corrispondente dictionary identificato secondo chiave 'from_id' viene aggiornato coi dati geo relativi oltre che col valore 'snr'. Il dictionary cssì aggiornato viene scritto in Sqlite3 DB meshDB.db ad ogni nuovo NODEINFO_APP in modo che se si marca il radio button 'Storico giorno' e poi si clicca il pulsante "SHOW MAP" si avrà la rappresentazione sulla mappa di tutti i punti raggiunti dai nodi nella giornata prescelta. Il numero di punti rappresentati su mappa in questo caso saranno in numero pari al numero di messaggi POSITION_APP ricevuti da ciascun nodo in mesh (uno ogni 5 minuti per i miei 2 nodi perchè così configurati, il default è ogni 20 minuti).
+
+Se il radio button non è selezionato, SHOW MAP mostrerà i punti geografici dei vari nodi in mesh come da tabella presente nel Tab centrale ovvero la posizione attuale di ciascuno.
+
+
+
 ## Installazione folium
 Deve preesistere un'instalaazione python 3.7 o superiore, pip install folium carica l'ambiente richiesto che prevede anche PyQt5 installato (pip install pyqt5)
 

@@ -140,7 +140,8 @@ class App(QWidget):
           ).add_to(self.map1)
         if(self.radiob.isChecked()):
             #read connessioni in meshDB and mark all record = combobox selected
-            qr = "select user,lat,lon,dist from connessioni where data = '"+self.combobox.currentText()+"'"
+            qr = "select user,lat,lon,dist from connessioni where data = '"+self.combobox.currentText()+ \
+                "' and dist is not null"
             conn = dba.connect('meshDB.db')
             cur = conn.cursor()
             rows = cur.execute(qr)
@@ -150,7 +151,9 @@ class App(QWidget):
                 user = row[0]
                 lat = row[1]
                 lon = row[2]
-                dist = row[3]/1000
+                dist = row[3]
+                dist = round(dist)
+                dist = dist/1000
                 if(abs(dist-prevd)>0.01):
                     prevd = dist
                     folium.Marker([lat,lon],
@@ -235,11 +238,9 @@ class RepeatedTimer(object): # Timer helper class
     self.is_running = False
 
 
-
 #riempi table1 con valori in nodeInfo
 def showInfo():
     r = 0
-    fieldn = 0
     ex.table1.setRowCount(r)
     for info in nodeInfo:
         ex.table1.setRowCount(r+1)
@@ -259,7 +260,6 @@ def showInfo():
             item4 = QTableWidgetItem()
             item4.setText(str(info['lon'])[0:8])
             ex.table1.setItem(r,4,item4)
-            fieldn += 1
         if('batt' in info):
             item5 = QTableWidgetItem()
             item5.setText(str(info['batt']))
@@ -268,31 +268,14 @@ def showInfo():
             item6 = QTableWidgetItem()
             item6.setText(str(info['snr']))
             ex.table1.setItem(r,6,item6)
-            fieldn += 1
         if('distance' in info):
             item7 = QTableWidgetItem()
             item7.setText(str(round(info['distance'])))
             ex.table1.setItem(r,7,item7)
-            fieldn += 1
         if('rilevamento' in info):
             item8 = QTableWidgetItem()
             item8.setText(str(round(info['rilevamento']*10)/10))
             ex.table1.setItem(r,8,item8)
-            fieldn += 1
-        #if all fields but batt are there insert record in DB
-        batt = "N/A"
-        if('batt' in info):
-            batt = str(info['batt'])
-        if(fieldn > 3):
-            data = datetime.datetime.now().strftime("%y/%m/%d")
-            ora = datetime.datetime.now().strftime('%T')
-            query = "insert into connessioni values("+"'"+data+"','"+ora+"','"+info['user']+ \
-                "',"+str(info['alt'])+","+str(info['lat'])+","+str(info['lon'])+ \
-                ",'"+batt+"',"+str(info['snr'])+","+str(round(info['distance'])) + \
-                ","+str(str(round(info['rilevamento']*10)/10))+")"
-            print(query)
-            insertDB(query)
-        fieldn = 0
         r += 1
 
 
@@ -322,13 +305,52 @@ def insertUser(user,id):
         else:
             i += 1
     if(i==n):   #id non esiste, aggiungi nuovo user e id
-        print(i)
         newuser = {}
         newuser['user']=user
         newuser['id'] = id
         newuser['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")
+        newuser['ts'] = datetime.datetime.now().timestamp()
+        #Insert newuser in DB
+        qr = "insert into connessioni (data,ora,user) values('"+datetime.datetime.now().strftime('%y/%m/%d')+ \
+            "','"+datetime.datetime.now().strftime('%T')+"','"+user+"')"
+        insertDB(qr)
+        newuser['_id'] = max_IdDB()
         nodeInfo.append(newuser)
         print(nodeInfo)
+    else:
+        print("chiudo vecchio e apro nuovo")
+        # se now() - nodeInfo[i]['time'] > 2 secondi fai showInfo() per riempire Tab1
+        # e inserire record in DB e poi aggiornalo creando newuser in posizione [i] 
+        now = datetime.datetime.now().timestamp()
+        prima = nodeInfo[i]['ts']
+        if((now-prima)>60):
+            showInfo()     # insert data in Table1 and set marker on geomap
+            newuser = {}
+            newuser['user']=user
+            newuser['id'] = id
+            newuser['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")
+            newuser['ts'] = now
+            #Insert newuser in DB
+            qr = "insert into connessioni (data,ora,user) values('"+datetime.datetime.now().strftime('%y/%m/%d')+ \
+                "','"+datetime.datetime.now().strftime('%T')+"','"+user+"')"
+            insertDB(qr)
+            newuser['_id'] = max_IdDB()
+            nodeInfo[i] = newuser
+            print(nodeInfo)
+
+
+def max_IdDB():
+    qr = "select max(_id) from connessioni"
+    global conn,cur
+    conn = dba.connect('meshDB.db')
+    cur = conn.cursor()
+    rows = cur.execute(qr)
+    datas = rows.fetchall()
+    print(datas)
+    nr = datas[0][0]
+    cur.close()
+    conn.close()
+    return nr
 
 
 def updateUser(id,coord,altitude,distance,rilev):
@@ -343,6 +365,11 @@ def updateUser(id,coord,altitude,distance,rilev):
             nodeInfo[i].update({'distance': distance})
             nodeInfo[i].update({'rilevamento': rilev})
             nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+            qr = "update connessioni set lat="+str(nodeInfo[i]['lat'])+",lon="+str(nodeInfo[i]['lon'])+ \
+                ",alt="+str(nodeInfo[i]['alt'])+",dist="+str(nodeInfo[i]['distance'])+",rilev="+ \
+                str(nodeInfo[i]['rilevamento'])+",data='"+datetime.datetime.now().strftime('%y/%m/%d')+ \
+                "',ora='"+datetime.datetime.now().strftime('%T')+"' where _id ="+str(nodeInfo[i]['_id'])
+            insertDB(qr)
             break
         i += 1
     print(nodeInfo)
@@ -355,6 +382,8 @@ def updateSnr(id,snr):
         if(info['id'] == id):
             nodeInfo[i].update({'snr': snr})
             nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+            qr = "update connessioni set snr="+str(nodeInfo[i]['snr'])+" where _id="+str(nodeInfo[i]['_id'])
+            insertDB(qr)
             break
         i += 1
     print(nodeInfo)
@@ -444,7 +473,6 @@ def onReceive(packet, interface): # called when a packet arrives
                 # aggiorna nodeInfo
                 updateUser(packet['fromId'],coord2,packet['decoded']['data']['position']['altitude'],distance,rilev)
                 showInfo()
-
             if('rxSnr' in packet):
                 item11 = QTableWidgetItem()
                 item11.setText(str(packet['rxSnr']))
@@ -452,7 +480,6 @@ def onReceive(packet, interface): # called when a packet arrives
                 ex.table.setItem(r,11,item11)
                 updateSnr(packet['fromId'],str(packet['rxSnr']))
                 showInfo()
-            
     else:
         item6 = QTableWidgetItem()
         item6.setText(packet['fromId'])
