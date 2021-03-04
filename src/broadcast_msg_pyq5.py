@@ -16,6 +16,7 @@ import datetime
 
 RUNNING = False
 count = 0
+msgcount = 1
 homeLoc = {}
 nodeInfo = []
 
@@ -539,14 +540,16 @@ def onConnection(interface, topic=pub.AUTO_TOPIC): # called when we (re)connect 
     print ("starting...")
     interface.sendText("Hello mesh")
     ex.log.append("Starting...")
-    rt = RepeatedTimer(30, sendText) # no need of rt.start()
+    rt = RepeatedTimer(120, sendText) # no need of rt.start()
 
 
 def sendText(): # called every x seconds
     if(ex.rbtn1.isChecked()==False):
         currTime = datetime.datetime.now().strftime("%H:%M:%S")
-        msg = str(count)+" "+currTime+" "+ex.inText.text()
+        global msgcount
+        msg = str(msgcount)+" "+currTime+" "+ex.inText.text()
         interface.sendText(msg)
+        msgcount += 1
         ex.log.append("Sending "+" "+msg)
         print("Message sent: " + msg)
 
