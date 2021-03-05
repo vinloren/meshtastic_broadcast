@@ -255,9 +255,11 @@ def showInfo():
         if('alt' in info):
             item2.setText(str(info['alt']))
             ex.table1.setItem(r,2,item2)
+        if('lat' in info):
             item3 = QTableWidgetItem()
             item3.setText(str(info['lat'])[0:8])
             ex.table1.setItem(r,3,item3)
+        if('lon' in info):
             item4 = QTableWidgetItem()
             item4.setText(str(info['lon'])[0:8])
             ex.table1.setItem(r,4,item4)
@@ -447,10 +449,12 @@ def onReceive(packet, interface): # called when a packet arrives
                 item8.setText(str(packet['decoded']['data']['position']['altitude']))
                 row[8] = str(packet['decoded']['data']['position']['altitude'])+';'
                 ex.table.setItem(r,8,item8)
+            if('latitude' in packet['decoded']['data']['position']):   
                 item9 = QTableWidgetItem()
                 item9.setText(str(packet['decoded']['data']['position']['latitude'])[0:8])
                 row[9] = str(packet['decoded']['data']['position']['latitude'])[0:8]+';'
                 ex.table.setItem(r,9,item9)
+            if('longitude' in packet['decoded']['data']['position']):
                 item10 = QTableWidgetItem()
                 item10.setText(str(packet['decoded']['data']['position']['longitude'])[0:8])
                 row[10] = str(packet['decoded']['data']['position']['longitude'])[0:8]+';'
@@ -472,7 +476,10 @@ def onReceive(packet, interface): # called when a packet arrives
                 row[13] = str(round(rilev*10)/10)+'\n'
                 print(rilev)
                 # aggiorna nodeInfo
-                updateUser(packet['fromId'],coord2,packet['decoded']['data']['position']['altitude'],distance,rilev)
+                if('altitude' in packet['decoded']['data']['position']):
+                    updateUser(packet['fromId'],coord2,packet['decoded']['data']['position']['altitude'],distance,rilev)
+                else:
+                    updateUser(packet['fromId'],coord2,'0',distance,rilev)
                 showInfo()
             if('rxSnr' in packet):
                 item11 = QTableWidgetItem()
@@ -526,7 +533,10 @@ def onReceive(packet, interface): # called when a packet arrives
             row[13] = str(round(rilev*10)/10)+'\n'
             ex.table.setItem(r,12,item12)
             ex.table.setItem(r,13,item13) 
-            updateUser(packet['fromId'],coord2,packet['decoded']['position']['altitude'],distance,rilev)
+            if('altitude' in packet['decoded']['data']['position']):
+                updateUser(packet['fromId'],coord2,packet['decoded']['position']['altitude'],distance,rilev)
+            else:
+                updateUser(packet['fromId'],coord2,'0',distance,rilev)
             showInfo()
 
     if(ex.rbtn2.isChecked()):
