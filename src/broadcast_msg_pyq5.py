@@ -533,7 +533,7 @@ def onReceive(packet, interface): # called when a packet arrives
             row[13] = str(round(rilev*10)/10)+'\n'
             ex.table.setItem(r,12,item12)
             ex.table.setItem(r,13,item13) 
-            if('altitude' in packet['decoded']['data']['position']):
+            if('altitude' in packet['decoded']['position']):
                 updateUser(packet['fromId'],coord2,packet['decoded']['position']['altitude'],distance,rilev)
             else:
                 updateUser(packet['fromId'],coord2,'0',distance,rilev)
