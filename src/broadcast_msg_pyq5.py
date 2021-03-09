@@ -141,7 +141,7 @@ class App(QWidget):
           ).add_to(self.map1)
         if(self.radiob.isChecked()):
             #read connessioni in meshDB and mark all record = combobox selected
-            qr = "select user,lat,lon,dist from connessioni where data = '"+self.combobox.currentText()+ \
+            qr = "select user,lat,lon,dist,ora,snr from connessioni where data = '"+self.combobox.currentText()+ \
                 "' and dist is not null"
             conn = dba.connect('meshDB.db')
             cur = conn.cursor()
@@ -153,13 +153,16 @@ class App(QWidget):
                 lat = row[1]
                 lon = row[2]
                 dist = row[3]
+                ora = row[4]
+                snr = row[5]
                 dist = round(dist)
                 dist = dist/1000
                 if(abs(dist-prevd)>0.01):
                     prevd = dist
                     folium.Marker([lat,lon],
                         icon = folium.Icon(color='red'),
-                        popup = user+'<br>Km: '+str(dist),
+                        popup = user+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;<br>ora: '+ \
+                            ora+'<br>snr: '+str(snr)+'<br>Km: '+str(dist),
                     ).add_to(self.map1)
                     print("Mark added")
             cur.close()
@@ -171,10 +174,12 @@ class App(QWidget):
                     dist = haversine([homeLoc['lat'],homeLoc['lon']],[node['lat'],node['lon']])
                     dist = round(dist)
                     dist = dist/1000
+                    ora = node['time'].split(' ')[1]
                     if(dist > 0.01):
                         folium.Marker([node['lat'],node['lon']],
                             icon = folium.Icon(color='red'),
-                            popup = node['user']+'<br>Km: '+str(dist),
+                            popup = node['user']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;<br>ora: '+ \
+                                ora+'<br>snr: '+str(node['snr'])+'<br>Km: '+str(dist),
                         ).add_to(self.map1)
         data = io.BytesIO()
         self.map1.save(data, close_file=False)
