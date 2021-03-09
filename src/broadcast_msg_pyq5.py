@@ -164,6 +164,9 @@ class App(QWidget):
                         popup = user+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;<br>ora: '+ \
                             ora+'<br>snr: '+str(snr)+'<br>Km: '+str(dist),
                     ).add_to(self.map1)
+                    folium.Marker([lat,lon],
+                        icon=folium.DivIcon(html=f"""<div style='font-size: 22px; font-weight: bold;'>{user}</div>""")
+                    ).add_to(self.map1)
                     print("Mark added")
             cur.close()
             conn.close()
@@ -181,6 +184,9 @@ class App(QWidget):
                             popup = node['user']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;<br>ora: '+ \
                                 ora+'<br>snr: '+str(node['snr'])+'<br>Km: '+str(dist),
                         ).add_to(self.map1)
+                        folium.Marker([lat,lon],
+                        icon=folium.DivIcon(html=f"""<div style='font-size: 22px; font-weight: bold;'>{node['user']}</div>""")
+                    ).add_to(self.map1)
         data = io.BytesIO()
         self.map1.save(data, close_file=False)
         self.map1 = QtWebEngineWidgets.QWebEngineView()
