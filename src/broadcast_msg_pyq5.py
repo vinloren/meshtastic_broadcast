@@ -274,9 +274,9 @@ def showInfo():
             item4 = QTableWidgetItem()
             item4.setText(str(info['lon'])[0:8])
             ex.table1.setItem(r,4,item4)
-        if('batt' in info):
+        if('batteryLevel' in info):
             item5 = QTableWidgetItem()
-            item5.setText(str(info['batt']))
+            item5.setText(str(info['batteryLevel']))
             ex.table1.setItem(r,5,item5)
         if('snr' in info):
             item6 = QTableWidgetItem()
@@ -367,7 +367,7 @@ def max_IdDB():
     return nr
 
 
-def updateUser(id,coord,altitude,distance,rilev):
+def updateUser(id,coord,altitude,distance,rilev,batt):
     #trova id in nodeInfo
     i = 0
     for info in nodeInfo:
@@ -379,9 +379,14 @@ def updateUser(id,coord,altitude,distance,rilev):
             nodeInfo[i].update({'distance': distance})
             nodeInfo[i].update({'rilevamento': rilev})
             nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+            if('batteryLevel' in nodeInfo[i]):
+                if(batt != 'N/A'):
+                    nodeInfo[i].update({'batteryLevel': batt})
+            else:
+                nodeInfo[i].update({'batteryLevel': batt})
             qr = "update connessioni set lat="+str(nodeInfo[i]['lat'])+",lon="+str(nodeInfo[i]['lon'])+ \
                 ",alt="+str(nodeInfo[i]['alt'])+",dist="+str(nodeInfo[i]['distance'])+",rilev="+ \
-                str(nodeInfo[i]['rilevamento'])+",data='"+datetime.datetime.now().strftime('%y/%m/%d')+ \
+                str(nodeInfo[i]['rilevamento'])+",batt='"+batt+"',data='"+datetime.datetime.now().strftime('%y/%m/%d')+ \
                 "',ora='"+datetime.datetime.now().strftime('%T')+"' where _id ="+str(nodeInfo[i]['_id'])
             insertDB(qr)
             break
@@ -487,10 +492,13 @@ def onReceive(packet, interface): # called when a packet arrives
                 row[13] = str(round(rilev*10)/10)+'\n'
                 print(rilev)
                 # aggiorna nodeInfo
+                batt = 'N/A'
+                if('batteryLevel' in packet['decoded']['data']['position']):
+                    batt = str(packet['decoded']['data']['position']['batteryLevel'])
                 if('altitude' in packet['decoded']['data']['position']):
-                    updateUser(packet['fromId'],coord2,packet['decoded']['data']['position']['altitude'],distance,rilev)
+                    updateUser(packet['fromId'],coord2,packet['decoded']['data']['position']['altitude'],distance,rilev,batt)
                 else:
-                    updateUser(packet['fromId'],coord2,'0',distance,rilev)
+                    updateUser(packet['fromId'],coord2,'0',distance,rilev,batt)
                 showInfo()
             if('rxSnr' in packet):
                 item11 = QTableWidgetItem()
@@ -544,10 +552,13 @@ def onReceive(packet, interface): # called when a packet arrives
             row[13] = str(round(rilev*10)/10)+'\n'
             ex.table.setItem(r,12,item12)
             ex.table.setItem(r,13,item13) 
+            batt = 'N/A'
+            if('batteryLevel' in packet['decoded']['position']):
+                batt = str(packet['decoded']['position']['batteryLevel'])
             if('altitude' in packet['decoded']['position']):
-                updateUser(packet['fromId'],coord2,packet['decoded']['position']['altitude'],distance,rilev)
+                updateUser(packet['fromId'],coord2,packet['decoded']['position']['altitude'],distance,rilev,batt)
             else:
-                updateUser(packet['fromId'],coord2,'0',distance,rilev)
+                updateUser(packet['fromId'],coord2,'0',distance,rilev,batt)
             showInfo()
 
     if(ex.rbtn2.isChecked()):
