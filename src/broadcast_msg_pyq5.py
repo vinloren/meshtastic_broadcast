@@ -46,7 +46,7 @@ class App(QWidget):
         self.radiob = QRadioButton('Storico giorno:')
         #self.setMaximumWidth(100)
         self.combobox = QComboBox(self)
-        self.combobox.setMinimumWidth(80)
+        self.combobox.setMinimumWidth(90)
         fra = QLabel("fra")
         self.fragiorno = QLineEdit()
         self.fragiorno.setText('21/01/01')
@@ -184,7 +184,7 @@ class App(QWidget):
                             popup = node['user']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;<br>ora: '+ \
                                 ora+'<br>snr: '+str(node['snr'])+'<br>Km: '+str(dist),
                         ).add_to(self.map1)
-                        folium.Marker([lat,lon],
+                        folium.Marker([node['lat'],node['lon']],
                         icon=folium.DivIcon(html=f"""<div style='font-size: 22px; font-weight: bold;'>{node['user']}</div>""")
                     ).add_to(self.map1)
         data = io.BytesIO()
