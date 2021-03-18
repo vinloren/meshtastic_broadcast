@@ -33,8 +33,14 @@ Se il radio button non è selezionato, SHOW MAP mostrerà i punti geografici dei
 Deve preesistere un'instalaazione python 3.7 o superiore, pip install folium carica l'ambiente richiesto che prevede anche PyQt5 installato (pip install pyqt5)
 
 
+
+## Invio dati mesh a server MQTT
+Il 18/03/21 ho aggiunto due programmi python per fare in modo che i dati dinamici rilevati nel mesh siano inviati a server MQTT (broker.emqx.io) in modo che chi si ponesse in subscribe su quel server sul canale 'meshtastic/vinloren' possa vedere in tempo reale tutti i nodi attivi sul mesh 'vinloren' attraverso l'uso di mqtt_subscribe.py. Lanciato mqtt_send.py esso provvederà a trasmettere gli ultimi 20 record mesh memorizzati in DB ad intervalli di 60 secondi in odo che tutti gli utenti del mesh possano avere contezza del suo stato in tempo reale.
+
+
+
 ### Note
-Il programma è stato provato con meshtastic Python API 1.1.46 e node firmware 1.1.48. Nel log python ogn tanto appare la scritta WARNING:root:Ignoring old position/user message. Recommend you update firmware to 1.1.20 or later cosa bizzarra perchè il firmware sul node è 1.1.48 e il livello API python è 1.1.46.
+Il programma è stato provato con meshtastic Python API 1.1.50 e node firmware 1.1.50. Nel log python ogn tanto appare la scritta WARNING:root:Ignoring old position/user message. Recommend you update firmware to 1.1.20 or later cosa bizzarra perchè il firmware sul node è 1.1.50 e il livello API python è 1.1.50.
 In corrispondenza di questo avviso manca poi nel pacchetto ricevuto il campo 'data' e quindi 'portnum' che descive il tipo di messaggi che invece qui è assente. Su questo vedrò di investigare con meshtastic.discounse.group quanto prima.
 
 Il 14 Feb aperto problema at meshtastic.discourse.group e geeksville ha recepito la questione richiedendo una fix per Android App che pare essere lei a inviare i dati GPS in vecchio stile che non viene ticonosciuto da python API che genera poi il warning. Vedi https://github.com/meshtastic/Meshtastic-Android/issues/247
