@@ -46,7 +46,7 @@ class App(QWidget):
         self.radiob = QRadioButton('Storico giorno:')
         #self.setMaximumWidth(100)
         self.combobox = QComboBox(self)
-         self.combobox.setMinimumWidth(90)
+        self.combobox.setMinimumWidth(90)
         fra = QLabel("fra")
         self.fragiorno = QLineEdit()
         self.fragiorno.setText('21/01/01')
