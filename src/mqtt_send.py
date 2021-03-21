@@ -1,7 +1,10 @@
-import string,threading,sqlite3
+import string,threading,sqlite3,datetime,time,sys
 import paho.mqtt.client as mqtt
 from random import seed
 from random import random
+
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, \
+            QVBoxLayout,QHBoxLayout,QLineEdit,QTextEdit,QLabel,QPushButton      
 
 #=============================================================#
 # mqtt_send.py risiede nella stessa directory che ospita      #
@@ -9,9 +12,66 @@ from random import random
 # mqtt i dati del mesh attivo in tempo reale in modo che chi  #
 # fosse collegato in subscribe possa avere contezza del suo   #
 # stato. Per ottenere ciò mqtt_send accede al DB sqlite3 ogni #
-# 30 secondi per leggere l'ultimo record inserito e inviarlo  #
-# al server mqtt.                                             #
+# 375 secs per leggere tutti i record inseriti fra data e     #
+# data e inviarli al server mqtt tralasciando i record che    #
+# non cambiano posizione per meno di 10mt.                    #
 #=============================================================#
+
+
+class App(QWidget):
+    
+    def __init__(self):
+        super().__init__()
+        self.title = 'Pubblica dati Mesh'
+        self.initUI()
+        
+    def initUI(self):
+        iniziolbl = QLabel("Pubblica da ")
+        finelbl = QLabel("a ")
+        self.inizio = QLineEdit()
+        self.fine = QLineEdit()
+        self.startb = QPushButton("START",self)
+        channlbl =  QLabel("My Mesh:")
+        self.chann = QLineEdit()
+        self.chann.setText('vinloren')
+        voidlbl = QLabel("")
+        voidlbl.setMinimumWidth(240)
+        hhead = QHBoxLayout()
+        hhead.addWidget(iniziolbl)
+        hhead.addWidget(self.inizio)
+        hhead.addWidget(finelbl)
+        oggi = datetime.datetime.now().strftime("%y/%m/%d")
+        self.inizio.setText(oggi)
+        domanit = time.time()+86400
+        domanis = time.localtime(domanit)
+        domani = str(domanis.tm_year-2000)+"/"
+        if(domanis.tm_mon < 10):
+            domani = domani +'0'+str(domanis.tm_mon)+'/'
+        else:
+            domani = domani + str(domanis.tm_mon)+'/'
+        if(domanis.tm_mday < 10):
+            domani = domani + '0'+str(domanis.tm_mday)
+        else:
+            domani = domani + str(domanis.tm_mday)
+        self.fine.setText(domani)
+        hhead.addWidget(self.fine)
+        hhead.addWidget(channlbl)
+        hhead.addWidget(self.chann)
+        self.startb.clicked.connect(self.start_click)
+        hhead.addWidget(self.startb)
+        hhead.addWidget(voidlbl)
+        self.layout = QVBoxLayout(self)
+        self.setWindowTitle(self.title)
+        self.layout.addLayout(hhead)
+        self.log = QTextEdit()
+        self.layout.addWidget(self.log)
+        self.setGeometry(100, 100, 700,450)
+        self.show()
+
+    def start_click(self):
+        connetti()
+
+
 # Database Manager Class
 class DatabaseManager():
 	def __init__(self):
@@ -35,38 +95,40 @@ class DatabaseManager():
 # SQLite DB Name
 DB_Name =  "meshDB.db"
 
-history = 20   # invia gli ultimi 20 record
-dbObj = DatabaseManager()
-qr = "select max(_id) from connessioni"
-res = dbObj.retrieve_db_record(qr)
-lastid = res[0][0]-history
-#print ("Last id = "+str(lastid))
-del dbObj
-
-def checkLast(dbObj):
-    #print("CheckLast..")
-    qr = "select max(_id) from connessioni"
+def checkLast(dbObj,inizio,fine):
+    qr = "select * from connessioni where data >='"+inizio+"' and data < '"+fine+"' and dist is not null order by user"
     res = dbObj.retrieve_db_record(qr)
-    global lastid
-    global history
-    #print(res,lastid)
     fields = ['data','ora','user','alt','lat','lon','batt','snr','dist','rilev']
-    while (res[0][0] > lastid):
-        qr = "select * from connessioni where _id > "+str(lastid)+" limit 1"
-        lastid = lastid+1 #res[0][0]
-        row = dbObj.retrieve_db_record(qr)
-        message = {}
+    messages = []
+    lastuser = ""
+    r = 0
+    for row in res:
+        msg = {}
         i = 0
         for field in fields:
-            message[field] = str(row[0][i])
-            i += 1     
-        print("message: "+str(message))
-        publish_To_Topic(pubtopic,str(message))
-    lastid -= history
-    del dbObj
+            msg[field] = str(row[i])
+            i += 1   
+        if(lastuser != msg['user']):
+            lastuser = msg['user']
+            messages.append(msg)
+            r += 1
+            #print(lastuser)
+        else:
+            prvdist = float(messages[r-1]['dist'])
+            if(abs(prvdist-float(msg['dist']))>0.01):
+                messages.append(msg)
+                r += 1
+            else:
+                messages[r-1] = msg
+    print("numero record:"+str(r))
+    for msg in messages:
+        msg.update({'nrec': r})
+        #print(msg['user'])
+        publish_To_Topic(pubtopic,str(msg))
+
     
 MQTT_Broker = "broker.emqx.io"
-pubtopic = "meshtastic/vinloren"
+pubtopic = "meshtastic/"
 
 # seed random number generator
 seed(7)
@@ -99,9 +161,9 @@ def on_disconnect(client, userdata, rc):
 	    pass
 
 def publish_To_Topic(pubtopic,message):
-	client.publish(pubtopic,message)
-	print ("Published: " + message + " " + "on MQTT Topic: " + str(pubtopic))
-	print ("")
+    client.publish(pubtopic,message)
+    dataora = datetime.datetime.now().strftime("%d/%m/%y %T")
+    ex.log.append(dataora+" Published: "+message+" on Topic: " + str(pubtopic))
 
 client = mqtt.Client()
 client.client_id = cname
@@ -113,10 +175,19 @@ client.connect(MQTT_Broker, 1883, 60)
 
 def publish_to_MQTT():
     dbObj = DatabaseManager()
-    tmr = threading.Timer(60.0, publish_to_MQTT)
+    tmr = threading.Timer(375.0, publish_to_MQTT)
     tmr.start()
-    checkLast(dbObj)
+    checkLast(dbObj,ex.inizio.text(),ex.fine.text())
     del dbObj
 
-publish_to_MQTT()    
-client.loop_forever()
+def connetti():
+    global pubtopic
+    pubtopic = "meshtastic/"+ex.chann.text()
+    publish_to_MQTT()    
+    client.loop_start()
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = App()
+    sys.exit(app.exec_()) 

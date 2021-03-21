@@ -1,14 +1,15 @@
 # meshtastic_broadcast
-Da circa un mese sto seguendo il progetto Meshtastic che si propone di creare una rete di comunicazione su banda 868Mhz con apparecchi basati su ESP32 e LoRa radio (es.: TTGO-LoRa32-oled). Il progetto include supporto di comunicazione via Python su serial interface collegata a PC. Attraverso la libreria Python meshtastic si può istruire l'unità collegata su porta USB a trasmettere e ricevere messaggi dal mesh configurato. L'applicazione python qui descritta si propone di raccogliere i messaggi di protocollo e di trasmissione dati mostrandoli su PythonQt5 GUI e salvandoli in foglio excell per successive analisi.
+Da Dicembre 2020  sto seguendo il progetto Meshtastic che si propone di creare una rete di comunicazione su banda 868Mhz con apparecchi basati su ESP32 e LoRa radio (es.: TTGO-LoRa32-oled). Il progetto include supporto di comunicazione via Python su serial interface collegata a PC. Attraverso la libreria Python meshtastic si può istruire l'unità collegata su porta USB a trasmettere e ricevere messaggi dal mesh configurato. L'applicazione python qui descritta si propone di raccogliere i messaggi di protocollo e di trasmissione dati mostrandoli su PythonQt5 GUI e salvandoli in foglio excell per successive analisi.
 
 ## broadcast_msg_pyq5.py
 E' l'applicazione pyhon con Qt5 GUI che ha l'obiettivo di mostrare tutti i messaggi che intercorrono nel mesh rilevato dal node connesso sulla porta usb del PC ospite. Il collegamento al node è gestito dalla libreia meshtastic presente in ambiante python avendo in precedenza eseguito 'pip install meshtastic' (senza apici) che fornisce le python API come descritto at https://github.com/meshtastic/Meshtastic-python
 
-Attraverso interfaccia GUI si può gestire registrazione del colluquio in mesh con o senza invio periodico, ogni 30 secendi, del messaggio presente in input EditText (cui viente automaticamente intestato nomero del messaggio e orario). Questa opzione viene attivata da checkbox esplicativa. Se la checkbox è marcata vengono registrati solo i messaggi automatici generati dal nodo con eventuali risposte, altrimenti oltre a questi vengono inviati i messaggi col testo presente in EditText box.
+Attraverso interfaccia GUI si può gestire registrazione del colluquio in mesh con o senza invio periodico, ogni 2 minuti, del messaggio presente in input EditText (cui viente automaticamente intestato nomero del messaggio e orario). Questa opzione viene attivata da checkbox esplicativa. Se la checkbox è marcata vengono registrati solo i messaggi automatici generati dal nodo con eventuali risposte, altrimenti oltre a questi vengono inviati i messaggi col testo presente in EditText box.
 
-La seconda checkbox presente serve a eventualmente registrare tutti i messaggi intercorsi nel mesh su file .csv in modo da ottenere poi un excel file da analizzare in seguito. Marcando la checkbox viene aprto in scrittura il file meshtastic_data.csv. La registrazione continua fino a quando non smarchiamo di nuovo la checkbox (il mark viene tolto), momento in cui il .csv file viene chiuso e i relativi dati sono diaponibile per elaborazione excel. Ogni volta che si riapre il file esso viene reinizializzato daccapo.
+La seconda checkbox presente serve a eventualmente registrare tutti i messaggi intercorsi nel mesh su file .csv in modo da ottenere poi un excel file da analizzare in seguito. Marcando la checkbox viene aprto in scrittura il file meshtastic_data.csv. La registrazione continua fino a quando non smarchiamo di nuovo la checkbox (il mark viene tolto), momento in cui il .csv file viene chiuso e i relativi dati sono disponbili per elaborazione excel. Ogni volta che si riapre il file esso viene reinizializzato daccapo.
 
 Oltre alla visualizzazione dei messaggi intercorsi nel mesh in tab1 widget (sotto label "Messaggi"), questa applicazione mostra anche tutti i nodi connessi in mesh con coordinate geografiche, distanza e rilevamento dal punto di home (il geo point del nodo connesso al PC), rxSnr e livello batteria se presente. Questi dati sono in tab2 sotto label "Connessi".
+
 
 ## OpenStreet Map dei nodi in mesh
 Ho aggiunto un ulteriore Tab (tab3 "GeoMap") per mostrare la mappa con al centro la posizione di Home riportata nei QLineEdit field in "Home lat" e "Home lon" marcata con marker blu e poi i marker in rosso per ciascun nodo rilevato in mesh.
@@ -35,8 +36,14 @@ Deve preesistere un'instalaazione python 3.7 o superiore, pip install folium car
 
 
 ## Invio dati mesh a server MQTT
-Il 18/03/21 ho aggiunto due programmi python per fare in modo che i dati dinamici rilevati nel mesh siano inviati a server MQTT (broker.emqx.io) in modo che chi si ponesse in subscribe su quel server sul canale 'meshtastic/vinloren' possa vedere in tempo reale tutti i nodi attivi sul mesh 'vinloren' attraverso l'uso di mqtt_subscribe.py. Lanciato mqtt_send.py esso provvederà a trasmettere gli ultimi 20 record mesh memorizzati in DB ad intervalli di 60 secondi in odo che tutti gli utenti del mesh possano avere contezza del suo stato in tempo reale.
+Il 18/03/21 ho aggiunto due programmi python per fare in modo che i dati dinamici rilevati nel mesh siano inviati a server MQTT (broker.emqx.io) in modo che chi si ponesse in subscribe su quel server sul canale 'meshtastic/vinloren' possa vedere in tempo reale tutti i nodi attivi sul mesh 'vinloren' attraverso l'uso di mqtt_subscribe.py. 
 
+### mqtt_send.py
+mqtt_send.py provvede a trasmettere o i record in corso di creazione nella giornata attuale oppure tutti i dati già registrati in DB a partire da una data o fra due date prescelte. I dati sono pubblicati su brocker.emx.io che fornisce gratuitamemte il servizio di publish in modo che chiunque vi si collegasse sarà in grado di visulaizzare i dati mesh pubblicati in tempo reale. La cadenza di pubblicazione è fissata in 375 seconti ovvero il periodo di 'beacon' (comunicazione periodica della posizion GPS) configurato su tutti i nodi del mio mesh (mesh 'vinloren').
+
+### mqtt_subscribe.py
+questo programma consente di vis ualizzare su tabella tutti i dati dei nodi che parlano o abbiano parlato nel mesh selezionato ('vinloren' nel mio caso).
+I dati mostrati in tabella appaiono una sola volta (l'ultima presente) se la posizione del relativo nodo non è mutata di oltre 10mt, altrimenti i dati di quel nodo appariranno per ciascuna variazione maggiore di posizione. In questo modo abbiamo il tracciamento dei nodi in movimento. Il tutto può essere visualizzato in mappa geografica presente in Tab 2 ('Map').
 
 
 ### Note
