@@ -96,7 +96,7 @@ class DatabaseManager():
 DB_Name =  "meshDB.db"
 
 def checkLast(dbObj,inizio,fine):
-    qr = "select * from connessioni where data >='"+inizio+"' and data < '"+fine+"' and dist is not null order by user"
+    qr = "select * from connessioni where data >='"+inizio+"' and data < '"+fine+"' and dist is not null order by user,_id"
     res = dbObj.retrieve_db_record(qr)
     fields = ['data','ora','user','alt','lat','lon','batt','snr','dist','rilev']
     messages = []
@@ -115,7 +115,8 @@ def checkLast(dbObj,inizio,fine):
             #print(lastuser)
         else:
             prvdist = float(messages[r-1]['dist'])
-            if(abs(prvdist-float(msg['dist']))>0.01):
+            #print(str(prvdist)+" "+msg['dist'])
+            if(abs(prvdist-float(msg['dist']))>10):
                 messages.append(msg)
                 r += 1
             else:

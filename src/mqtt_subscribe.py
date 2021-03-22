@@ -4,8 +4,7 @@ from random import seed
 from random import random
 
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTabWidget, \
-            QTableWidgetItem,QVBoxLayout,QHBoxLayout,QLineEdit,QTextEdit,QLabel,QCheckBox, \
-            QPushButton,QRadioButton,QComboBox       
+            QTableWidgetItem,QVBoxLayout,QHBoxLayout,QLineEdit,QLabel,QPushButton      
 from PyQt5.QtGui import QIcon
 import folium
 from PyQt5 import QtWidgets, QtWebEngineWidgets
