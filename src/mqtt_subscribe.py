@@ -92,6 +92,7 @@ class App(QWidget):
             popup = 'Home node',
         ).add_to(self.map1)
         global packet
+        global msgcount
         for msg in packet:
             lat = float(msg['lat'])
             lon = float(msg['lon'])
@@ -121,6 +122,7 @@ class App(QWidget):
         self.tab2.setLayout(self.tab2.layout)
         self.map1.show()
         packet = []
+        msgcount = 0
 
 
 MQTT_Broker = "broker.emqx.io"  
@@ -171,15 +173,15 @@ def fillTable(dats):
     r = int(ex.hist.text())
     ex.table.setRowCount(r)
     global msgcount
+    global packet
     items = []
     i = 0
     for field in ex.labels:
         items.append(QTableWidgetItem())
         items[i].setText(dats[field])
-        ex.table.setItem(msgcount%r,i,items[i])
+        ex.table.setItem(msgcount,i,items[i])
         i += 1
     msgcount += 1
-    global packet
     if(len(packet) < r):
         packet.append(dats)
 
