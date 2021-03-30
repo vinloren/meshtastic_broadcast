@@ -36,7 +36,7 @@ class App(QWidget):
         mylatlbl = QLabel("Home lat:")
         mylonlbl = QLabel("Home lon:")
         voidlbl = QLabel("")
-        voidlbl.setMinimumWidth(400)
+        voidlbl.setMinimumWidth(300)
         self.mylat = QLineEdit()
         self.mylon = QLineEdit()
         #mylatlbl.setMaximumWidth(60)
@@ -61,6 +61,13 @@ class App(QWidget):
         #self.mylon.setMaximumWidth(80)
         self.mylat.setText('45.641174')
         self.mylon.setText('9.114828')
+        lblmap = QLabel("Tipo Map")
+        self.combomap = QComboBox(self)
+        self.combomap.addItem("OpenStreetMap")
+        self.combomap.addItem('Stamen Terrain')
+        self.combomap.addItem("Stamen Toner")
+        self.combomap.addItem("CartoDB positron")
+        self.combomap.addItem("CartoDB dark_matter")
         hhome = QHBoxLayout()
         hhome.addWidget(mylatlbl)
         hhome.addWidget(self.mylat)
@@ -73,6 +80,8 @@ class App(QWidget):
         hhome.addWidget(self.fragiorno)
         hhome.addWidget(et)
         hhome.addWidget(self.egiorno)
+        hhome.addWidget(lblmap)
+        hhome.addWidget(self.combomap)
         hhome.addWidget(voidlbl)
         self.layout = QVBoxLayout(self)
         self.setWindowTitle(self.title)
@@ -124,15 +133,21 @@ class App(QWidget):
         self.layout.addWidget(label)
         self.layout.addWidget(self.log)
         self.layout.addLayout(hbox)
-        self.setGeometry(100, 100, 1200,700)
+        self.setGeometry(100, 50, 1200,640)
         self.show()
 
 
     def showMap(self):
         homeLoc['lat'] = float(self.mylat.text())
         homeLoc['lon'] = float(self.mylon.text())
+        # tiles = 'OpenStreetMap'
+        # tiles = 'Stamen Terrain'
+        # tiles = 'Stamen Toner'
+        # tiles = 'CartoDB dark_matter'
+        # tiles = "CartoDB positron"
         self.map1 = folium.Map(
-            location=[homeLoc['lat'],homeLoc['lon']], tiles="OpenStreetMap", zoom_start=13
+            location=[homeLoc['lat'],homeLoc['lon']], tiles=self.combomap.currentText(), \
+                zoom_start=13
         )
         folium.Marker([homeLoc['lat'],homeLoc['lon']],
             #Make color/style changes here
