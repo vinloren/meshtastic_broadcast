@@ -4,7 +4,7 @@ from random import seed
 from random import random
 
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTabWidget, \
-            QTableWidgetItem,QVBoxLayout,QHBoxLayout,QLineEdit,QLabel,QPushButton      
+            QTableWidgetItem,QVBoxLayout,QHBoxLayout,QLineEdit,QLabel,QPushButton,QComboBox     
 from PyQt5.QtGui import QIcon
 import folium
 from PyQt5 import QtWidgets, QtWebEngineWidgets
@@ -37,8 +37,15 @@ class App(QWidget):
         self.startb = QPushButton("START",self)
         self.startb.setMaximumWidth(86)
         self.startb.clicked.connect(self.start_click)
+        lblmap = QLabel("Tipo Map")
+        self.combomap = QComboBox(self)
+        self.combomap.addItem("OpenStreetMap")
+        self.combomap.addItem('Stamen Terrain')
+        self.combomap.addItem("Stamen Toner")
+        self.combomap.addItem("CartoDB positron")
+        self.combomap.addItem("CartoDB dark_matter")
         voidlbl = QLabel("")
-        voidlbl.setMinimumWidth(480)
+        voidlbl.setMinimumWidth(280)
         self.layout = QVBoxLayout(self)
         self.setWindowTitle(self.title)
         self.tabs = QTabWidget()
@@ -54,6 +61,8 @@ class App(QWidget):
         hhead.addWidget(channlbl)
         hhead.addWidget(self.chann)
         hhead.addWidget(self.startb)
+        hhead.addWidget(lblmap)
+        hhead.addWidget(self.combomap)
         hhead.addWidget(voidlbl)
          # Add tabs
         self.tabs.addTab(self.tab1,"MyMesh")
@@ -84,7 +93,7 @@ class App(QWidget):
         homeLoc['lat'] = float(self.mylat.text())
         homeLoc['lon'] = float(self.mylon.text())
         self.map1 = folium.Map(
-            location=[homeLoc['lat'],homeLoc['lon']], tiles="OpenStreetMap", zoom_start=13
+            location=[homeLoc['lat'],homeLoc['lon']], tiles=self.combomap.currentText(), zoom_start=13
         )
         folium.Marker([homeLoc['lat'],homeLoc['lon']],
             #Make color/style changes here
