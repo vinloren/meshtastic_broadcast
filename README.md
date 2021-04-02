@@ -31,8 +31,10 @@ Se il radio button non è selezionato, SHOW MAP mostrerà i punti geografici dei
 
 
 ## Installazione folium
-Deve preesistere un'instalaazione python 3.7 o superiore, pip install folium carica l'ambiente richiesto che prevede anche PyQt5 installato (pip install pyqt5)
-
+Deve preesistere un'instalaazione python 3.7 o superiore:
+1) pip install pyqt5
+2) pip install pyqtwebengine
+3) pip install folium conclude i requisiti
 
 
 ## Invio dati mesh a server MQTT
@@ -47,7 +49,4 @@ I dati mostrati in tabella appaiono una sola volta (l'ultima presente) se la pos
 
 
 ### Note
-Il programma è stato provato con meshtastic Python API 1.1.50 e node firmware 1.1.50. Nel log python ogn tanto appare la scritta WARNING:root:Ignoring old position/user message. Recommend you update firmware to 1.1.20 or later cosa bizzarra perchè il firmware sul node è 1.1.50 e il livello API python è 1.1.50.
-In corrispondenza di questo avviso manca poi nel pacchetto ricevuto il campo 'data' e quindi 'portnum' che descive il tipo di messaggi che invece qui è assente. Su questo vedrò di investigare con meshtastic.discounse.group quanto prima.
-
-Il 14 Feb aperto problema at meshtastic.discourse.group e geeksville ha recepito la questione richiedendo una fix per Android App che pare essere lei a inviare i dati GPS in vecchio stile che non viene ticonosciuto da python API che genera poi il warning. Vedi https://github.com/meshtastic/Meshtastic-Android/issues/247
+Il programma è stato provato con meshtastic Python API 1.1.50 e node firmware 1.1.50 e poi successivamente aggiornato per supportare ilnuovo ambiente 1.2.xx (ultimo aggiornamento verificato 1.2.17)
