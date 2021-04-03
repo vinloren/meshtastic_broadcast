@@ -6,8 +6,14 @@ from random import random
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTabWidget, \
             QTableWidgetItem,QVBoxLayout,QHBoxLayout,QLineEdit,QLabel,QPushButton,QComboBox     
 from PyQt5.QtGui import QIcon
+from PyQt5.QtWebEngineCore import QWebEngineUrlRequestInterceptor
 import folium
 from PyQt5 import QtWidgets, QtWebEngineWidgets
+
+
+class Interceptor(QWebEngineUrlRequestInterceptor):
+    def interceptRequest(self, info):
+        info.setHttpHeader(b"Accept-Language", b"en-US,en;q=0.9,es;q=0.8,de;q=0.7")
 
 
 class App(QWidget):
@@ -15,6 +21,7 @@ class App(QWidget):
     def __init__(self):
         super().__init__()
         self.title = 'Active Mesh Data Show'
+        self.interceptor = Interceptor()
         self.initUI()
         
     def initUI(self):
@@ -122,6 +129,7 @@ class App(QWidget):
         self.map1.save(data, close_file=False)
         self.map1 = QtWebEngineWidgets.QWebEngineView()
         self.map1.setHtml(data.getvalue().decode())
+        self.map1.page().profile().setUrlRequestInterceptor(self.interceptor)
         self.tabs.removeTab(1)
         self.tab2.destroy()
         self.tab2 = QWidget()
