@@ -44,9 +44,9 @@ Il 18/03/21 ho aggiunto due programmi python per fare in modo che i dati dinamic
 mqtt_send.py provvede a trasmettere o i record in corso di creazione nella giornata attuale oppure tutti i dati già registrati in DB a partire da una data o fra due date prescelte. I dati sono pubblicati su brocker.emx.io che fornisce gratuitamemte il servizio di publish in modo che chiunque vi si collegasse sarà in grado di visulaizzare i dati mesh pubblicati in tempo reale. La cadenza di pubblicazione è fissata in 375 seconti ovvero il periodo di 'beacon' (comunicazione periodica della posizion GPS) configurato su tutti i nodi del mio mesh (mesh 'vinloren').
 
 ### mqtt_subscribe.py
-questo programma consente di vis ualizzare su tabella tutti i dati dei nodi che parlano o abbiano parlato nel mesh selezionato ('vinloren' nel mio caso).
+questo programma consente di visualizzare su tabella tutti i dati dei nodi che parlano o abbiano parlato nel mesh selezionato ('vinloren' nel mio caso).
 I dati mostrati in tabella appaiono una sola volta (l'ultima presente) se la posizione del relativo nodo non è mutata di oltre 10mt, altrimenti i dati di quel nodo appariranno per ciascuna variazione maggiore di posizione. In questo modo abbiamo il tracciamento dei nodi in movimento. Il tutto può essere visualizzato in mappa geografica presente in Tab 2 ('Map').
 
 
 ### Note
-Il programma è stato provato con meshtastic Python API 1.1.50 e node firmware 1.1.50 e poi successivamente aggiornato per supportare ilnuovo ambiente 1.2.xx (ultimo aggiornamento verificato 1.2.17)
+Il programma è stato provato con meshtastic Python API 1.1.50 e node firmware 1.1.50 e poi successivamente aggiornato per supportare il nuovo ambiente 1.2.xx (ultimo aggiornamento verificato 1.2.17)

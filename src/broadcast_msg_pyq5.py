@@ -9,6 +9,7 @@ from PyQt5 import QtWidgets, QtWebEngineWidgets
 
 import sqlite3 as dba
 import meshtastic
+import meshtastic.serial_interface
 from pubsub import pub
 import threading
 import time
@@ -37,7 +38,7 @@ class App(QWidget):
         self.labels = ['data ora','origine','destinazione','tipo messaggio','payload','utente', \
             'da_id','a_id','altitudine','latitudine','longitudine','rxSnr','distanza','rilevamento']
         self.labels1 = ['data ora','user','altitudine','latitudine','longitudine','batteria%', \
-            'rxsnr','distanza','rilevamento']
+            'rxsnr','distanza','rilevamento','chanUtil','airTxUtil','pressione','temperatura','umidità']
         self.csvFile = open('meshtastic_data.csv','wt')
         mylatlbl = QLabel("Home lat:")
         mylonlbl = QLabel("Home lon:")
@@ -179,7 +180,7 @@ class App(QWidget):
                 snr = row[5]
                 dist = round(dist)
                 dist = dist/1000
-                if(abs(dist-prevd)>0.01):
+                if(abs(dist-prevd)>0.1): #se variazione > 100mt marca pos
                     prevd = dist
                     folium.Marker([lat,lon],
                         icon = folium.Icon(color='red'),
@@ -187,7 +188,7 @@ class App(QWidget):
                             ora+'<br>snr: '+str(snr)+'<br>Km: '+str(dist),
                     ).add_to(self.map1)
                     folium.Marker([lat,lon],
-                        icon=folium.DivIcon(html=f"""<div style='font-size: 22px; font-weight: bold;'>{user}</div>""")
+                        icon=folium.DivIcon(html=f"""<div style='font-size: 12px; font-weight: normal;'>{user}</div>""")
                     ).add_to(self.map1)
                     print("Mark added")
             cur.close()
@@ -200,14 +201,17 @@ class App(QWidget):
                     dist = round(dist)
                     dist = dist/1000
                     ora = node['time'].split(' ')[1]
+                    segndist = "None"
+                    if ('snr' in node):
+                        segndist = str(node['snr'])  
                     if(dist > 0.01):
                         folium.Marker([node['lat'],node['lon']],
                             icon = folium.Icon(color='red'),
                             popup = node['user']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;<br>ora: '+ \
-                                ora+'<br>snr: '+str(node['snr'])+'<br>Km: '+str(dist),
+                                ora+'<br>snr: '+segndist+'<br>Km: '+str(dist),
                         ).add_to(self.map1)
                         folium.Marker([node['lat'],node['lon']],
-                        icon=folium.DivIcon(html=f"""<div style='font-size: 22px; font-weight: bold;'>{node['user']}</div>""")
+                        icon=folium.DivIcon(html=f"""<div style='font-size: 12px; font-weight: normal;'>{node['user']}</div>""")
                     ).add_to(self.map1)
         data = io.BytesIO()
         self.map1.save(data, close_file=False)
@@ -228,7 +232,7 @@ class App(QWidget):
         global RUNNING,interface
         if(RUNNING==True):
             return
-        interface = meshtastic.SerialInterface()
+        interface = meshtastic.serial_interface.SerialInterface()
         RUNNING = True
 
 
@@ -297,9 +301,9 @@ def showInfo():
             item4 = QTableWidgetItem()
             item4.setText(str(info['lon'])[0:8])
             ex.table1.setItem(r,4,item4)
-        if('batteryLevel' in info):
+        if('battlv' in info):
             item5 = QTableWidgetItem()
-            item5.setText(str(info['batteryLevel']))
+            item5.setText(str(info['battlv']))
             ex.table1.setItem(r,5,item5)
         if('snr' in info):
             item6 = QTableWidgetItem()
@@ -313,6 +317,26 @@ def showInfo():
             item8 = QTableWidgetItem()
             item8.setText(str(round(info['rilevamento']*10)/10))
             ex.table1.setItem(r,8,item8)
+        if('chutil' in info):
+            item9 = QTableWidgetItem()
+            item9.setText(str(round(info['chutil']*10)/10))
+            ex.table1.setItem(r,9,item9)
+        if('airutil' in info):
+            item10 =  QTableWidgetItem()
+            item10.setText(str(round(info['airutil']*10)/10))
+            ex.table1.setItem(r,10,item10)
+        if('pressione' in info):
+            item11 = QTableWidgetItem()
+            item11.setText(str(round(info['pressione']*10)/10))
+            ex.table1.setItem(r,11,item11)
+        if('temperatura' in info):
+            item12 = QTableWidgetItem()
+            item12.setText(str(round(info['temperatura']*10)/10))
+            ex.table1.setItem(r,12,item12)
+        if('humidity' in info):
+            item13 = QTableWidgetItem()
+            item13.setText(str(round(info['humidity']*10)/10))
+            ex.table1.setItem(r,13,item13)
         r += 1
 
 
@@ -333,16 +357,17 @@ def insertDB(query):
 
 
 #inserisci nuovo user in dictionary
-def insertUser(user,id):
+def insertUser(nodenum,user,id):
     n = len(nodeInfo)
     i = 0
     while(i<n):
-        if (id == nodeInfo[i]['id']):
+        if (nodenum == nodeInfo[i]['nodenum']):
             break
         else:
             i += 1
     if(i==n):   #id non esiste, aggiungi nuovo user e id
         newuser = {}
+        newuser['nodenum']=nodenum
         newuser['user']=user
         newuser['id'] = id
         newuser['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")
@@ -363,6 +388,7 @@ def insertUser(user,id):
         if((now-prima)>60):
             showInfo()     # insert data in Table1 and set marker on geomap
             newuser = {}
+            newuser['nodenum'] = nodenum
             newuser['user']=user
             newuser['id'] = id
             newuser['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")
@@ -390,7 +416,7 @@ def max_IdDB():
     return nr
 
 
-def updateUser(id,coord,altitude,distance,rilev,batt):
+def updateUser(id,coord,altitude,distance,rilev):
     #trova id in nodeInfo
     i = 0
     for info in nodeInfo:
@@ -402,11 +428,10 @@ def updateUser(id,coord,altitude,distance,rilev,batt):
             nodeInfo[i].update({'distance': distance})
             nodeInfo[i].update({'rilevamento': rilev})
             nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
-            if('batteryLevel' in nodeInfo[i]):
-                if(batt != 'N/A'):
-                    nodeInfo[i].update({'batteryLevel': batt})
-            else:
-                nodeInfo[i].update({'batteryLevel': batt})
+            batt = ' '
+            if('battlv' in nodeInfo[i]):
+                batt = str(nodeInfo[i]['battlv'])
+           
             qr = "update connessioni set lat="+str(nodeInfo[i]['lat'])+",lon="+str(nodeInfo[i]['lon'])+ \
                 ",alt="+str(nodeInfo[i]['alt'])+",dist="+str(nodeInfo[i]['distance'])+",rilev="+ \
                 str(nodeInfo[i]['rilevamento'])+",batt='"+batt+"',data='"+datetime.datetime.now().strftime('%y/%m/%d')+ \
@@ -458,8 +483,12 @@ def onReceive(packet, interface): # called when a packet arrives
     ex.table.setItem(r,1,item1)
     ex.table.setItem(r,2,item2)
     item6 = QTableWidgetItem()
-    row[6] = packet['fromId']+';'
-    item6.setText(packet['fromId'])
+    if (isinstance(packet['fromId'],str)):
+        row[6] = packet['fromId']+';'
+        item6.setText(packet['fromId'])
+    else:
+        row[6] = 'None;'
+        item6.setText('None')
     ex.table.setItem(r,6,item6)
     item7 = QTableWidgetItem()
     row[7] = packet['toId']+';'
@@ -480,7 +509,7 @@ def onReceive(packet, interface): # called when a packet arrives
             item5.setText(packet['decoded']['user']['longName'])
             row[5] = packet['decoded']['user']['longName']+';'
             ex.table.setItem(r,5,item5)
-            insertUser(packet['decoded']['user']['longName'],packet['fromId'])
+            insertUser(from_,packet['decoded']['user']['longName'],packet['fromId'])
             showInfo()
         if (packet['decoded']['portnum'] == 'POSITION_APP'):
             if('altitude' in packet['decoded']['position']):
@@ -515,13 +544,10 @@ def onReceive(packet, interface): # called when a packet arrives
                 row[13] = str(round(rilev*10)/10)+'\n'
                 print(rilev)
                 # aggiorna nodeInfo
-                batt = 'N/A'
-                if('batteryLevel' in packet['decoded']['position']):
-                    batt = str(packet['decoded']['position']['batteryLevel'])
                 if('altitude' in packet['decoded']['position']):
-                    updateUser(packet['fromId'],coord2,packet['decoded']['position']['altitude'],distance,rilev,batt)
+                    updateUser(packet['fromId'],coord2,packet['decoded']['position']['altitude'],distance,rilev)
                 else:
-                    updateUser(packet['fromId'],coord2,'0',distance,rilev,batt)
+                    updateUser(packet['fromId'],coord2,'0',distance,rilev)
                 showInfo()
             if('rxSnr' in packet):
                 item11 = QTableWidgetItem()
@@ -530,6 +556,33 @@ def onReceive(packet, interface): # called when a packet arrives
                 ex.table.setItem(r,11,item11)
                 updateSnr(packet['fromId'],str(packet['rxSnr']))
                 showInfo()
+        if (packet['decoded']['portnum'] == 'TELEMETRY_APP'):
+                if('deviceMetrics' in packet['decoded']['telemetry']):
+                    battlvl = ' '
+                    chanutil = 0
+                    airutil = 0
+                    if('batteryLevel' in packet['decoded']['telemetry']['deviceMetrics']):
+                        battlvl   = packet['decoded']['telemetry']['deviceMetrics']['batteryLevel']
+                    if('channelUtilization' in packet['decoded']['telemetry']['deviceMetrics']):
+                        chanutil  = packet['decoded']['telemetry']['deviceMetrics']['channelUtilization']
+                    if('airUtilTx' in packet['decoded']['telemetry']['deviceMetrics']):
+                        airutil   = packet['decoded']['telemetry']['deviceMetrics']['airUtilTx']
+                    updateTelemetry(packet['from'],battlvl,chanutil,airutil) 
+                    showInfo()
+                if('environmentMetrics' in packet['decoded']['telemetry']):
+                    temperatura = 0
+                    pressione = 0
+                    humidity = 0
+                    if('temperature' in packet['decoded']['telemetry']['environmentMetrics']):
+                        temperatura = packet['decoded']['telemetry']['environmentMetrics']['temperature']
+                    if('barometricPressure' in packet['decoded']['telemetry']['environmentMetrics']):
+                        pressione = packet['decoded']['telemetry']['environmentMetrics']['barometricPressure']
+                    if('relativeHumidity' in packet['decoded']['telemetry']['environmentMetrics']):
+                        humidity = packet['decoded']['telemetry']['environmentMetrics']['relativeHumidity']  
+                    updateSensors(packet['from'],temperatura,pressione,humidity)
+                    showInfo()
+
+
 
     if(ex.rbtn2.isChecked()):
         i = 0
@@ -538,11 +591,36 @@ def onReceive(packet, interface): # called when a packet arrives
             i += 1
     count = count+1
 
+
+def updateTelemetry(nodenum,battlv,chanutil,airutil):
+    i = 0
+    for info in nodeInfo:
+        if(info['nodenum'] == nodenum):
+            nodeInfo[i].update({'battlv': battlv})
+            nodeInfo[i].update({'chutil': chanutil})
+            nodeInfo[i].update({'airutil': airutil})
+            break
+        i = i+1
+    print(nodeInfo)
+
+def updateSensors(nodenum,temperatura,pressione,humidity):
+    i = 0
+    for info in nodeInfo:
+        if(info['nodenum'] == nodenum):
+            nodeInfo[i].update({'temperatura': temperatura})
+            nodeInfo[i].update({'pressione': pressione})
+            nodeInfo[i].update({'humidity': humidity})
+            break
+        i = i+1
+    print(nodeInfo)
+
 def onConnection(interface, topic=pub.AUTO_TOPIC): # called when we (re)connect to the radio
     print ("starting...")
+    if(msgcount > 1):
+        return
     interface.sendText("Hello mesh")
     ex.log.append("Starting...")
-    rt = RepeatedTimer(120, sendText) # no need of rt.start()
+    rt = RepeatedTimer(600, sendText) # no need of rt.start()
 
 
 def sendText(): # called every x seconds
