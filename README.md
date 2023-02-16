@@ -50,3 +50,4 @@ I dati mostrati in tabella appaiono una sola volta (l'ultima presente) se la pos
 
 ### Note
 Il programma è stato provato con meshtastic Python API 1.1.50 e node firmware 1.1.50 e poi successivamente aggiornato per supportare il nuovo ambiente 1.2.xx (ultimo aggiornamento verificato 1.2.17)
+Il 16 GFeb 2013 sono stati fatti aggiornamenti per supportare il livello 2.0.x di Meshtastic
