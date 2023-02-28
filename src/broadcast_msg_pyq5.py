@@ -31,7 +31,7 @@ class App(QWidget):
     homeLoc = {}
     nodeInfo = []
     callmesh = object
-    meshdb   = object
+    calldb   = object
     dataDB   = pyqtSignal(object)
 
 
@@ -165,6 +165,8 @@ class App(QWidget):
         hbox1.addWidget(self.label2)
         hbox2.addWidget(self.log)
         hbox2.addWidget(self.ricevuti)
+        self.log.setReadOnly(True)
+        self.ricevuti.setReadOnly(True)
         self.rbtn2.clicked.connect(self.handleFile)
         self.log.setMaximumHeight(180)
         self.ricevuti.setMaximumHeight(180)
@@ -270,8 +272,8 @@ class App(QWidget):
                 self.callmesh.sendImmediate()
             return
         self.callmesh = meshInterface()
-        #if(self.callmesh.setInterface() == False):
-        #    return
+        self.calldb = callDB()
+        self.calldb.start()
         if(self.rbtn1.isChecked()==False):
             self.callmesh.setSendTx(True)  # non invia messaggi periodici
         else:
@@ -332,8 +334,7 @@ class App(QWidget):
 
 
     def onPacketRcv(self,packet):
-        #print(packet)
-        #self.log.append(f"{packet}")
+        print(packet)
         row = ['-;','-;','-;','-;', \
             '-;','-;','-;','-;', \
             '-;','-;','-;','-;','-;',' \n']
@@ -396,7 +397,7 @@ class App(QWidget):
                 nome = packet['decoded']['user']['longName']
                 pdict.update({'longname': nome})
                 pdict.update({'chiave': from_})
-                self.dataDB.emit(pdict)
+                self.calldb.InsUpdtDB(pdict)
                 self.showInfo()
             
             elif (packet['decoded']['portnum'] == 'ADMIN_APP'):
@@ -449,12 +450,12 @@ class App(QWidget):
                             self.updateUser(from_,coord2,packet['decoded']['position']['altitude'],distance,rilev)
                             pdict.update({'alt': packet['decoded']['position']['altitude']})
                             pdict.update({'chiave': from_})
-                            self.dataDB.emit(pdict)
+                            self.calldb.InsUpdtDB(pdict)
                         else:
                             self.updateUser(from_,coord2,'0',distance,rilev)
                             pdict.update({'alt': 0})
                             pdict.update({'chiave': from_})
-                            self.dataDB.emit(pdict)
+                            self.calldb.InsUpdtDB(pdict)
                     self.showInfo()
                     
                 if('rxSnr' in packet):
@@ -466,7 +467,7 @@ class App(QWidget):
                     pdict = {}
                     pdict.update({'snr': packet['rxSnr']})
                     pdict.update({'chiave': from_})
-                    self.dataDB.emit(pdict)
+                    self.calldb.InsUpdtDB(pdict)
                     self.showInfo()
                     
                 
@@ -513,7 +514,7 @@ class App(QWidget):
                             pdict.update({'chanutil': chanutil})
                             pdict.update({'airutiltx': airutil})
                             pdict.update({'chiave': from_})
-                            self.dataDB.emit(pdict)
+                            self.calldb.InsUpdtDB(pdict)
                             
                     if('environmentMetrics' in packet['decoded']['telemetry']):
                         temperatura = 0
@@ -532,7 +533,7 @@ class App(QWidget):
                         pdict.update({'temperat': temperatura})
                         pdict.update({'umidita': humidity})
                         pdict.update({'chiave': from_})
-                        self.dataDB.emit(pdict)
+                        self.calldb.InsUpdtDB(pdict)
                         
 
             elif (packet['decoded']['portnum'] == 'TEXT_MESSAGE_APP'):
@@ -647,6 +648,7 @@ class App(QWidget):
     
     def insertDB(self,query):
         timstr = time.perf_counter_ns()
+        self.calldb.dbbusy = True
         conn = dba.connect('meshDB.db')
         cur = conn.cursor()
         try:
@@ -661,6 +663,7 @@ class App(QWidget):
         conn.close()
         timtot = time.perf_counter_ns() - timstr
         print(f"InsertDB Tab. connessioni eseguita in {timtot // 1000000}ms.")
+        self.calldb.dbbusy = False
 
         #inserisci nuovo user in dictionary
     def insertUser(self,nodenum,user,id):
@@ -705,6 +708,7 @@ class App(QWidget):
 
     def max_IdDB(self):
         qr = "select max(_id) from connessioni"
+        self.calldb.dbbusy = True
         conn = dba.connect('meshDB.db')
         cur = conn.cursor()
         rows = cur.execute(qr)
@@ -713,6 +717,7 @@ class App(QWidget):
         nr = datas[0][0]
         cur.close()
         conn.close()
+        self.calldb.dbbusy = False
         return nr
 
     def findUser(self,nodenum):
@@ -817,77 +822,6 @@ class meshInterface(QThread):
     sendtx   = True
     secondi  = 0
     lastcnt  = -1
-    timstart = 0.0
-    timtot   = 0.0
-
-
-    def InsUpdtDB(self, pdict):
-        ts = datetime.datetime.now().strftime("%H:%M:%S.%f")
-        print(ts+" Acquisito dict per InsUpdtDB")
-        self.pdict = pdict
-
-    def execInsUpdtDB(self,dict):
-        #print("Inizio InsUpdt")
-        #print(dict)
-        self.timstart = time.perf_counter_ns()
-        chiave = dict['chiave']
-        del dict['chiave']
-        qr = "select count(*) from meshnodes where nodenum = "+str(chiave)
-        data = datetime.datetime.now().strftime("%y/%m/%d") 
-        ora  = datetime.datetime.now().strftime("%T") 
-        conn = dba.connect('meshDB.db')
-        cur  = conn.cursor()
-        rows = cur.execute(qr)
-        datas = rows.fetchall()
-        nr = datas[0][0]
-        cur.close()
-        conn.close()
-        #print("Update o Insert?")
-        campi = list(dict.keys())
-        #print(campi)
-        if(nr > 0):
-            qr = "update meshnodes set data='"+data+"',ora='"+ora+"'"
-            i = 0
-            while(i < len(campi)):
-                qr += ","+campi[i]+"='"+str(dict.get(campi[i]))+"'"
-                i += 1           
-            qr += " where nodenum="+str(chiave)
-            #print(qr)
-            self.insertDB(qr)
-        else:
-            qr = "insert into meshnodes (nodenum,data,ora,"
-            i = 0
-            while(i < len(campi)-1):
-                qr += campi[i]+","
-            qr += campi[i]+") values("+str(chiave)+",'"+data+"','"+ora+"','"
-            i=0
-            while(i < len(campi)-1):
-                qr += str(dict.get(campi[i]))+"','"
-                i += 1
-            qr += str(dict.get(campi[i]))+"')"
-            #print(qr)
-            self.insertDB(qr)
-            self.timtot = time.perf_counter_ns() - self.timstart
-        print(f"InsUpdtDB eseguita in {self.timtot // 1000000}ms.")
-
-    def insertDB(self,query):
-        #print("Insert/Update")
-        print(query)
-        try:
-            conn = dba.connect('meshDB.db')
-        except:
-            print("conn time-out in InsUpdtDB")
-            return
-        cur = conn.cursor()
-        try:
-            cur.execute(query)
-            conn.commit()
-        except dba.Error as er:
-            print('SQLite error: %s' % (' '.join(er.args)))
-            print("Exception class is: ", er.__class__)
-            print(query)
-        cur.close()
-        conn.close()
 
     def setInterface(self):    
         try:
@@ -921,7 +855,6 @@ class meshInterface(QThread):
     
     def run(self):
         print("meshInterface started..")
-        ex.dataDB.connect(self.InsUpdtDB)
         if(self.setInterface() == False):
             return
         
@@ -934,8 +867,6 @@ class meshInterface(QThread):
 
         while(True):
             time.sleep(1)
-            #ts = datetime.datetime.now().strftime("%H:%M:%S")
-            #print(ts)
             self.secondi += 1
             if(self.secondi % 600 == 0):
                 if(self.sendtx == True):
@@ -947,32 +878,120 @@ class meshInterface(QThread):
                     self.msgcount += 1
             
             if(self.packet == {}):
-                if(self.pdict == {}):  
-                    continue
-                else:
-                    ts = datetime.datetime.now().strftime("%H:%M:%S.%f")
-                    print(ts+" Eseguo InsUpdtDB..")
-                    self.execInsUpdtDB(self.pdict) 
-                    self.pdict = {} 
+                continue
             else:
                 ts = datetime.datetime.now().strftime("%H:%M:%S.%f")
                 print(ts+" Emit packet..")
                 self.actionDone.emit(self.packet)
                 self.packet = {}    
+        ex.log.append("While loop in Thread interrotto..")
 
+        
+    
     def onReceive(self,packet,interface): # called when a packet arrives
         if(self.secondi > self.lastcnt):
             self.packet = packet
             ts = datetime.datetime.now().strftime("%H:%M:%S.%f")
             print(ts)
-            print(f"{packet}")
-            self.lastcnt = self.secondi
-        else:
-            ts = datetime.datetime.now().strftime("%H:%M:%S")
-            msg = ts+" Thread meshInterface non gira più.."
-            print(msg)
-            ex.log.append(msg)
+
         
+
+class callDB(QThread):
+    timstart = 0.0
+    timtot   = 0.0
+    dbbusy   = False
+    slptcnt  = 0
+    arraypdict = []
+
+    def InsUpdtDB(self, pdict):
+        ts = datetime.datetime.now().strftime("%H:%M:%S.%f")
+        self.arraypdict.append(pdict)
+        print(ts+" Acquisito dict"+str(len(self.arraypdict))+" per InsUpdtDB")
+       
+    def execInsUpdtDB(self,dict):
+        #print("Inizio InsUpdt")
+        print(dict)
+        self.timstart = time.perf_counter_ns()
+        chiave = dict['chiave']
+        del dict['chiave']
+        qr = "select count(*) from meshnodes where nodenum = "+str(chiave)
+        data = datetime.datetime.now().strftime("%y/%m/%d") 
+        ora  = datetime.datetime.now().strftime("%T") 
+        conn = dba.connect('meshDB.db')
+        cur  = conn.cursor()
+        rows = cur.execute(qr)
+        datas = rows.fetchall()
+        nr = datas[0][0]
+        cur.close()
+        conn.close()
+        #print("Update o Insert?")
+        campi = list(dict.keys())
+        if(nr > 0):
+            qr = "update meshnodes set data='"+data+"',ora='"+ora+"'"
+            i = 0
+            while(i < len(campi)):
+                qr += ","+campi[i]+"='"+str(dict.get(campi[i]))+"'"
+                i += 1           
+            qr += " where nodenum="+str(chiave)
+            #print(qr)
+            self.insertDB(qr)
+        else:
+            qr = "insert into meshnodes (nodenum,data,ora,"
+            i = 0
+            while(i < len(campi)-1):
+                qr += campi[i]+","
+                i += 1
+            qr += campi[i]+") values("+str(chiave)+",'"+data+"','"+ora+"','"
+            i=0
+            while(i < len(campi)-1):
+                qr += str(dict.get(campi[i]))+"','"
+                i += 1
+            qr += str(dict.get(campi[i]))+"')"
+            #print(qr)
+            self.insertDB(qr)
+            self.timtot = time.perf_counter_ns() - self.timstart
+        print(f"InsUpdtDB eseguita in {self.timtot // 1000000}ms.")
+
+    def insertDB(self,query):
+        #print("callDB: Insert/Update")
+        #print(query)
+        try:
+            conn = dba.connect('meshDB.db')
+            #print("callDB conn.dba..")
+        except:
+            print("conn time-out in InsUpdtDB")
+            return
+        cur = conn.cursor()
+        try:
+            cur.execute(query)
+            conn.commit()
+        except dba.Error as er:
+            print('SQLite error: %s' % (' '.join(er.args)))
+            print("Exception class is: ", er.__class__)
+            print(query)
+        cur.close()
+        conn.close()
+
+    def run(self):
+        while(True):
+            time.sleep(0.5)
+            self.slptcnt += 1
+            if(len(self.arraypdict) == 0):  
+                continue
+            else:
+                if(self.dbbusy == False):
+                    for pdict in self.arraypdict:
+                        ts = datetime.datetime.now().strftime("%H:%M:%S.%f")         
+                        print(ts+" Eseguo InsUpdtDB..")
+                        self.execInsUpdtDB(pdict)
+                    self.arraypdict = []
+                else:
+                    print("meshDB occupato..")
+
+               
+
+
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
