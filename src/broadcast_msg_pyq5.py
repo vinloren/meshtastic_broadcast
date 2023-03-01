@@ -178,6 +178,19 @@ class App(QWidget):
         self.setGeometry(100, 50, 1200,640)
         self.show()
 
+    def closeEvent(self, event):
+        #salva mylat e mylon in meshnodes
+        mylat = self.mylat.text()
+        mylon = self.mylon.text()
+        qr = "update meshnodes set lat ='"+mylat+"',lon='"+mylon+"' where nodenum="+str(self.mynodeId)
+        print("Salvo mylat e mylon in DB: "+mylat+' '+mylon)
+        conn = dba.connect('meshDB.db')
+        cur = conn.cursor()
+        cur.execute(qr)
+        conn.commit()
+        cur.close()
+        conn.close()
+        print("Coordinate gps salvate..")
 
     def showMap(self):
         self.homeLoc['lat'] = float(self.mylat.text())
@@ -271,7 +284,6 @@ class App(QWidget):
             if(self.rbtn3.isChecked()==True):
                 self.callmesh.sendImmediate()
             return
-        self.loadPeers()
         self.callmesh = meshInterface()
         self.calldb = callDB()
         self.calldb.start()
@@ -281,7 +293,9 @@ class App(QWidget):
             self.callmesh.setSendTx(False) # non invia messaggi periodice
         self.callmesh.actionDone.connect(self.onPacketRcv)
         self.callmesh.start()
-       
+        self.RUNNING = True
+
+    def loadHist(self):
         conn = dba.connect('meshDB.db')
         cur = conn.cursor()
         #riempi combobox con lista dei giorni presenti in db
@@ -292,8 +306,7 @@ class App(QWidget):
         for giorno in datas:
             self.combobox.addItem(giorno[0])
         cur.close()
-        conn.close()       
-        self.RUNNING = True
+        conn.close()  
 
     def loadPeers(self):
         #trova data minore di 7gg rispetto oggi
@@ -1050,12 +1063,11 @@ class callDB(QThread):
                 else:
                     print("meshDB occupato..")
 
-               
-
-
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = App()
+    ex = App() 
+    ex.loadHist()
+    ex.loadPeers()
     sys.exit(app.exec_())  
