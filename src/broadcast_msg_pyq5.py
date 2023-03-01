@@ -271,6 +271,7 @@ class App(QWidget):
             if(self.rbtn3.isChecked()==True):
                 self.callmesh.sendImmediate()
             return
+        self.loadPeers()
         self.callmesh = meshInterface()
         self.calldb = callDB()
         self.calldb.start()
@@ -278,11 +279,7 @@ class App(QWidget):
             self.callmesh.setSendTx(True)  # non invia messaggi periodici
         else:
             self.callmesh.setSendTx(False) # non invia messaggi periodice
-
         self.callmesh.actionDone.connect(self.onPacketRcv)
-        #self.callmesh.dataDB.connect(self.InsUpdtDB)
-        #self.meshdb = meshDB()
-        #self.meshdb.start()
         self.callmesh.start()
        
         conn = dba.connect('meshDB.db')
@@ -298,7 +295,54 @@ class App(QWidget):
         conn.close()       
         self.RUNNING = True
 
-    
+    def loadPeers(self):
+        #trova data minore di 7gg rispetto oggi
+        prv = datetime.datetime.now().timestamp()-86400*7
+        prvdate = datetime.date.fromtimestamp(prv).strftime("%y/%m/%d")
+        conn = dba.connect('meshDB.db')
+        cur = conn.cursor()
+        #cancella record piu vecchi di 7gg
+        qr = "delete from meshnodes where data < '"+prvdate+"'"
+        cur.execute(qr)
+        conn.commit()
+        qr = "select * from meshnodes"
+        rows = cur.execute(qr)
+        datas = rows.fetchall()
+        for row in datas:
+            info = {}
+            dataora = row[0]+' '+row[1]
+            info['time'] = dataora
+            info['nodenum'] = row[2]
+            info['user'] = row[3]
+            if((row[4] == None) == False):
+                info['alt'] = row[4]
+            if((row[5] == None) == False):
+                info['lat'] = row[5]
+            if((row[6] == None) == False):
+                info['lon'] = row[6]
+            if((row[7] == None) == False):
+                info['battlv'] = row[7]
+            if((row[8] == None) == False):
+                info['snr'] = row[8]
+            if((row[9] == None) == False):
+                info['distance'] = row[9]
+            if((row[10] == None) == False):
+                info['rilevamento'] = row[10]
+            if((row[11] == None) == False):
+                info['chutil'] = row[11]
+            if((row[12] == None) == False):
+                info['airutil'] = row[12]
+            if((row[13] == None) == False):
+                info['pressione'] = row[13]
+            if((row[14] == None) == False):
+                info['temperatura'] = row[14]
+            if((row[15] == None) == False):
+                info['humidity'] = row[15]
+            self.nodeInfo.append(info)
+        cur.close()
+        conn.close()  
+        self.showInfo()
+
     def chusageGreen(self):
         self.chusage.setStyleSheet("QProgressBar::chunk "
                       "{"
@@ -405,6 +449,19 @@ class App(QWidget):
                 if(from_ == to_):
                     self.mynodeId = from_
                     self.ricevuti.append("mynodeID = "+str(from_))
+                    fromId = packet['fromId']
+                    i = 0
+                    for info in self.nodeInfo:
+                        if(self.nodeInfo[i]['nodenum'] == self.mynodeId): 
+                            self.nodeInfo[i]['user'] = 'mioGW'
+                            self.nodeInfo[i]['id'] = fromId
+                            break
+                        i += 1
+                    if(len(self.nodeInfo)==i):
+                        self.nodeinfo[i]['nodenum'] = self.mynodeId
+                        self.nodeInfo[i]['user'] = 'mioGW'
+                        self.nodeInfo[i]['id'] = fromId
+
             
             elif (packet['decoded']['portnum'] == 'POSITION_APP'):
                 tipmsg = 'POSITION_APP'
@@ -617,7 +674,9 @@ class App(QWidget):
                 self.table1.setItem(r,6,item6)
             if('distance' in info):
                 item7 = QTableWidgetItem()
-                item7.setText(str(round(info['distance'])))
+                dist = (float)(info['distance']/1000.0)
+                dist = round(dist,2)
+                item7.setText(str(dist))
                 self.table1.setItem(r,7,item7)
             if('rilevamento' in info):
                 item8 = QTableWidgetItem()
@@ -693,7 +752,9 @@ class App(QWidget):
             # se now() - nodeInfo[i]['time'] > 1 minuto fai showInfo() per riempire Tab1
             # e inserire record in DB e poi aggiornalo creando newuser in posizione [i] 
             now = datetime.datetime.now().timestamp()
-            prima = self.nodeInfo[i]['ts']
+            prima = 0
+            if('ts' in self.nodeInfo[i]):
+                prima = self.nodeInfo[i]['ts']
             if((now-prima)>59):
                 self.nodeInfo[i]['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")           
                 self.nodeInfo[i]['ts'] = now
@@ -741,12 +802,12 @@ class App(QWidget):
                 batt = ' '
                 if('battlv' in self.nodeInfo[i]):
                     batt = str(self.nodeInfo[i]['battlv'])
-            
-                qr = "update connessioni set lat="+str(self.nodeInfo[i]['lat'])+",lon="+str(self.nodeInfo[i]['lon'])+ \
-                    ",alt="+str(self.nodeInfo[i]['alt'])+",dist="+str(self.nodeInfo[i]['distance'])+",rilev="+ \
-                    str(self.nodeInfo[i]['rilevamento'])+",batt='"+batt+"',data='"+datetime.datetime.now().strftime('%y/%m/%d')+ \
-                    "',ora='"+datetime.datetime.now().strftime('%T')+"' where _id ="+str(self.nodeInfo[i]['_id'])
-                self.insertDB(qr)
+                if('_id' in self.nodeInfo[i]):
+                    qr = "update connessioni set lat="+str(self.nodeInfo[i]['lat'])+",lon="+str(self.nodeInfo[i]['lon'])+ \
+                        ",alt="+str(self.nodeInfo[i]['alt'])+",dist="+str(self.nodeInfo[i]['distance'])+",rilev="+ \
+                        str(self.nodeInfo[i]['rilevamento'])+",batt='"+batt+"',data='"+datetime.datetime.now().strftime('%y/%m/%d')+ \
+                        "',ora='"+datetime.datetime.now().strftime('%T')+"' where _id ="+str(self.nodeInfo[i]['_id'])
+                    self.insertDB(qr)
             i += 1
         print(self.nodeInfo)
 
@@ -754,12 +815,13 @@ class App(QWidget):
         #trova id in nodeInfo
         i = 0
         for info in self.nodeInfo:
-            if(info['id'] == id):
-                self.nodeInfo[i].update({'snr': snr})
-                self.nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
-                qr = "update connessioni set snr="+str(self.nodeInfo[i]['snr'])+" where _id="+str(self.nodeInfo[i]['_id'])
-                self.insertDB(qr)
-                break
+            if('id' in info):
+                if(info['id'] == id):
+                    self.nodeInfo[i].update({'snr': snr})
+                    self.nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+                    qr = "update connessioni set snr="+str(self.nodeInfo[i]['snr'])+" where _id="+str(self.nodeInfo[i]['_id'])
+                    self.insertDB(qr)
+                    break
             i += 1
         print(self.nodeInfo)
 
