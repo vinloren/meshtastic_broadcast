@@ -50,11 +50,11 @@ class App(QWidget):
         mylatlbl = QLabel("Home lat:")
         mylonlbl = QLabel("Home lon:")
         voidlbl = QLabel("")
-        voidlbl.setMinimumWidth(320)
+        voidlbl.setMinimumWidth(110)
         self.mylat = QLineEdit()
         self.mylon = QLineEdit()
-        #mylatlbl.setMaximumWidth(60)
-        #mylonlbl.setMaximumWidth(60)
+        mylatlbl.setMaximumWidth(60)
+        mylonlbl.setMaximumWidth(60)
         mapbtn =  QPushButton("SHOW MAP",self)
         #mapbtn.setMaximumWidth(110)
         self.radiob = QRadioButton('Storico giorno:')
@@ -62,27 +62,35 @@ class App(QWidget):
         self.combobox = QComboBox(self)
         self.combobox.setMinimumWidth(90)
         fra = QLabel("fra")
+        fra.setMaximumWidth(20)
         self.fragiorno = QLineEdit()
-        self.fragiorno.setText('21/01/01')
-        #self.fragiorno.setMaximumSize(70,24)
+        self.fragiorno.setText('23/03/01')
+        self.fragiorno.setMaximumSize(70,24)
         et = QLabel("e")
+        et.setMaximumWidth(20)
         self.egiorno = QLineEdit()
         oggi = datetime.datetime.now().strftime("%y/%m/%d")
         self.egiorno.setText(oggi)
-        #self.egiorno.setMaximumSize(70,24)
+        self.egiorno.setMaximumSize(70,24)
         mapbtn.clicked.connect(self.showMap)
-        #self.mylat.setMaximumWidth(80)
-        #self.mylon.setMaximumWidth(80)
+        self.mylat.setMinimumWidth(70)
+        self.mylon.setMinimumWidth(70)
+        #self.mylat.setMaximumWidth(70)
+        #self.mylon.setMaximumWidth(70)
         self.mylat.setText('45.641174')
         self.mylon.setText('9.114828')
         lblmap = QLabel("Tipo Map")
         self.combomap = QComboBox(self)
         self.combomap.addItem("OpenStreetMap")
-      # self.combomap.addItem("Mapbox Bright")
         self.combomap.addItem('Stamen Terrain')
         self.combomap.addItem("Stamen Toner")
         self.combomap.addItem("CartoDB positron")
         self.combomap.addItem("CartoDB dark_matter")
+        self.lblcbnode = QLabel("Map node:")
+        self.combonode = QComboBox(self)
+        self.combonode.addItem("map solo i GW")
+        self.combonode.setMinimumWidth(130)
+        self.combonode.setMaximumWidth(140)
         hhome = QHBoxLayout()
         hhome.addWidget(mylatlbl)
         hhome.addWidget(self.mylat)
@@ -95,9 +103,13 @@ class App(QWidget):
         hhome.addWidget(self.fragiorno)
         hhome.addWidget(et)
         hhome.addWidget(self.egiorno)
+        #hhome.addWidget(voidlbl)
         hhome.addWidget(lblmap)
         hhome.addWidget(self.combomap)
+        hhome.addWidget(self.lblcbnode)
+        hhome.addWidget(self.combonode)
         hhome.addWidget(voidlbl)
+
         self.layout = QVBoxLayout(self)
         self.setWindowTitle(self.title)
         self.tabs = QTabWidget()
@@ -112,6 +124,7 @@ class App(QWidget):
         self.rbtn1 = QCheckBox('Solo ricezione') 
         self.rbtn3 = QCheckBox('Mess. immediato')
         self.rbtn2 = QCheckBox('Genera csv file')
+        self.rbtn4 = QCheckBox('Autorisposta')
         self.rbtn1.setMaximumWidth(150)
         self.rbtn2.setMinimumWidth(150)
         startb = QPushButton("START",self)
@@ -130,13 +143,13 @@ class App(QWidget):
         hbox.addWidget(self.inText) 
         hbox.addWidget(self.rbtn1)
         hbox.addWidget(self.rbtn3)
+        hbox.addWidget(self.rbtn4)
         hbox.addWidget(self.rbtn2)
         hbox.addWidget(self.lblmsgat)
         hbox.addWidget(self.lblchus)
         hbox.addWidget(self.chusage)
         hbox.addWidget(self.lblairu)
         hbox.addWidget(self.airustx)
-
         # Add tabs
         self.tabs.addTab(self.tab1,"Messaggi")
         self.tabs.addTab(self.tab2,"Connessi")
@@ -163,6 +176,7 @@ class App(QWidget):
         self.ricevuti= QTextEdit()
         hbox1.addWidget(self.label1)
         hbox1.addWidget(self.label2)
+        self.log.setFontFamily('Courier New')
         hbox2.addWidget(self.log)
         hbox2.addWidget(self.ricevuti)
         self.log.setReadOnly(True)
@@ -175,14 +189,14 @@ class App(QWidget):
         self.layout.addLayout(hbox1)
         self.layout.addLayout(hbox2)
         self.layout.addLayout(hbox)
-        self.setGeometry(100, 50, 1200,640)
+        self.setGeometry(100, 50, 1024,640)
         self.show()
 
     def closeEvent(self, event):
         #salva mylat e mylon in meshnodes
         mylat = self.mylat.text()
         mylon = self.mylon.text()
-        qr = "update meshnodes set lat ='"+mylat+"',lon='"+mylon+"' where nodenum="+str(self.mynodeId)
+        qr = "update meshnodes set lat ='"+mylat+"',lon='"+mylon+"' where longname='mioGW'"
         print("Salvo mylat e mylon in DB: "+mylat+' '+mylon)
         conn = dba.connect('meshDB.db')
         cur = conn.cursor()
@@ -225,10 +239,9 @@ class App(QWidget):
                 dist = row[3]
                 ora = row[4]
                 snr = row[5]
-                dist = round(dist)
-                dist = dist/1000
-                if(abs(dist-prevd)>0.1): #se variazione > 100mt marca pos
-                    prevd = dist
+                dist = dist/1000.0
+                dist = round(dist,1)
+                if('GW' in user): #se variazione > 100mt marca pos
                     folium.Marker([lat,lon],
                         icon = folium.Icon(color='red'),
                         popup = user+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;<br>ora: '+ \
@@ -238,15 +251,29 @@ class App(QWidget):
                         icon=folium.DivIcon(html=f"""<div style='font-size: 12px; font-weight: normal;'>{user}</div>""")
                     ).add_to(self.map1)
                     print("Mark added")
+                elif(abs(dist-prevd)>0.1 and self.combonode.currentText() == user):
+                    prevd = dist
+                    folium.Marker([lat,lon],
+                        icon = folium.Icon(color='green'),
+                        popup = user+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;<br>ora: '+ \
+                            ora+'<br>snr: '+str(snr)+'<br>Km: '+str(dist),
+                    ).add_to(self.map1)
+                    folium.Marker([lat,lon],
+                        icon=folium.DivIcon(html=f"""<div style='font-size: 12px; font-weight: normal;'>{user}</div>""")
+                    ).add_to(self.map1)
+                    print("Mark added")
+                     
             cur.close()
             conn.close()
         else:
-            #add a marker for each node in nodeInfo
+            #add a marker for each node GW in nodeInfo
             for node in self.nodeInfo:
-                if('lat' in node):
+                if(node['user'] == None):
+                    continue
+                if('lat' in node and 'GW' in node['user']):
                     dist = self.haversine([self.homeLoc['lat'],self.homeLoc['lon']],[node['lat'],node['lon']])
-                    dist = round(dist)
-                    dist = dist/1000
+                    dist = dist/1000.0
+                    dist = round(dist,1)
                     ora = node['time'].split(' ')[1]
                     segndist = "None"
                     if ('snr' in node):
@@ -260,6 +287,27 @@ class App(QWidget):
                         folium.Marker([node['lat'],node['lon']],
                         icon=folium.DivIcon(html=f"""<div style='font-size: 12px; font-weight: normal;'>{node['user']}</div>""")
                     ).add_to(self.map1)
+                elif('lat' in node and not self.combonode.currentText() == 'map solo i GW'):
+                    if(node['user'] == None):
+                            continue   
+                    if('lat' in node and self.combonode.currentText() == node['user']):
+                        dist = self.haversine([self.homeLoc['lat'],self.homeLoc['lon']],[node['lat'],node['lon']])
+                        dist = dist/1000.0
+                        dist = round(dist,1)
+                        ora = node['time'].split(' ')[1]
+                        segndist = "None"
+                        if ('snr' in node):
+                            segndist = str(node['snr'])  
+                            if(dist > 0.01):
+                                folium.Marker([node['lat'],node['lon']],
+                                    icon = folium.Icon(color='green'),
+                                    popup = node['user']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;<br>ora: '+ \
+                                    ora+'<br>snr: '+segndist+'<br>Km: '+str(dist),
+                                ).add_to(self.map1)
+                            folium.Marker([node['lat'],node['lon']],
+                            icon=folium.DivIcon(html=f"""<div style='font-size: 12px; font-weight: normal;'>{node['user']}</div>""")
+                            ).add_to(self.map1)    
+
         data = io.BytesIO()
         self.map1.save(data, close_file=False)
         self.map1 = QtWebEngineWidgets.QWebEngineView()
@@ -282,7 +330,8 @@ class App(QWidget):
                 self.callmesh.setSendTx(False)
             
             if(self.rbtn3.isChecked()==True):
-                self.callmesh.sendImmediate()
+                msg = self.inText.text()
+                self.callmesh.sendImmediate(msg)
             return
         self.callmesh = meshInterface()
         self.calldb = callDB()
@@ -298,6 +347,14 @@ class App(QWidget):
     def loadHist(self):
         conn = dba.connect('meshDB.db')
         cur = conn.cursor()
+        # aggiorna mylat e mylon 
+        qr = "select lat,lon from meshnodes where longname='mioGW'"
+        rows = cur.execute(qr)
+        datas = rows.fetchall()
+        print(datas[0][0])
+        print(datas[0][1])
+        self.mylat.setText(str(datas[0][0]))
+        self.mylon.setText(str(datas[0][1]))
         #riempi combobox con lista dei giorni presenti in db
         qr = "select DISTINCT data from connessioni where data > '"+self.fragiorno.text()+ \
             "' and data <= '"+self.egiorno.text()+"' order by data ASC"
@@ -305,6 +362,15 @@ class App(QWidget):
         datas = rows.fetchall()
         for giorno in datas:
             self.combobox.addItem(giorno[0])
+        qr = "select * from meshnodes order by longname"
+        rows = cur.execute(qr)
+        datas = rows.fetchall()
+        for record in datas:
+            #print(record[3])
+            if(record[3]== None):
+                continue
+            if('GW' not in record[3]):
+                self.combonode.addItem(record[3])    
         cur.close()
         conn.close()  
 
@@ -318,7 +384,13 @@ class App(QWidget):
         qr = "delete from meshnodes where data < '"+prvdate+"'"
         cur.execute(qr)
         conn.commit()
-        qr = "select * from meshnodes"
+        qr = "delete from airtx where data < '"+prvdate+"'"
+        cur.execute(qr)
+        conn.commit()
+        qr = "delete from connessioni where data < '"+prvdate+"'"
+        cur.execute(qr)
+        conn.commit()
+        qr = "select * from meshnodes order by longname"
         rows = cur.execute(qr)
         datas = rows.fetchall()
         for row in datas:
@@ -354,7 +426,7 @@ class App(QWidget):
             self.nodeInfo.append(info)
         cur.close()
         conn.close()  
-        self.showInfo()
+        #self.showInfo()
 
     def chusageGreen(self):
         self.chusage.setStyleSheet("QProgressBar::chunk "
@@ -426,12 +498,14 @@ class App(QWidget):
         self.table.setItem(r,6,item6)
         item7 = QTableWidgetItem()
         if (isinstance(packet['toId'],str)):
+            achi = packet['toId']
             row[7] = packet['toId']+';'
             item7.setText(packet['toId'])
         else:
             row[7] = 'None;'
             item7.setText('None')
-            dachi = 'None'
+            achi = 'None'
+
         self.table.setItem(r,7,item7)
         if ('decoded' in packet):
             tipmsg = packet['decoded']['portnum']
@@ -461,21 +535,13 @@ class App(QWidget):
                 tipmsg =  'ADMIN_APP'
                 if(from_ == to_):
                     self.mynodeId = from_
-                    self.ricevuti.append("mynodeID = "+str(from_))
-                    fromId = packet['fromId']
-                    i = 0
-                    for info in self.nodeInfo:
-                        if(self.nodeInfo[i]['nodenum'] == self.mynodeId): 
-                            self.nodeInfo[i]['user'] = 'mioGW'
-                            self.nodeInfo[i]['id'] = fromId
-                            break
-                        i += 1
-                    if(len(self.nodeInfo)==i):
-                        self.nodeinfo[i]['nodenum'] = self.mynodeId
-                        self.nodeInfo[i]['user'] = 'mioGW'
-                        self.nodeInfo[i]['id'] = fromId
+                    pdict = {}
+                    pdict.update({'chiave': from_})
+                    pdict.update({'longname': 'mioGW'})
+                    # cancella mioGW preesistente e sostotuiscilo con quello attuale
+                    self.delmioGW()
+                    self.calldb.InsUpdtDB(pdict)
 
-            
             elif (packet['decoded']['portnum'] == 'POSITION_APP'):
                 tipmsg = 'POSITION_APP'
                 if('altitude' in packet['decoded']['position']):
@@ -498,12 +564,12 @@ class App(QWidget):
                     if('longitude' in  packet['decoded']['position'] and 'latitude' in  packet['decoded']['position']):
                         coord2 = [packet['decoded']['position']['latitude'],packet['decoded']['position']['longitude']]
                         distance = self.haversine(coord1,coord2)
-                        row[12] = str(round(distance))+';'
+                        row[12] = str(round(distance,2)/1000.0)+';'
                         print(distance)
                         #calcola e inserisci rilevamento
                         rilev = self.calcBearing(coord1,coord2)
                         item12 = QTableWidgetItem()
-                        item12.setText(str(int(distance)))
+                        item12.setText(str(round(distance,2)/1000.0))
                         item13 = QTableWidgetItem()
                         item13.setText(str(round(rilev*10)/10))
                         self.table.setItem(r,12,item12)
@@ -533,13 +599,12 @@ class App(QWidget):
                     item11.setText(str(packet['rxSnr']))
                     row[11] = str(packet['rxSnr'])+';'
                     self.table.setItem(r,11,item11)
-                    self.updateSnr(packet['fromId'],str(packet['rxSnr']))
+                    self.updateSnr(from_,str(packet['rxSnr']))
                     pdict = {}
                     pdict.update({'snr': packet['rxSnr']})
                     pdict.update({'chiave': from_})
                     self.calldb.InsUpdtDB(pdict)
-                    self.showInfo()
-                    
+                    self.showInfo() 
                 
             elif (packet['decoded']['portnum'] == 'TELEMETRY_APP'):
                     tipmsg = 'TELEMETRY_APP'
@@ -608,11 +673,14 @@ class App(QWidget):
 
             elif (packet['decoded']['portnum'] == 'TEXT_MESSAGE_APP'):
                 tipmsg = 'TEXT_MESSAGE_APP'
+                msgda = self.findUser(from_)
                 testo = datetime.datetime.now().strftime("%d/%m/%y %T") + \
-                    " "+packet['decoded']['text']+" de "+self.findUser(from_)
+                    " "+packet['decoded']['text']+" de "+msgda
                 self.ricevuti.append(testo) 
+                if('qsl?' in packet['decoded']['text'] and self.rbtn4.isChecked()):
+                    rmsg = 'rx qsl de vinloren_GW_0a78 a msg: '+packet['decoded']['text']+" da "+msgda
+                    self.callmesh.sendImmediate(rmsg)
             
-
             if(self.rbtn2.isChecked()):
                 i = 0
                 while(i < len(row)):
@@ -631,14 +699,34 @@ class App(QWidget):
             self.count += 1
         else:
             tipmsg = 'NON_GESTITO'
-        self.logpMsg(dachi,tipmsg)
+        user = self.findUser(from_)
+        if(len(user) > 20):
+            user = user[0:20]
+        while(len(user) < 20):
+                user += ' '
+        self.logpMsg(dachi,user,achi,tipmsg)
+
         
-    def logpMsg(self,dachi,tipomsg):
+    def delmioGW(self):
+        qr = "delete from meshnodes where longname = 'mioGW'"
+        conn = dba.connect('meshDB.db')
+        cur = conn.cursor()
+        try:
+            cur.execute(qr)
+            conn.commit()
+        except dba.Error as er:
+            print('SQLite error: %s' % (' '.join(er.args)))
+            print("Exception class is: ", er.__class__)
+            print(qr)
+        cur.close()
+        conn.close()
+    
+    def logpMsg(self,dachi,user,achi,tipomsg):
         ora = datetime.datetime.now().strftime("%d/%m/%y %T")
         if(isinstance(dachi,str)):
-           lgm = ora+' '+dachi+' '+tipomsg
+           lgm = ora+'\t'+dachi+'\t'+user+'\t'+achi+'\t'+tipomsg
         else:
-           lgm = ora+' None '+tipomsg 
+           lgm = ora+'\tNone\t'+user+'\t'+achi+'\t'+tipomsg 
         self.log.append(lgm)    
 
     def handleFile(self):
@@ -658,64 +746,66 @@ class App(QWidget):
         r = 0
         self.table1.setRowCount(r)
         for info in self.nodeInfo:
-            self.table1.setRowCount(r+1)
-            item0 = QTableWidgetItem()
-            item0.setText(info['time'])
-            self.table1.setItem(r,0,item0)
-            item1 = QTableWidgetItem()
-            item1.setText(info['user'])
-            self.table1.setItem(r,1,item1)
-            item2 = QTableWidgetItem()
-            if('alt' in info):
-                item2.setText(str(info['alt']))
-                self.table1.setItem(r,2,item2)
-            if('lat' in info):
-                item3 = QTableWidgetItem()
-                item3.setText(str(info['lat'])[0:8])
-                self.table1.setItem(r,3,item3)
-            if('lon' in info):
-                item4 = QTableWidgetItem()
-                item4.setText(str(info['lon'])[0:8])
-                self.table1.setItem(r,4,item4)
-            if('battlv' in info):
-                item5 = QTableWidgetItem()
-                item5.setText(str(info['battlv']))
-                self.table1.setItem(r,5,item5)
-            if('snr' in info):
-                item6 = QTableWidgetItem()
-                item6.setText(str(info['snr']))
-                self.table1.setItem(r,6,item6)
-            if('distance' in info):
-                item7 = QTableWidgetItem()
-                dist = (float)(info['distance']/1000.0)
-                dist = round(dist,2)
-                item7.setText(str(dist))
-                self.table1.setItem(r,7,item7)
-            if('rilevamento' in info):
-                item8 = QTableWidgetItem()
-                item8.setText(str(round(info['rilevamento']*10)/10))
-                ex.table1.setItem(r,8,item8)
-            if('chutil' in info):
-                item9 = QTableWidgetItem()
-                item9.setText(str(round(info['chutil']*10)/10))
-                self.table1.setItem(r,9,item9)
-            if('airutil' in info):
-                item10 =  QTableWidgetItem()
-                item10.setText(str(round(info['airutil']*10)/10))
-                self.table1.setItem(r,10,item10)
-            if('pressione' in info):
-                item11 = QTableWidgetItem()
-                item11.setText(str(round(info['pressione']*10)/10))
-                self.table1.setItem(r,11,item11)
-            if('temperatura' in info):
-                item12 = QTableWidgetItem()
-                item12.setText(str(round(info['temperatura']*10)/10))
-                self.table1.setItem(r,12,item12)
-            if('humidity' in info):
-                item13 = QTableWidgetItem()
-                item13.setText(str(round(info['humidity']*10)/10))
-                self.table1.setItem(r,13,item13)
-            r += 1
+            if('ts' in info):
+                self.table1.setRowCount(r+1)
+                item0 = QTableWidgetItem()
+                item0.setText(info['time'])
+                self.table1.setItem(r,0,item0)
+                item1 = QTableWidgetItem()
+                if('user' in info):
+                    item1.setText(info['user'])
+                    self.table1.setItem(r,1,item1)
+                item2 = QTableWidgetItem()
+                if('alt' in info):
+                    item2.setText(str(info['alt']))
+                    self.table1.setItem(r,2,item2)
+                if('lat' in info):
+                    item3 = QTableWidgetItem()
+                    item3.setText(str(info['lat'])[0:8])
+                    self.table1.setItem(r,3,item3)
+                if('lon' in info):
+                    item4 = QTableWidgetItem()
+                    item4.setText(str(info['lon'])[0:8])
+                    self.table1.setItem(r,4,item4)
+                if('battlv' in info):
+                    item5 = QTableWidgetItem()
+                    item5.setText(str(info['battlv']))
+                    self.table1.setItem(r,5,item5)
+                if('snr' in info):
+                    item6 = QTableWidgetItem()
+                    item6.setText(str(info['snr']))
+                    self.table1.setItem(r,6,item6)
+                if('distance' in info):
+                    item7 = QTableWidgetItem()
+                    dist = (float)(info['distance']/1000.0)
+                    dist = round(dist,2)
+                    item7.setText(str(dist))
+                    self.table1.setItem(r,7,item7)
+                if('rilevamento' in info):
+                    item8 = QTableWidgetItem()
+                    item8.setText(str(round(info['rilevamento']*10)/10))
+                    ex.table1.setItem(r,8,item8)
+                if('chutil' in info):
+                    item9 = QTableWidgetItem()
+                    item9.setText(str(round(info['chutil']*10)/10))
+                    self.table1.setItem(r,9,item9)
+                if('airutil' in info):
+                    item10 =  QTableWidgetItem()
+                    item10.setText(str(round(info['airutil']*10)/10))
+                    self.table1.setItem(r,10,item10)
+                if('pressione' in info):
+                    item11 = QTableWidgetItem()
+                    item11.setText(str(round(info['pressione']*10)/10))
+                    self.table1.setItem(r,11,item11)
+                if('temperatura' in info):
+                    item12 = QTableWidgetItem()
+                    item12.setText(str(round(info['temperatura']*10)/10))
+                    self.table1.setItem(r,12,item12)
+                if('humidity' in info):
+                    item13 = QTableWidgetItem()
+                    item13.setText(str(round(info['humidity']*10)/10))
+                    self.table1.setItem(r,13,item13)
+                r += 1
     
     
     def insertDB(self,query):
@@ -746,7 +836,7 @@ class App(QWidget):
                 break
             else:
                 i += 1
-        if(i==n):   #nodenum non esiste, aggiungi nuovo user e id
+        if(i==n):   # nodenum non esiste, aggiungi nuovo user e id
             newuser = {}
             newuser['nodenum']=nodenum
             newuser['user']=user
@@ -759,25 +849,25 @@ class App(QWidget):
             self.insertDB(qr)
             newuser['_id'] = self.max_IdDB()
             self.nodeInfo.append(newuser)
-            print(self.nodeInfo)
+            print(newuser)
         else:
-            print("aggiorno orario su record trovato")
-            # se now() - nodeInfo[i]['time'] > 1 minuto fai showInfo() per riempire Tab1
-            # e inserire record in DB e poi aggiornalo creando newuser in posizione [i] 
-            now = datetime.datetime.now().timestamp()
-            prima = 0
-            if('ts' in self.nodeInfo[i]):
-                prima = self.nodeInfo[i]['ts']
-            if((now-prima)>59):
-                self.nodeInfo[i]['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")           
-                self.nodeInfo[i]['ts'] = now
-                # Insert new record in DB
+            self.nodeInfo[i]['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")           
+            self.nodeInfo[i]['user'] = user
+            self.nodeInfo[i]['id'] = id
+            if('_id' in self.nodeInfo[i]):
+                print("aggiorno orario su record trovato")
+                qr = "update connessioni set user='"+user+"',data='"+datetime.datetime.now().strftime("%y/%m/%d")+ \
+                "',ora='"+datetime.datetime.now().strftime("%T")+"' where _id="+str(self.nodeInfo[i]['_id'])  
+                self.insertDB(qr)
+            else:
+                print("Inserisco record dopo attribuito _id")
                 qr = "insert into connessioni (data,ora,user) values('"+datetime.datetime.now().strftime('%y/%m/%d')+ \
-                    "','"+datetime.datetime.now().strftime('%T')+"','"+user+"')"
+                "','"+datetime.datetime.now().strftime('%T')+"','"+user+"')"
                 self.insertDB(qr)
                 self.nodeInfo[i]['_id'] = self.max_IdDB()
-                self.showInfo()     # insert data in Table1 and set marker on geomap
-                print(self.nodeInfo)
+            self.nodeInfo[i]['ts'] = datetime.datetime.now().timestamp()
+            self.showInfo()     # insert data in Table1 and set marker on geomap
+            print(self.nodeInfo[i])
 
 
     def max_IdDB(self):
@@ -797,68 +887,240 @@ class App(QWidget):
     def findUser(self,nodenum):
         for info in self.nodeInfo:
             if(info['nodenum'] == nodenum):
-                return (info['user'])
+                if('user' in info):
+                    return (info['user'])
+                else:
+                    return("unknown")
         return ("unknown")
 
     def updateUser(self,nodenum,coord,altitude,distance,rilev):
         #trova id in nodeInfo
         i = 0
+        lat, lon = coord
         for info in self.nodeInfo:
             if(info['nodenum'] == nodenum):
-                lat, lon = coord
-                self.nodeInfo[i].update({'lat': lat})
-                self.nodeInfo[i].update({'lon': lon})
-                self.nodeInfo[i].update({'alt': altitude})
-                self.nodeInfo[i].update({'distance': distance})
-                self.nodeInfo[i].update({'rilevamento': rilev})
-                self.nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+                if('user' not in info):
+                    self.nodeInfo[i].update({'user': self.findUser(nodenum)}) 
                 batt = ' '
                 if('battlv' in self.nodeInfo[i]):
                     batt = str(self.nodeInfo[i]['battlv'])
                 if('_id' in self.nodeInfo[i]):
-                    qr = "update connessioni set lat="+str(self.nodeInfo[i]['lat'])+",lon="+str(self.nodeInfo[i]['lon'])+ \
-                        ",alt="+str(self.nodeInfo[i]['alt'])+",dist="+str(self.nodeInfo[i]['distance'])+",rilev="+ \
-                        str(self.nodeInfo[i]['rilevamento'])+",batt='"+batt+"',data='"+datetime.datetime.now().strftime('%y/%m/%d')+ \
-                        "',ora='"+datetime.datetime.now().strftime('%T')+"' where _id ="+str(self.nodeInfo[i]['_id'])
+                    # se la distanza precedente differisce di meno di 100mt dall'attuale
+                    # lascia tutto inalterato e aggiorna solo la data e ts altrimenti
+                    # crea nuovo record in connessioni 
+                    if('distance' in info ):
+                        if(abs(info['distance']-distance) < 100):
+                            qr = "update connessioni set data='"+datetime.datetime.now().strftime('%y/%m/%d')+ \
+                                "',ora='"+datetime.datetime.now().strftime('%T')+"' where _id ="+str(self.nodeInfo[i]['_id'])
+                            self.insertDB(qr)
+                            self.nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+                            self.nodeInfo[i].update({'ts': datetime.datetime.now().timestamp()})
+                            print("Aggiornato data-ora in record con gps entro 100mt")
+                        else:
+                            # crea nuovo record coi nuovi parametri
+                            dp = abs(info['distance']-distance)
+                            #print(distance)
+                            #print(info['distance'])
+                            print("Distanza fra i due punti gps: "+str(dp))
+                            #self.ricevuti.append("Distanza fra i due punti gps: "+str(dp))
+                            newuser = {}
+                            newuser['nodenum']=nodenum
+                            newuser['_id'] = self.max_IdDB()+1
+                            self.nodeInfo[i]['_id'] = newuser['_id']
+                            newuser['lat'] = lat
+                            self.nodeInfo[i]['lat'] = lat
+                            newuser['lon'] = lon
+                            self.nodeInfo[i]['lon'] = lon
+                            newuser['alt'] = altitude
+                            self.nodeInfo[i]['alt'] = altitude
+                            newuser['distance'] = distance
+                            self.nodeInfo[i]['distance'] = distance
+                            newuser['rilevamento'] = rilev
+                            self.nodeInfo[i]['rilevamento'] = rilev
+                            newuser['battlv'] = batt
+                            self.nodeInfo[i]['battlv'] = batt
+                            newuser['user'] = self.findUser(nodenum)
+                            self.nodeInfo[i]['user'] = newuser['user']
+                            newuser['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")
+                            self.nodeInfo[i]['time'] = newuser['time']
+                            newuser['ts'] = datetime.datetime.now().timestamp()
+                            self.nodeInfo[i]['ts'] = newuser['ts'] 
+                            qr = "insert into connessioni (user,lat,lon,alt,dist,rilev,batt,data,ora) values('"+\
+                                newuser['user']+"','"+str(newuser['lat'])+"','"+str(newuser['lon'])+ \
+                                "','"+str(newuser['alt'])+"','"+str(newuser['distance'])+"','"+ \
+                                str(newuser['rilevamento'])+"','"+newuser['battlv']+"','"+datetime.datetime.now().strftime('%y/%m/%d')+ \
+                                "','"+datetime.datetime.now().strftime('%T')+"')"
+                            self.insertDB(qr)
+                            print("(updateUser) Nuovo record gps mosso oltre 100mt")
+                            print(newuser)
+                    else: # non c'erano coordinate precedenti allora setta le attuali
+                        self.nodeInfo[i].update({'lat': lat})
+                        self.nodeInfo[i].update({'lon': lon})
+                        self.nodeInfo[i].update({'alt': altitude})
+                        self.nodeInfo[i].update({'distance': distance})
+                        self.nodeInfo[i].update({'rilevamento': rilev})
+                        self.nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+                        self.nodeInfo[i].update({'ts': datetime.datetime.now().timestamp()})
+                        qr = "update connessioni set lat="+str(self.nodeInfo[i]['lat'])+",lon="+str(self.nodeInfo[i]['lon'])+ \
+                            ",alt="+str(self.nodeInfo[i]['alt'])+",dist="+str(self.nodeInfo[i]['distance'])+",rilev="+ \
+                            str(self.nodeInfo[i]['rilevamento'])+",batt='"+batt+"',data='"+datetime.datetime.now().strftime('%y/%m/%d')+ \
+                            "',ora='"+datetime.datetime.now().strftime('%T')+"' where _id ="+str(self.nodeInfo[i]['_id'])
+                        self.insertDB(qr)
+                        print("(updateUser) aggiorno record per mancanza coord. precedenti")
+                        print(self.nodeInfo[i])
+                else:
+                    # mancava _id inserisci nuovo record con le coordinate ricevute
+                    qr = "insert into connessioni (data,ora,lat,lon,alt,dist,rilev,data,ora,user) values('"+datetime.datetime.now().strftime('%y/%m/%d')+ \
+                        "','"+datetime.datetime.now().strftime('%T')+"','"+str(lat)+"','"+str(lon)+"','"+str(altitude)+\
+                        "','"+str(distance)+"','"+str(rilev)+"','"+datetime.datetime.now().strftime('%y/%m/%d')+"','"+\
+                        datetime.datetime.now().strftime('%T')+"','"+self.nodeInfo[i]['user']+"')"
                     self.insertDB(qr)
+                    self.nodeInfo[i]['_id'] = self.max_IdDB()   
+                    self.nodeInfo[i].update({'ts': datetime.datetime.now().timestamp()}) 
+                    self.nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+                    print("(updateUser) creato _id in record vecchio riaggiornato") 
+                    print(self.nodeInfo[i]) 
+                break
             i += 1
-        print(self.nodeInfo)
+            if(len(self.nodeInfo) == i): # nuovo utente mai collegato prima
+                newuser = {}
+                newuser['nodenum'] = nodenum
+                newuser['_id'] = self.max_IdDB()+1
+                newuser['lat'] = lat
+                newuser['lon'] = lon
+                newuser['alt'] = altitude
+                newuser['distance'] = distance
+                newuser['rilevamento'] = rilev
+                newuser['battlv'] = ' '
+                newuser['user'] = self.findUser(nodenum)
+                newuser['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")
+                newuser['ts'] = datetime.datetime.now().timestamp()
+                self.nodeInfo.append(newuser)
+                qr = "insert into connessioni (user,lat,lon,alt,dist,rilev,batt,data,ora) values('"+\
+                        newuser['user']+"','"+str(newuser['lat'])+"','"+str(newuser['lon'])+ \
+                        "','"+str(newuser['alt'])+"','"+str(newuser['distance'])+"','"+ \
+                        str(newuser['rilevamento'])+"','"+newuser['battlv']+"','"+datetime.datetime.now().strftime('%y/%m/%d')+ \
+                        "','"+datetime.datetime.now().strftime('%T')+"')"
+                self.insertDB(qr)
+                print("(updateUser) nuovo utente mai collegato prima")
+                print((newuser))
 
-    def updateSnr(self,id,snr):
-        #trova id in nodeInfo
+    def updateSnr(self,nodenum,snr):
+        #trova/inserisci _id in nodeInfo
         i = 0
         for info in self.nodeInfo:
-            if('id' in info):
-                if(info['id'] == id):
-                    self.nodeInfo[i].update({'snr': snr})
-                    self.nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
-                    qr = "update connessioni set snr="+str(self.nodeInfo[i]['snr'])+" where _id="+str(self.nodeInfo[i]['_id'])
+            if(info['nodenum'] == nodenum):
+                self.nodeInfo[i].update({'snr': snr})
+                self.nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+                if('user' not in info):
+                    self.nodeInfo[i]['user'] = self.findUser(nodenum)
+                if('_id' in info):
+                    qr = "update connessioni set snr="+str(self.nodeInfo[i]['snr'])+" where _id="+str(info['_id'])
                     self.insertDB(qr)
-                    break
+                break
             i += 1
-        print(self.nodeInfo)
+            if(len(self.nodeInfo) == i):
+                newuser = {}
+                newuser['nodenum'] = nodenum
+                newuser['_id'] = self.max_IdDB()+1
+                newuser['snr'] = snr
+                newuser['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")
+                newuser['ts'] = datetime.datetime.now().timestamp()
+                newuser['user'] = self.findUser(nodenum)
+                self.nodeInfo.append(newuser)
+                qr = "insert into connessioni (user,snr,data,ora) values('"+newuser['user']+\
+                    "','"+newuser['snr']+"','"+datetime.datetime.now().strftime('%y/%m/%d')+"','"+ \
+                    datetime.datetime.now().strftime('%T')+"')"
+                self.insertDB(qr)
+        print(self.nodeInfo[i])
 
     def updateTelemetry(self,nodenum,battlv,chanutil,airutil):
         i = 0
         for info in self.nodeInfo:
             if(info['nodenum'] == nodenum):
+                if('user' not in info):
+                    self.nodeInfo[i].update({'user': self.findUser(nodenum)})
                 self.nodeInfo[i].update({'battlv': battlv})
-                self.nodeInfo[i].update({'chutil': chanutil})
-                self.nodeInfo[i].update({'airutil': airutil})
+                self.nodeInfo[i].update({'chutil': round(chanutil,2)})
+                self.nodeInfo[i].update({'airutil': round(airutil,2)})
+                self.nodeInfo[i].update({'tsTl': datetime.datetime.now().timestamp()})
+                self.nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+                if('_id' in info):
+                    qr = "update connessioni set batt='"+str(battlv)+"',data='"+datetime.datetime.now().strftime("%y/%m/%d")+\
+                    "',ora='"+datetime.datetime.now().strftime("%T")+"' where _id="+str(info['_id'])
+                    self.insertDB(qr)
+                # aggiungere insert in connessioni in caso manchi _id
+                else:
+                    newuser = {}
+                    self.nodeInfo[i]['_id'] = self.max_IdDB()+1
+                    self.nodeInfo[i]['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")
+                    self.nodeInfo[i]['ts'] = datetime.datetime.now().timestamp()
+                    self.nodeInfo[i]['battlv'] = battlv
+                    self.nodeInfo[i]['chutil'] = round(chanutil,2)
+                    self.nodeInfo[i]['airutil'] = round(airutil,2)
+                    self.nodeInfo[i]['tsTl'] = datetime.datetime.now().timestamp()
+                    newuser['user'] = self.findUser(nodenum)   
+                    qr = "insert into connessioni (batt,data,ora,user) values('"+str(battlv)+ \
+                        "','"+datetime.datetime.now().strftime('%y/%m/%d')+"','"+ \
+                        datetime.datetime.now().strftime('%T')+"','"+newuser['user']+"')"
+                    self.insertDB(qr)
+                    print("(telemetry) inserito nuovo record aggiornando _id") 
+                    print(newuser)
                 break
             i = i+1
-        print(self.nodeInfo)
+        if(len(self.nodeInfo) == i):
+            newuser = {}
+            newuser['nodenum'] = nodenum
+            newuser['_id'] = self.max_IdDB()+1
+            newuser['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")
+            newuser['ts'] = datetime.datetime.now().timestamp()
+            newuser['battlv'] = battlv
+            newuser['chutil'] = round(chanutil,2)
+            newuser['airutil'] = round(airutil,2)
+            newuser['tsTl'] = datetime.datetime.now().timestamp()
+            newuser['user'] = self.findUser(nodenum)
+            self.nodeInfo.append(newuser)
+            qr = "insert into connessioni (batt,data,ora,user) values('"+str(battlv)+ \
+                "','"+datetime.datetime.now().strftime('%y/%m/%d')+"','"+ \
+                datetime.datetime.now().strftime('%T')+"','"+newuser['user']+"')"
+            self.insertDB(qr)
+            print("(telemetry) inserito nuovo record da user mai visto prima")
+            print(self.nodeInfo[i])
 
     def updateSensors(self,nodenum,temperatura,pressione,humidity):
         i = 0
         for info in self.nodeInfo:
             if(info['nodenum'] == nodenum):
+                if('user' not in info):
+                    self.nodeInfo[i].update({'user': self.findUser(nodenum)})
                 self.nodeInfo[i].update({'temperatura': temperatura})
                 self.nodeInfo[i].update({'pressione': pressione})
                 self.nodeInfo[i].update({'humidity': humidity})
+                self.nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+                self.nodeInfo[i].update({'ts': datetime.datetime.now().timestamp()})   
+                if('_id' not in info):
+                    self.nodeInfo[i].update({'_id': self.max_IdDB()+1})
+                    qr = "insert into connessioni (user,data,ora) values('"+self.nodeInfo[i]['user']+\
+                    "','"+datetime.datetime.now().strftime('%y/%m/%d')+"','"+ \
+                    datetime.datetime.now().strftime('%T')+"')"
+                    self.insertDB(qr)
+                    print("(UpdateSensors) Inserito nuovo record con _id")
+                    print(self.nodeInfo[i])
                 break
-            i = i+1
-        print(self.nodeInfo)
+            i += 1
+        if(len(self.nodeInfo) == i):
+            newuser = {}
+            newuser['nodenum'] = nodenum
+            newuser['_id'] = self.max_IdDB()+1
+            newuser['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")
+            newuser['ts'] = datetime.datetime.now().timestamp()
+            newuser['temperatura'] = temperatura
+            newuser['pressione'] = pressione
+            newuser['humidity'] = humidity
+            newuser['user'] = self.findUser(nodenum)
+            print("(UpdateSensors) aggiunto record da user mai visto prima")
+            self.nodeInfo.append(newuser)
+            print(self.nodeInfo[i])
 
 
     #Horisontal Bearing
@@ -920,9 +1182,9 @@ class meshInterface(QThread):
                 print("Manderò messaggi periodici")
                 ex.log.append("Manderò messaggi periodici")
 
-    def sendImmediate(self):
+    def sendImmediate(self,msg):
         currTime = datetime.datetime.now().strftime("%H:%M:%S")
-        msg = currTime+" "+ ex.inText.text()
+        msg = currTime+" "+ msg
         self.interface.sendText(msg)
         ex.ricevuti.append("Sending immediate: "+msg)
         print("Immediate message sent: " + msg)
@@ -934,7 +1196,7 @@ class meshInterface(QThread):
             return
         
         if(self.sendtx == True):
-            ex.ricevuti.append("Hello mesh, manderò messaggi priodici.")
+            ex.ricevuti.append("Hello mesh, manderò messaggi periodici.")
             self.interface.sendText("Hello mesh, manderò messaggi periodici.")
         else:
             ex.ricevuti.append("Hello mesh, non manderò messaggi periodici.")
@@ -978,7 +1240,7 @@ class callDB(QThread):
     slptcnt  = 0
     arraypdict = []
 
-    def InsUpdtDB(self, pdict):
+    def InsUpdtDB(self, pdict): 
         ts = datetime.datetime.now().strftime("%H:%M:%S.%f")
         self.arraypdict.append(pdict)
         print(ts+" Acquisito dict"+str(len(self.arraypdict))+" per InsUpdtDB")
@@ -1051,6 +1313,34 @@ class callDB(QThread):
         while(True):
             time.sleep(0.5)
             self.slptcnt += 1
+            #ogni 5 minuti salva valori chanUtil e AirUtilTX di mioGW
+            if(self.slptcnt % 600 == 0):
+                myair = ex.airustx.text()
+                myair = myair[0:len(myair)-1]
+                myair = float(myair)/10
+                mycha = ex.chusage.text()
+                mycha = float(mycha[0:len(mycha)-1])
+                data = datetime.datetime.now().strftime("%y/%m/%d") 
+                ora  = datetime.datetime.now().strftime("%T") 
+                qr = "insert into airtx (data,ora,nodenum,longname,chanutil,airutiltx) \
+                    values('"+data+"','"+ora+"','"+str(ex.mynodeId)+"','mioGW','"+str(mycha)+\
+                    "','"+str(myair)+"')"
+                self.insertDB(qr)
+                print("Miei valori ChanUtil e AirUtilTX inseriti..")
+                #ora inserisci ChanUtil e AirUtilTX per tutti i peers presenti in nodeInfo[]
+                tstamp = datetime.datetime.now().timestamp()
+                for info in ex.nodeInfo:
+                    qr = "insert into airtx (data,ora,nodenum,longname,chanutil,airutiltx) values('"\
+                        +data+"','"+ora+"','"
+                    if('tsTl' in info):
+                        if('chutil'in info and 'airutil' in info and not info['user'] == 'mioGW'):
+                            tdiff = tstamp - info['tsTl']
+                            if(tdiff < 301):    #ultimo msg non più vecchio di 5min
+                                qr += str(info['nodenum'])+"','"+info['user']+"','"+str(round(info['chutil'],2))+"','"+ \
+                                str(round(info['airutil'],2))+"')"
+                                self.insertDB(qr)
+                                print("Aggiornato AirUtilTX di "+info['user'])
+            
             if(len(self.arraypdict) == 0):  
                 continue
             else:
