@@ -1063,7 +1063,7 @@ class App(QWidget):
                     self.nodeInfo[i]['airutil'] = round(airutil,2)
                     self.nodeInfo[i]['tsTl'] = datetime.datetime.now().timestamp()
                     newuser['user'] = self.findUser(nodenum)   
-                    qr = "insert into connessioni (batt,data,ora,user) values('"+battlv+ \
+                    qr = "insert into connessioni (batt,data,ora,user) values('"+str(battlv)+ \
                         "','"+datetime.datetime.now().strftime('%y/%m/%d')+"','"+ \
                         datetime.datetime.now().strftime('%T')+"','"+newuser['user']+"')"
                     self.insertDB(qr)
