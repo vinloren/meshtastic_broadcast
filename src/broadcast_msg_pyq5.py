@@ -1055,12 +1055,15 @@ class App(QWidget):
                     self.nodeInfo[i]['_id'] = self.max_IdDB()+1
                     self.nodeInfo[i]['time'] = datetime.datetime.now().strftime("%d/%m/%y %T")
                     self.nodeInfo[i]['ts'] = datetime.datetime.now().timestamp()
-                    self.nodeInfo[i]['battlv'] = battlv
+                    if(isinstance(battlv,int)):
+                        self.nodeInfo[i]['battlv'] = str(battlv)
+                    else:
+                        self.nodeInfo[i]['battlv'] = ' '
                     self.nodeInfo[i]['chutil'] = round(chanutil,2)
                     self.nodeInfo[i]['airutil'] = round(airutil,2)
                     self.nodeInfo[i]['tsTl'] = datetime.datetime.now().timestamp()
                     newuser['user'] = self.findUser(nodenum)   
-                    qr = "insert into connessioni (batt,data,ora,user) values('"+str(battlv)+ \
+                    qr = "insert into connessioni (batt,data,ora,user) values('"+battlv+ \
                         "','"+datetime.datetime.now().strftime('%y/%m/%d')+"','"+ \
                         datetime.datetime.now().strftime('%T')+"','"+newuser['user']+"')"
                     self.insertDB(qr)
