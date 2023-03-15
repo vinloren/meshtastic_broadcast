@@ -354,10 +354,14 @@ class App(QWidget):
         qr = "select lat,lon from meshnodes where longname='mioGW'"
         rows = cur.execute(qr)
         datas = rows.fetchall()
-        print(datas[0][0])
-        print(datas[0][1])
-        self.mylat.setText(str(datas[0][0]))
-        self.mylon.setText(str(datas[0][1]))
+        try:
+            print(datas[0][0])
+            print(datas[0][1])
+            self.mylat.setText(str(datas[0][0]))
+            self.mylon.setText(str(datas[0][1]))
+        except:
+            self.mylat.setText('45.6412')
+            self.mylon.setText('9.1149')
         #riempi combobox con lista dei giorni presenti in db
         qr = "select DISTINCT data from connessioni where data > '"+self.fragiorno.text()+ \
             "' and data <= '"+self.egiorno.text()+"' order by data ASC"
@@ -1036,7 +1040,7 @@ class App(QWidget):
                     "','"+newuser['snr']+"','"+datetime.datetime.now().strftime('%y/%m/%d')+"','"+ \
                     datetime.datetime.now().strftime('%T')+"')"
                 self.insertDB(qr)
-        print(self.nodeInfo[i])
+                print(newuser)
 
     def updateTelemetry(self,nodenum,battlv,chanutil,airutil):
         i = 0
