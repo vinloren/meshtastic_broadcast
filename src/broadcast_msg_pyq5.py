@@ -125,8 +125,10 @@ class App(QWidget):
         self.rbtn3 = QCheckBox('Mess. immediato')
         self.rbtn2 = QCheckBox('Genera csv file')
         self.rbtn4 = QCheckBox('Autorisposta')
-        self.rbtn1.setMaximumWidth(150)
-        self.rbtn2.setMinimumWidth(150)
+        self.qsl = QLineEdit()
+        self.qsl.setText('RX qsl de IU2RPO_GW_868 a: ')
+        self.rbtn1.setMaximumWidth(95)
+        self.rbtn2.setMinimumWidth(95)
         startb = QPushButton("START",self)
         startb.clicked.connect(self.start_click)
         self.chusage = QProgressBar(self)
@@ -144,6 +146,7 @@ class App(QWidget):
         hbox.addWidget(self.rbtn1)
         hbox.addWidget(self.rbtn3)
         hbox.addWidget(self.rbtn4)
+        hbox.addWidget(self.qsl)
         hbox.addWidget(self.rbtn2)
         hbox.addWidget(self.lblmsgat)
         hbox.addWidget(self.lblchus)
@@ -678,7 +681,8 @@ class App(QWidget):
                     " "+packet['decoded']['text']+" de "+msgda
                 self.ricevuti.append(testo) 
                 if('qsl?' in packet['decoded']['text'] and self.rbtn4.isChecked()):
-                    rmsg = 'rx qsl de vinloren_GW_0a78 a msg: '+packet['decoded']['text']+" da "+msgda
+                    rmsg = self.qsl.text()
+                    rmsg = rmsg + packet['decoded']['text']+" da "+msgda
                     self.callmesh.sendImmediate(rmsg)
             
             if(self.rbtn2.isChecked()):
