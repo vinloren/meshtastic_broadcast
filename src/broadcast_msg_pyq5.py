@@ -397,6 +397,9 @@ class App(QWidget):
         qr = "delete from connessioni where data < '"+prvdate+"'"
         cur.execute(qr)
         conn.commit()
+        qr = "update meshnodes set longname='ignoto' where longname is null"
+        cur.execute(qr)
+        conn.commit()
         qr = "select * from meshnodes order by longname"
         rows = cur.execute(qr)
         datas = rows.fetchall()
@@ -649,14 +652,17 @@ class App(QWidget):
                             ora = "Ore "+datetime.datetime.now().strftime("%T")
                             self.lblmsgat.setText(ora)
                         else:
-                            self.updateTelemetry(packet['from'],battlvl,chanutil,airutil) 
-                            self.showInfo()
-                            pdict ={}
-                            pdict.update({'batt': battlvl})
-                            pdict.update({'chanutil': chanutil})
-                            pdict.update({'airutiltx': airutil})
-                            pdict.update({'chiave': from_})
-                            self.calldb.InsUpdtDB(pdict)
+                            try:
+                                self.updateTelemetry(packet['from'],battlvl,chanutil,airutil) 
+                                self.showInfo()
+                                pdict ={}
+                                pdict.update({'batt': battlvl})
+                                pdict.update({'chanutil': chanutil})
+                                pdict.update({'airutiltx': airutil})
+                                pdict.update({'chiave': from_})
+                                self.calldb.InsUpdtDB(pdict)
+                            except:
+                                print("Update saltata per campi nulli in Telemetry")
                             
                     if('environmentMetrics' in packet['decoded']['telemetry']):
                         temperatura = 0
@@ -708,6 +714,8 @@ class App(QWidget):
         else:
             tipmsg = 'NON_GESTITO'
         user = self.findUser(from_)
+        if(user == None):
+            user = "unknown"
         if(len(user) > 20):
             user = user[0:20]
         while(len(user) < 20):
@@ -978,16 +986,19 @@ class App(QWidget):
                         print(self.nodeInfo[i])
                 else:
                     # mancava _id inserisci nuovo record con le coordinate ricevute
-                    qr = "insert into connessioni (data,ora,lat,lon,alt,dist,rilev,data,ora,user) values('"+datetime.datetime.now().strftime('%y/%m/%d')+ \
-                        "','"+datetime.datetime.now().strftime('%T')+"','"+str(lat)+"','"+str(lon)+"','"+str(altitude)+\
-                        "','"+str(distance)+"','"+str(rilev)+"','"+datetime.datetime.now().strftime('%y/%m/%d')+"','"+\
-                        datetime.datetime.now().strftime('%T')+"','"+self.nodeInfo[i]['user']+"')"
-                    self.insertDB(qr)
-                    self.nodeInfo[i]['_id'] = self.max_IdDB()   
-                    self.nodeInfo[i].update({'ts': datetime.datetime.now().timestamp()}) 
-                    self.nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
-                    print("(updateUser) creato _id in record vecchio riaggiornato") 
-                    print(self.nodeInfo[i]) 
+                    try:
+                        qr = "insert into connessioni (data,ora,lat,lon,alt,dist,rilev,data,ora,user) values('"+datetime.datetime.now().strftime('%y/%m/%d')+ \
+                            "','"+datetime.datetime.now().strftime('%T')+"','"+str(lat)+"','"+str(lon)+"','"+str(altitude)+\
+                            "','"+str(distance)+"','"+str(rilev)+"','"+datetime.datetime.now().strftime('%y/%m/%d')+"','"+\
+                            datetime.datetime.now().strftime('%T')+"','"+self.nodeInfo[i]['user']+"')"
+                        self.insertDB(qr)
+                        self.nodeInfo[i]['_id'] = self.max_IdDB()   
+                        self.nodeInfo[i].update({'ts': datetime.datetime.now().timestamp()}) 
+                        self.nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
+                        print("(updateUser) creato _id in record vecchio riaggiornato") 
+                        print(self.nodeInfo[i]) 
+                    except:
+                        print("Campi null nella creazioni qr, record scartato")
                 break
             i += 1
             if(len(self.nodeInfo) == i): # nuovo utente mai collegato prima
@@ -1347,11 +1358,13 @@ class callDB(QThread):
                         if('chutil'in info and 'airutil' in info and not info['user'] == 'mioGW'):
                             tdiff = tstamp - info['tsTl']
                             if(tdiff < 301):    #ultimo msg non più vecchio di 5min
-                                qr += str(info['nodenum'])+"','"+info['user']+"','"+str(round(info['chutil'],2))+"','"+ \
-                                str(round(info['airutil'],2))+"')"
-                                self.insertDB(qr)
-                                print("Aggiornato AirUtilTX di "+info['user'])
-            
+                                try:
+                                    qr += str(info['nodenum'])+"','"+info['user']+"','"+str(round(info['chutil'],2))+"','"+ \
+                                    str(round(info['airutil'],2))+"')"
+                                    self.insertDB(qr)
+                                    print("Aggiornato AirUtilTX di "+info['user'])
+                                except:
+                                    print("Non aggiornato AirUtilTX per user null.")
             if(len(self.arraypdict) == 0):  
                 continue
             else:
