@@ -50,24 +50,29 @@ class App(QWidget):
         mylatlbl = QLabel("Home lat:")
         mylonlbl = QLabel("Home lon:")
         voidlbl = QLabel("")
-        voidlbl.setMinimumWidth(110)
+        voidlbl1 = QLabel("")
+        voidlbl2 = QLabel("")
+        voidlbl3 = QLabel("")
+        voidlbl4 = QLabel("")
+        voidlbl.setMinimumWidth(22)
+        voidlbl1.setMinimumWidth(22)
+        voidlbl2.setMinimumWidth(22)
+        voidlbl3.setMinimumWidth(22)
+        voidlbl3.setMinimumWidth(22)
         self.mylat = QLineEdit()
         self.mylon = QLineEdit()
+        self.mylat.setMaximumWidth(70)
+        self.mylon.setMaximumWidth(70)
         mylatlbl.setMaximumWidth(60)
         mylonlbl.setMaximumWidth(60)
         mapbtn =  QPushButton("SHOW MAP",self)
-        #mapbtn.setMaximumWidth(110)
         self.radiob = QRadioButton('Storico giorno:')
-        #self.setMaximumWidth(100)
         self.combobox = QComboBox(self)
         self.combobox.setMinimumWidth(90)
-        fra = QLabel("fra")
-        fra.setMaximumWidth(20)
-        self.fragiorno = QLineEdit()
-        self.fragiorno.setText('23/03/01')
-        self.fragiorno.setMaximumSize(70,24)
-        et = QLabel("e")
-        et.setMaximumWidth(20)
+        lblmant = QLabel("Mantieni ultimi gg in DB")
+        self.numgg = QLineEdit()
+        self.numgg.setText('10')
+        self.numgg.setMaximumSize(24,22)
         self.egiorno = QLineEdit()
         oggi = datetime.datetime.now().strftime("%y/%m/%d")
         self.egiorno.setText(oggi)
@@ -75,8 +80,6 @@ class App(QWidget):
         mapbtn.clicked.connect(self.showMap)
         self.mylat.setMinimumWidth(70)
         self.mylon.setMinimumWidth(70)
-        #self.mylat.setMaximumWidth(70)
-        #self.mylon.setMaximumWidth(70)
         self.mylat.setText('45.641174')
         self.mylon.setText('9.114828')
         lblmap = QLabel("Tipo Map")
@@ -99,17 +102,17 @@ class App(QWidget):
         hhome.addWidget(mapbtn)
         hhome.addWidget(self.radiob)
         hhome.addWidget(self.combobox)
-        hhome.addWidget(fra)
-        hhome.addWidget(self.fragiorno)
-        hhome.addWidget(et)
-        hhome.addWidget(self.egiorno)
-        #hhome.addWidget(voidlbl)
+        hhome.addWidget(lblmant)
+        hhome.addWidget(self.numgg)
         hhome.addWidget(lblmap)
         hhome.addWidget(self.combomap)
         hhome.addWidget(self.lblcbnode)
         hhome.addWidget(self.combonode)
         hhome.addWidget(voidlbl)
-
+        hhome.addWidget(voidlbl1)
+        hhome.addWidget(voidlbl2)
+        hhome.addWidget(voidlbl3)
+        hhome.addWidget(voidlbl4)
         self.layout = QVBoxLayout(self)
         self.setWindowTitle(self.title)
         self.tabs = QTabWidget()
@@ -196,6 +199,7 @@ class App(QWidget):
         self.show()
 
     def closeEvent(self, event):
+        self.removeOld()
         #salva mylat e mylon in meshnodes
         mylat = self.mylat.text()
         mylon = self.mylon.text()
@@ -363,8 +367,7 @@ class App(QWidget):
             self.mylat.setText('45.6412')
             self.mylon.setText('9.1149')
         #riempi combobox con lista dei giorni presenti in db
-        qr = "select DISTINCT data from connessioni where data > '"+self.fragiorno.text()+ \
-            "' and data <= '"+self.egiorno.text()+"' order by data ASC"
+        qr = "select DISTINCT data from connessioni order by data ASC"
         rows = cur.execute(qr)
         datas = rows.fetchall()
         for giorno in datas:
@@ -381,9 +384,10 @@ class App(QWidget):
         cur.close()
         conn.close()  
 
-    def loadPeers(self):
+    def removeOld(self):
         #trova data minore di 7gg rispetto oggi
-        prv = datetime.datetime.now().timestamp()-86400*7
+        ng = int(self.numgg.text())
+        prv = datetime.datetime.now().timestamp()-86400*ng
         prvdate = datetime.date.fromtimestamp(prv).strftime("%y/%m/%d")
         conn = dba.connect('meshDB.db')
         cur = conn.cursor()
@@ -397,6 +401,13 @@ class App(QWidget):
         qr = "delete from connessioni where data < '"+prvdate+"'"
         cur.execute(qr)
         conn.commit()
+        cur.close()
+        conn.close()  
+        print("Rimossi record vecchi piu di "+str(ng)+" giorni.")
+
+    def loadPeers(self):
+        conn = dba.connect('meshDB.db')
+        cur = conn.cursor()
         qr = "update meshnodes set longname='ignoto' where longname is null"
         cur.execute(qr)
         conn.commit()
