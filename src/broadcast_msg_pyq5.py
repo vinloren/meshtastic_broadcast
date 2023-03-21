@@ -386,7 +386,10 @@ class App(QWidget):
 
     def removeOld(self):
         #trova data minore di 7gg rispetto oggi
-        ng = int(self.numgg.text())
+        try:
+            ng = int(self.numgg.text())
+        except:
+            ng = 10
         prv = datetime.datetime.now().timestamp()-86400*ng
         prvdate = datetime.date.fromtimestamp(prv).strftime("%y/%m/%d")
         conn = dba.connect('meshDB.db')
