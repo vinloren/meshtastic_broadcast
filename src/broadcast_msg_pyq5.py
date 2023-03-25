@@ -1366,7 +1366,7 @@ class callDB(QThread):
                 #ora inserisci ChanUtil e AirUtilTX per tutti i peers presenti in nodeInfo[]
                 tstamp = datetime.datetime.now().timestamp()
                 for info in ex.nodeInfo:
-                    qr = "insert into airtx (data,ora,nodenum,longname,chanutil,airutiltx) values('"\
+                    qr = "insert into airtx (data,ora,nodenum,longname,chanutil,airutiltx,battlv) values('"\
                         +data+"','"+ora+"','"
                     if('tsTl' in info):
                         if('chutil'in info and 'airutil' in info and not info['user'] == 'mioGW'):
@@ -1374,7 +1374,7 @@ class callDB(QThread):
                             if(tdiff < 301):    #ultimo msg non più vecchio di 5min
                                 try:
                                     qr += str(info['nodenum'])+"','"+info['user']+"','"+str(round(info['chutil'],2))+"','"+ \
-                                    str(round(info['airutil'],2))+"')"
+                                    str(round(info['airutil'],2))+"','"+str(info['battlv'])+"')"
                                     self.insertDB(qr)
                                     print("Aggiornato AirUtilTX di "+info['user'])
                                 except:
