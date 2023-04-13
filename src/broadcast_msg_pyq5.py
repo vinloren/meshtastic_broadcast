@@ -121,7 +121,7 @@ class App(QWidget):
         self.tab3 = QWidget()
         self.inText = QLineEdit()
         self.inText.setMaximumWidth(250)
-        self.inText.setText("Test mesh da vinloren_GW_868")
+        self.inText.setText("Test mesh da IU2RPO_GW_868")
         label2 = QLabel("Dati inviati: ")
         label2.setMaximumWidth(70)
         self.rbtn1 = QCheckBox('Solo ricezione') 
@@ -1349,8 +1349,8 @@ class callDB(QThread):
         while(True):
             time.sleep(0.5)
             self.slptcnt += 1
-            #ogni 5 minuti salva valori chanUtil e AirUtilTX di mioGW
-            if(self.slptcnt % 600 == 0):
+            #ogni 10 minuti salva valori chanUtil e AirUtilTX di mioGW
+            if(self.slptcnt % 1200 == 0):
                 myair = ex.airustx.text()
                 myair = myair[0:len(myair)-1]
                 myair = float(myair)/10
@@ -1366,15 +1366,24 @@ class callDB(QThread):
                 #ora inserisci ChanUtil e AirUtilTX per tutti i peers presenti in nodeInfo[]
                 tstamp = datetime.datetime.now().timestamp()
                 for info in ex.nodeInfo:
-                    qr = "insert into airtx (data,ora,nodenum,longname,chanutil,airutiltx,battlv) values('"\
+                    qr = "insert into airtx (data,ora,nodenum,longname,chanutil,airutiltx,battlv,pressione,temperatura,umidita) values('"\
                         +data+"','"+ora+"','"
                     if('tsTl' in info):
                         if('chutil'in info and 'airutil' in info and not info['user'] == 'mioGW'):
                             tdiff = tstamp - info['tsTl']
-                            if(tdiff < 301):    #ultimo msg non più vecchio di 5min
+                            press = ' '
+                            if('pressione' in info):
+                                press = str(round(info['pressione'],1))
+                            tempr = ' '
+                            if('temperatura' in info):
+                                tempr = str(round(info['temperatura'],1))
+                            umid = ' '
+                            if('humidity' in info):
+                                umid = str(round(info['humidity'],1))
+                            if(tdiff < 601):    #ultimo msg non più vecchio di 10min
                                 try:
                                     qr += str(info['nodenum'])+"','"+info['user']+"','"+str(round(info['chutil'],2))+"','"+ \
-                                    str(round(info['airutil'],2))+"','"+str(info['battlv'])+"')"
+                                    str(round(info['airutil'],2))+"','"+str(info['battlv'])+"','"+press+"','"+tempr+"','"+umid+"')"
                                     self.insertDB(qr)
                                     print("Aggiornato AirUtilTX di "+info['user'])
                                 except:
