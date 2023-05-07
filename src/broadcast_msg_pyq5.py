@@ -682,13 +682,19 @@ class App(QWidget):
                         temperatura = 0
                         pressione = 0
                         humidity = 0
+                        voltage = 0
+                        current = 0
                         if('temperature' in packet['decoded']['telemetry']['environmentMetrics']):
                             temperatura = packet['decoded']['telemetry']['environmentMetrics']['temperature']
                         if('barometricPressure' in packet['decoded']['telemetry']['environmentMetrics']):
                             pressione = packet['decoded']['telemetry']['environmentMetrics']['barometricPressure']
                         if('relativeHumidity' in packet['decoded']['telemetry']['environmentMetrics']):
                             humidity = packet['decoded']['telemetry']['environmentMetrics']['relativeHumidity']  
-                        self.updateSensors(packet['from'],temperatura,pressione,humidity)
+                        if('voltage' in packet['decoded']['telemetry']['environmentMetrics']):
+                            voltage = packet['decoded']['telemetry']['environmentMetrics']['voltage']  
+                        if('current' in packet['decoded']['telemetry']['environmentMetrics']):
+                            current =packet['decoded']['telemetry']['environmentMetrics']['current'] 
+                        self.updateSensors(packet['from'],temperatura,pressione,humidity,voltage,current)
                         self.showInfo()
                         pdict ={}
                         pdict.update({'pressione': pressione})
@@ -1073,6 +1079,10 @@ class App(QWidget):
             if(info['nodenum'] == nodenum):
                 if('user' not in info):
                     self.nodeInfo[i].update({'user': self.findUser(nodenum)})
+                if(battlv == ' '):
+                    if('voltage' in self.nodeInfo[i]):
+                        carica = ((self.nodeInfo[i]['voltage']-3.6)/0.6)*100
+                        battlv = round(carica,1)       
                 self.nodeInfo[i].update({'battlv': battlv})
                 self.nodeInfo[i].update({'chutil': round(chanutil,2)})
                 self.nodeInfo[i].update({'airutil': round(airutil,2)})
@@ -1123,7 +1133,7 @@ class App(QWidget):
             print("(telemetry) inserito nuovo record da user mai visto prima")
             print(self.nodeInfo[i])
 
-    def updateSensors(self,nodenum,temperatura,pressione,humidity):
+    def updateSensors(self,nodenum,temperatura,pressione,humidity,voltage,corrente):
         i = 0
         for info in self.nodeInfo:
             if(info['nodenum'] == nodenum):
@@ -1132,6 +1142,8 @@ class App(QWidget):
                 self.nodeInfo[i].update({'temperatura': temperatura})
                 self.nodeInfo[i].update({'pressione': pressione})
                 self.nodeInfo[i].update({'humidity': humidity})
+                self.nodeInfo[i].update({'voltage': voltage})
+                self.nodeInfo[i].update({'corrente': corrente})
                 self.nodeInfo[i].update({'time': datetime.datetime.now().strftime("%d/%m/%y %T")})
                 self.nodeInfo[i].update({'ts': datetime.datetime.now().timestamp()})   
                 if('_id' not in info):
@@ -1153,6 +1165,8 @@ class App(QWidget):
             newuser['temperatura'] = temperatura
             newuser['pressione'] = pressione
             newuser['humidity'] = humidity
+            newuser['voltage'] = voltage
+            newuser['corrente'] = corrente
             newuser['user'] = self.findUser(nodenum)
             print("(UpdateSensors) aggiunto record da user mai visto prima")
             self.nodeInfo.append(newuser)
@@ -1366,7 +1380,7 @@ class callDB(QThread):
                 #ora inserisci ChanUtil e AirUtilTX per tutti i peers presenti in nodeInfo[]
                 tstamp = datetime.datetime.now().timestamp()
                 for info in ex.nodeInfo:
-                    qr = "insert into airtx (data,ora,nodenum,longname,chanutil,airutiltx,battlv,pressione,temperatura,umidita) values('"\
+                    qr = "insert into airtx (data,ora,nodenum,longname,chanutil,airutiltx,battlv,pressione,temperatura,umidita,voltage,corrente) values('"\
                         +data+"','"+ora+"','"
                     if('tsTl' in info):
                         if('chutil'in info and 'airutil' in info and not info['user'] == 'mioGW'):
@@ -1380,10 +1394,14 @@ class callDB(QThread):
                             umid = ' '
                             if('humidity' in info):
                                 umid = str(round(info['humidity'],1))
-                            if(tdiff < 601):    #ultimo msg non più vecchio di 10min
+                            if('voltage' in info):
+                                voltage =  str(round(info['voltage'],2))
+                            if('corrente' in info):
+                                corrente = str(round(info['corrente'],2))
+                            if(tdiff < 600):    #ultimo msg non più vecchio di 10min
                                 try:
                                     qr += str(info['nodenum'])+"','"+info['user']+"','"+str(round(info['chutil'],2))+"','"+ \
-                                    str(round(info['airutil'],2))+"','"+str(info['battlv'])+"','"+press+"','"+tempr+"','"+umid+"')"
+                                    str(round(info['airutil'],2))+"','"+str(info['battlv'])+"','"+press+"','"+tempr+"','"+umid+"','"+voltage+"','"+corrente+"')"
                                     self.insertDB(qr)
                                     print("Aggiornato AirUtilTX di "+info['user'])
                                 except:

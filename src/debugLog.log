@@ -1,0 +1,526 @@
+DEBUG | 10:59:22 3773 [Screen] Screen: Joined: Castellamonte 868 
+INFO  | 10:59:22 3773 Telling client we have new packets 405 
+INFO  | 10:59:22 3773 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77e80, len=113 
+INFO  | 10:59:22 3773 [ServerAPI] getFromRadio=STATE_SEND_PACKETS 
+DEBUG | 10:59:22 3773 [ServerAPI] phone downloaded packet (id=0x61fa58e6 fr=0xdc to=0xff, WantAck=0, HopLim=1 Ch=0x0 Portnum=4 rxtime=1678791561 rxSNR=-5.25 rxRSSI=-131) 
+encoding toPhone packet to phone variant=2, 92 bytes 
+DEBUG | 10:59:22 3773 [Router] Found existing packet record for fr=0x50c2adc,to=0xffffffff,id=0x61fa58e6 
+DEBUG | 10:59:22 3773 [Router] Found existing packet record for fr=0x50c2adc,to=0xffffffff,id=0x61fa58e6 
+DEBUG | 10:59:1 rxSNR=-5.25xRSSI=INFO  | 10:59:22it (id=0x61fae6 fr=0xdc to=0t sINFO  | 10:59:it (id=0x61fa5e6 fr=0xdINFO  | 10:59:22 3774itINFO  | 10:59:22it (DEBUG | 10:59:Battery: usbPower=0, isCharging=0, batMv=4154, batPct=95 
+INFO  | 10:59:44 3795 [mqtt] Received MQTT topic msh/2/c/MediumFast/!050d2dcc, len=89 
+DEBUG | 10:59:44 3795 [Router] Add packet record (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=1 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791584 rxSNR=-7.75 rxRSSI=-117) 
+handleReceived(REMOTE) (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=1 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791584 rxSNR=-7.75 rxRSSI=-117) 
+Module 'position' wantsPacket=1 
+INFO  | 10:59:44 3795 [Router] Received position from=0x1d627e6c, id=0xeea50a, portnum=3, payloadlen=18 
+INFO  | 10:59:44 3795 [Router] POSITION node=1d627e6c l=18 LAT LON MSL TIME  
+INFO  | 10:59:44 3795 [Router] updatePosition REMOTE node=0x1d627e6c time=1678791560, latI=449795000, lonI=73798000 
+DEBUG | 10:59:44 3795 [Router] Node status update: 28 online, 29 total 
+DEBUG | 10:59:44 3795 [Router] Module 'position' considered 
+DEBUG | 10:59:44 3795 [Router] Module 'routing' wantsPacket=1 
+INFO  | 10:59:44 3795 [Router] Received routing from=0x1d627e6c, id=0xeea50a, portnum=3, payloadlen=18 
+DEBUG | 10:59:44 3795 [Router] Routing sniffing (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=1 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791584 rxSNR=-7.75 rxRSSI=-117) 
+Rebroadcasting received floodmsg to neighbors 
+INFO  | 10:59:44 3795 [Router] Should encrypt MQTT?: 0 
+DEBUG | 10:59:44 3795 [Router] publish msh/2/c/MediumFast/!60580a78, 87 bytes 
+DEBUG | 10:59:44 3795 [Router] Expanding short PSK #1 
+DEBUG | 10:59:44 3795 [Router] Using AES128 key! 
+DEBUG | 10:59:44 3795 [Router] ESP32 crypt fr=1d627e6c, num=eea50a, numBytes=24! 
+DEBUG | 10:59:44 3795 [Router] enqueuing for send (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x1f encrypted rxtime=1678791584 rxSNR=-7.75 rxRSSI=-117) 
+txGood=1500,rxGood=1663,rxBad=1 
+DEBUG | 10:59:44 3795 [Router] rx_snr found. hop_limit:0 rx_snr:-7.750000 
+DEBUG | 10:59:44 3795 [Router] rx_snr found in packet. As a router, setting tx delay:294 
+DEBUG | 10:59:44 3795 [Router] Module 'routing' considered 
+INFO  | 10:59:44 3795 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77e80, len=87 
+DEBUG | 10:59:44 3795 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3795 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3795 [Router] Add packet record (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791583 rxSNR=-7.75 rxRSSI=-117) 
+Ignoring incoming msg, because we've already seen it (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791583 rxSNR=-7. 
+Incoming message was filtered 0x1d627e6c 
+INFO  | 10:59:44 3795 [mqtt] Ignoring downlink message we originally sent. 
+INFO  | 10:59:44 3795 [mqtt] Received MQTT topic msh/2/c/MediumFast/!1d49f208, len=87 
+DEBUG | 10:59:44 3795 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3795 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3795 [Router] Add packet record (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791584 rxSNR=-7.75 rxRSSI=-117) 
+Ignoring incoming msg, because we've already seen it (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791584 rxSNR=-7. 
+Incoming message was filtered 0x1d627e6c 
+INFO  | 10:59:44 3796 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7c50, len=87 
+DEBUG | 10:59:44 3796 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3796 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3796 [Router] Add packet record (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791582 rxSNR=-7.75 rxRSSI=-117) 
+Ignoring incoming msg, because we've already seen it (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791582 rxSNR=-7. 
+Incoming message was filtered 0x1d627e6c 
+INFO  | 10:59:44 3796 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa79a0, len=87 
+DEBUG | 10:59:44 3796 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3796 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3796 [Router] Add packet record (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791584 rxSNR=-7.75 rxRSSI=-117) 
+Ignoring incoming msg, because we've already seen it (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791584 rxSNR=-7. 
+Incoming message was filtered 0x1d627e6c 
+DEBUG | 10:59:44 3796 [RadioIf] Starting low level send (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x1f encrypted rxtime=1678791584 rxSNR=-7.75 rxRSSI=-117 priority=64) 
+(bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=40, time 207 ms 
+DEBUG | 10:59:44 3796 [RadioIf] AirTime - Packet transmitted : 207ms 
+INFO  | 10:59:44 3796 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25c221e4, len=87 
+DEBUG | 10:59:44 3796 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3796 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3796 [Router] Add packet record (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791582 rxSNR=-7.75 rxRSSI=-117) 
+Ignoring incoming msg, because we've already seen it (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791582 rxSNR=-7. 
+Incoming message was filtered 0x1d627e6c 
+INFO  | 10:59:44 3796 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a74d2c, len=87 
+DEBUG | 10:59:44 3796 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3796 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3796 [Router] Add packet record (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791582 rxSNR=-7.75 rxRSSI=-117) 
+Ignoring incoming msg, because we've already seen it (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x0 Portnum=3 WANTRESP rxtime=1678791582 rxSNR=-7. 
+Incoming message was filtered 0x1d627e6c 
+INFO  | 10:59:44 3796 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7bb8, len=87 
+DEBUG | 10:59:44 3796 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3796 [Router] Found existing packet record for fr=0x1d627e6c,to=0x50d2e30,id=0xeea50a 
+DEBUG | 10:59:44 3796 [Router] Add packet record (id=0x00eea50a fr=0x6c to=0x30, WantAck=0, HopLim=0 Ch=0x0 Portnum=3 WANTRESP rxtime=1INFO  | 10:59een it (idReceived MQTT topic msh/2/c/MediumFast/!95aa7bb8, len=75 
+DEBUG | 10:59:45 3796 [Router] Add packet record (id=0x5cb7884a fr=0xb8 to=0xcc, WantAck=0, HopLim=5 Ch=0x0 PortntsPacket=1 
+IN6FO  | 10:59DEBUG | 10:59: to=0xcc, WantAcb7884a 
+DEBUcord for fr=0x9INFO  | 10:59id=0INFO  | 10:59:id=0x5cb Received MQTT t, WantAck=0, IpLim=4 ChINFO  | 10:59:46 3portnum=5, paylESP32 crypt f [Router] Foundb932 fr=0xcc aa7bb8,id=0x4INFO  | 10:59:46 y se=INFO  | 10:59:y seen iReceived MQTT txcc INFO  | 10:59:y seINFO  | 10:59:4y seeINFO  | 10:59y seeDEBUG | 10:59:46 3798 [Rer] Add pDEBUG | 10:59:46 3798 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payx5cb7884a fr=0SNR=7.DEBUG | 10:59:47 3798 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 mer] Add pWARN  | 10:59:47 3798 [RadioIDEBUG | 10:59:47 3799 [RadioIf] (bw=250, sf=9, cr=4/8) pater] Add pacpayDEBUG | 10:59:47 3799 [RadioIf] Completed sending (id=0x5cb7884a fr=0(bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=40, time 207 ms 
+DEBUG | 10:59:48 3Ack=0, HopLimg incDEBUG | 10:59:48 3799 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=ter] Add packDEBUG | 10:59:48 3800 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms,ter] Add packet paDEBUG | 10:59:49 3800 [RadioIf] Completed sending (id=0x5cb7884a frReceived MQTT topic msh/2/c/MediumFast/!25a74d2c, len=84 
+DEBUG | 10:59:49 3800 [Router] Add packet record (id=0x0286a3be fr=0xc8 to=0xff, Wa3800 [Router]ng sniffiDEBUG | 10:59:t. As a routINFO  | 10:59DEBUG | 10:599 rxSNR=-7.75 rxRSSI=DEBUG | 10INFO  | 10:59:49 38t (INFO  | 10:59:49t (iINFO  | 10:59:t (id=0x0Received MQTT xff, WantAck=0, HopLim=1 Ch=0packet recoDEBUG | 10:59:51 3802 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=35, time 188 ms 
+DEBUG | 10:59:51 3802 [RadioIf] Lora RX (id=0x0286a3be fr=0xc8 to=0xff, WantAck=0, HopLim=0 Ch=0x1f encrypted rxSNR=13.75 rxRSSI=-62) 
+AirTime - Packet received : 188ms 
+DEBUG | 10:59:51 3802 [Router] Found existing packet record for fr=0xa3fb77c8,to=0xffffter] Add DEBUG | 10:59:51 3803 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, pal] Add paDEBUG | 10:59:51 3803 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=35, time 188 mser] Add DEBUG | 10:59:56 3808 [Power] Battery: usbPower=0, isCharging=0, batMv=4100, batPct=89 
+INFO  | 11:00:15 3826 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa79a0, len=93 
+DEBUG | 11:00:15 3826 [Router] Add packet record (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=4 Ch=0x0 Portnum=3 rxtime=1678791615 rxSNR=10.5 rxRSSI=-78) 
+handleReceived(REMOTE) (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=4 Ch=0x0 Portnum=3 rxtime=1678791615 rxSNR=10.5 rxRSSI=-78) 
+Module 'position' wantsPacket=1 
+INFO  | 11:00:15 3826 [Router] Received position from=0xb22485f4, id=0x74595dde, portnum=3, payloadlen=24 
+INFO  | 11:00:15 3826 [Router] POSITION node=b22485f4 l=24 LAT LON MSL PDOP SIV TIME  
+INFO  | 11:00:15 3826 [Router] updatePosition REMOTE node=0xb22485f4 time=1678791618, latI=450377631, lonI=76455758 
+DEBUG | 11:00:15 3826 [Router] Node status update: 28 online, 29 total 
+DEBUG | 11:00:15 3826 [Router] Module 'position' considered 
+DEBUG | 11:00:15 3826 [Router] Module 'routing' wantsPacket=1 
+INFO  | 11:00:15 3826 [Router] Received routing from=0xb22485f4, id=0x74595dde, portnum=3, payloadlen=24 
+DEBUG | 11:00:15 3826 [Router] Routing sniffing (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=4 Ch=0x0 Portnum=3 rxtime=1678791615 rxSNR=10.5 rxRSSI=-78) 
+Rebroadcasting received floodmsg to neighbors 
+INFO  | 11:00:15 3826 [Router] Should encrypt MQTT?: 0 
+DEBUG | 11:00:15 3826 [Router] publish msh/2/c/MediumFast/!60580a78, 93 bytes 
+DEBUG | 11:00:15 3826 [Router] Expanding short PSK #1 
+DEBUG | 11:00:15 3826 [Router] Using AES128 key! 
+DEBUG | 11:00:15 3826 [Router] ESP32 crypt fr=b22485f4, num=74595dde, numBytes=28! 
+DEBUG | 11:00:15 3826 [Router] enqueuing for send (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=3 Ch=0x1f encrypted rxtime=1678791615 rxSNR=10.5 rxRSSI=-78) 
+txGood=1506,rxGood=1673,rxBad=1 
+DEBUG | 11:00:15 3826 [Router] rx_snr found. hop_limit:3 rx_snr:10.500000 
+DEBUG | 11:00:15 3826 [Router] rx_snr found in packet. As a router, setting tx delay:84 
+DEBUG | 11:00:15 3826 [Router] Delivering rx packet (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=4 Ch=0x0 Portnum=3 rxtime=1678791615 rxSNR=10.5 rxRSSI=-78) 
+Update DB node 0xb22485f4, rx_time=1678791615 
+DEBUG | 11:00:15 3826 [Router] Forwarding to phone (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=4 Ch=0x0 Portnum=3 rxtime=1678791615 rxSNR=10.5 rxRSSI=-78) 
+Module 'routing' considered 
+INFO  | 11:00:15 3826 Telling client we have new packets 407 
+INFO  | 11:00:15 3826 [mqtt] Received MQTT topic msh/2/c/MediumFast/!050d2dcc, len=93 
+DEBUG | 11:00:15 3826 [Router] Found existing packet record for fr=0xb22485f4,to=0xffffffff,id=0x74595dde 
+DEBUG | 11:00:15 3826 [Router] Resending implicit ack for a repeated floodmsg 
+INFO  | 11:00:15 3826 [Router] Should encrypt MQTT?: 0 
+DEBUG | 11:00:15 3826 [Router] publish msh/2/c/MediumFast/!60580a78, 93 bytes 
+DEBUG | 11:00:15 3826 [Router] Expanding short PSK #1 
+DEBUG | 11:00:15 3826 [Router] Using AES128 key! 
+DEBUG | 11:00:15 3826 [Router] ESP32 crypt fr=b22485f4, num=74595dde, numBytes=28! 
+DEBUG | 11:00:15 3826 [Router] enqueuing for send (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=2 Ch=0x1f encrypted rxtime=1678791615 rxSNR=10.5 rxRSSI=-78) 
+txGood=1506,rxGood=1673,rxBad=1 
+DEBUG | 11:00:15 3826 [Router] rx_snr found. hop_limit:2 rx_snr:10.500000 
+DEBUG | 11:00:15 3826 [Router] rx_snr found in packet. As a router, setting tx delay:252 
+DEBUG | 11:00:15 3826 [Router] Found existing packet record for fr=0xb22485f4,to=0xffffffff,id=0x74595dde 
+DEBUG | 11:00:15 3826 [Router] Add packet record (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=3 Ch=0x0 Portnum=3 rxtime=1678791615 rxSNR=10.5 rxRSSI=-78) 
+Ignoring incoming msg, because we've already seen it (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=3 Ch=0x0 Portnum=3 rxtime=1678791615 rxSNR=10.5 rxRSSI= 
+Incoming message was filtered 0xb22485f4 
+DEBUG | 11:00:15 3826 [RadioIf] Starting low level send (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=2 Ch=0x1f encrypted rxtime=1678791615 rxSNR=10.5 rxRSSI=-78 priority=64) 
+(bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=44, time 221 ms 
+DEBUG | 11:00:15 3826 [RadioIf] AirTime - Packet transmitted : 221ms 
+INFO  | 11:00:15 3826 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77e80, len=93 
+INFO  | 11:00:15 3826 [ServerAPI] getFromRadio=STATE_SEND_PACKETS 
+DEBUG | 11:00:15 3826 [ServerAPI] phone downloaded packet (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=4 Ch=0x0 Portnum=3 rxtime=1678791615 rxSNR=10.5 rxRSSI=-78) 
+encoding toPhone packet to phone variant=2, 70 bytes 
+DEBUG | 11:00:15 3826 [Router] Found existing packet record for fr=0xb22485f4,to=0xffffffff,id=0x74595dde 
+DEBUG | 11:00:15 3826 [Router] Resending implicit ack for a repeated floodmsg 
+INFO  | 11:00:15 3826 [Router] Should encrypt MQTT?: 0 
+DEBUG | 11:00:15 3826 [Router] publish msh/2/c/MediumFast/!60580a78, 93 bytes 
+DEBUG | 11:00:15 3826 [Router] Expanding short PSK #1 
+DEBUG | 11:00:15 3826 [Router] Using AES128 key! 
+DEBUG | 11:00:15 3826 [Router] ESP32 crypt fr=b22485f4, num=74595dde, numBytes=28! 
+DEBUG | 11:00:15 3826 [Router] enqueuing for send (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=2 Ch=0x1f encrypted rxtime=1678791614 rxSNR=10.5 rxRSSI=-78) 
+txGood=1506,rxGood=1673,rxBad=1 
+DEBUG | 11:00:15 3826 [Router] rx_snr found. hop_limit:2 rx_snr:10.500000 
+DEBUG | 11:00:15 3826 [Router] rx_snr found in packet. As a router, setting tx delay:294 
+DEBUG | 11:00:15 3826 [Router] Found existing packet record for fr=0xb22485f4,to=0xffffffff,id=0x74595dde 
+DEBUG | 11:00:15 3826 [Router] Add packet record (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=3 Ch=0x0 Portnum=3 rxtime=1678791614 rxSNR=10.5 rxRSSI=-78) 
+Ignoring incoming msg, because we've already seen it (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=3 Ch=0x0 Portnum=3 rxtime=1678791614 rxSNR=10.5 rxRSSI= 
+Incoming message was filtered 0xb22485f4 
+INFO  | 11:00:15 3827 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77e80, len=93 
+DEBUG | 11:00:15 3827 [Router] Found existing packet record for fr=0xb22485f4,to=0xffffffff,id=0x74595dde 
+DEBUG | 11:00:15 3827 [Router] Found existing packet record for fr=0xb22485f4,to=0xffffffff,id=0x74595dde 
+DEBUG | 11:00:15 3827 [Router] Add packet record (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=2 Ch=0x0 Portnum=3 rxtime=1678791615 rxSNR=10.5 rxRSSI=-78) 
+Ignoring incoming msg, because we've already seen it (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=2 Ch=0x0 Portnum=3 rxtime=1678791615 rxSNR=10.5 rxRSSI= 
+Incoming message was filtered 0xb22485f4 
+INFO  | 11:00:15 3827 [mqtt] Received MQTT topic msh/2/c/MediumFast/!1d49f208, len=93 
+DEBUG | 11:00:15 3827 [Router] Found existing packet record for fr=0xb22485f4,to=0xffffffff,id=0x74595dde 
+DEBUG | 11:00:15 3827 [Router] Resending implicit ack for a repeated floodmsg 
+INFO  | 11:00:15 3827 [Router] Should encrypt MQTT?: 0 
+DEBUG | 11:00:15 3827 [Router] publish msh/2/c/MediumFast/!60580a78, 93 bytes 
+DEBUG | 11:00:15 3827 [Router] Expanding short PSK #1 
+DEBUG | 11:00:15 3827 [Router] Using AES128 key! 
+DEBUG | 11:00:15 3827 [Router] ESP32 crypt fr=b22485f4, num=74595dde, numBytes=28! 
+DEBUG | 11:00:15 3827 [Router] enqueuing for send (id=0x74595dde fr=0xf4 to=0xff, WantAck=0, HopLim=2 Ch=0x1f encrypted rxtime=1678791615 rxSNR=10.5 rxRSSI=-78) 
+txGood=1506,rxGood=1673,rxBa 3827 [Routerssage waINFO  | 11:00:15 38
+
+DEBUG | 11:00:0xb22485f4DEBUG | 11:00:1de 
+DEDEBUG | 11:00:. As a router,INFO  | 11:00
+
+DEBUG | 11:00:0xb22485f4,toencrypted rxtDEBUG | 11:00:1. As a routet| 11:00:16 382595dde 
+DEBUGcord for fr=0xb4595dde fr=0=0x0 Portnum=3 t received : xRINFO  | 11:00:1
+
+DEBUG | 11:00xb22485f4,to=0mitDEBUG | 11:00:1 3828 [Router] etting tx del[RadioIf] (bw=(id=0x74595ddINFO  | 11:00:16 3828t (id=0x74595ddket record foINFO  | 11:00:1t (id=0x74595ddf,id=0x74595diumFast/!95aa7c Portnum=3INFO  | 11:00:1t (idINFO  | 11:00:t (iINFO  | 11:00:len=49 
+DEBUG |0 Portnum=4 Wck=0, HopLim=4Received MQTT t3xff, WantAINFO  | 11:00:17t (iINFO  | 11:00:/t (iINFO  | 11:00:t (iINFO  | 11:00:17t (id=0Received MQTT topxff, WantAck60, HopLim=2 Ch9time 221 ms 
+D8791614INFO  | 11:00:18 382t INFO  | 11:00:18t (iINFO  | 11:00:t (id=0x7Received MQTT toxff, WantAck=0, HopLiINFO  | 11:00t (ieDEBUG | 11:00:1de 
+DEBUG | 1QTT topic msh/2ck=0, HopLim=2 Ch=0x0INFO  | 11:00:18t (id=0Received MQTT toxff, WantAINFINFO  | 11:00:18 3830t (INFO  | 11:00:1t (iINFO  | 11:00:t (iINFO  | 11:00:19 t (id=0xIgINFO  | 11:00:19 3830 t (INFO  | 11:00:1t (iDEBUG | 11:00:1de 
+DEBUG | 11:QTT topic ms8ck=0, HopLim=2 2 Ch=0xINFO  | 11:00t (id=0x74IgINFO  | 11:00:19 383t (iDEBUG | 11:00:1de 
+DEBUG | 11:QTT topic msh/ck=0, HopLim=gINFO  | 11:00DEBUG | 11:00678791616 priorUG | 11:DEBUG | 11:00INFO  | 11:00:20 383ct (iINFO  | 11:00:20t INFO  | 11:00:20t (id=0x74595dde fr=0xf4 tost/!95aa7c50, lnINFO  | 11:00:2t (ixINFO  | 11:00t (id=0x74595DEBUG | 11:00:20 er] Add packet 38DEBUG | 1DEBUG | 11:00:2cord (id=0x745DEBUG | 11:00:topic msh/2/c/M,INFO  | 11:00:2t (id=0x74595dfff,id=0x74595t:2 rx_snr:10.5=2 Ch=INFO  | 11:00:2t (id=0x74595dde fr=0xf4 toI 3832 [Routeret symLen=2 msntAck=0DEBUG | 11:004de 
+DEBUG | 11:QTT topic msck=INFINFO  | 11:00:21 383t (iINFO  | 11:00:21t (id=0x7Received MQTT xff, WantAck=0,0, HopDEBUG | 11:00:2833 [Router] umFast/!25a74d2PoINFO  | 11:00t (idINFO  | 11:00:21t (INFO  | 11:00:2t (iINFO  | Received MQTT txff, WantAck=0,0, HopLim=2  packet recoINFO  | 11:00:t (idINFO  | 11:00:22t (INFO  | 11:00:t (idINFO  | 11:00:t (iINFO  | 11:00:22t (iININFO  | 11:00:22 383t (idINFO  | 11:00:t (iINFO  | 11:00:22t INFO  | 11:00:22N node=050d2d=0x0 Portnum=3 encrypted rxti1:00:22 3834 ytes=50! 
+DEBUG0x36b9b9f2 fr=-39) 
+txGood=INFO  | 11:00:EBUG | 11:00:23 rxSNR=10.5 r'nodeinfo' want payloadlenDEBUG | 11:00:23 3835 [Router] Expanding short PSK #1 
+DEBUG | 11:00:23 3835 [Router] Using AES128 key! 
+DEBUG | 11:00:23 3835 =1678791623 rxS=0xf4, WantAc681,rxBad=1 
+INFO  | 11DEBUG | 11:00:24 rxSNR=10.5 rxRSSIDEBUG | 11:00:24835 [Router]umFast/!95aaaf4PorINFO  | 11:00t (id=0x74595(bw=2DEBUG | 11:00:4 rxSNR=10.5 rxrxRSSI=-78) 
+de 
+DEBUG |INFO  | 11:00t (id=0x74595dddde fr=0xf4 t 3836 [Router] 9b9Received MQTT xff, WDEBUG | 11:00:25 rxSNR=10.5 rxRSSI=-78) 
+Igaaf48, len=91xtimeDEBUGDEBUG | 11:00essage was filtg, beINFO  | 11:00t (idDEBUG | 11:00:25rd (id=0x745INFO  | 11:00:2t (idINFO  | 11:00:t (id=0x74595d0ket record ffed 0xb22485f4:25 383INFO  | 11:00:25 836 [Router] UG | 11:00:25 d (id=0x7INFO  | 11:00:t (iINFO  | 11:00:t (id=0x36b9b98, HopLim=6 Ch=x0 Portnum=4 eceived routDEBUG | 11:00:s a router,INFO  | 11:00:t (iINFO  | 11:00:26t (iINFO  | 11:00:t (idINFO  | 11:00t (idINFO  | 11:00:2t (iINFO  | 11:00:2o=0xff, WantAckffffffff,INFO  | 11:00:26485f4, id=0x7x48, WanDEBUG | 11:00:2E As aINFO  | 11:00:2h! 
+DEBUG | 1o0xb22485f4,to=UG | 11:00:26G | 11:00:26 38id=0x74595ddcd=0x74595ddf 
+:00:26 3838 [mqUG | 11:00:266 3838 [Router] 
+DEBUG | 11:
+
+Update DB nodim=5 Ch=0x1f sg, because we'ord (id=0x0abNTRESP rxtiINFO  | 11:00:27 38portnum=4, paylim=3 ChDEBUG | 11:00 len=58 
+DEBUG age was filte2 
+DEBUG | 11:0ff,id=0xabf5eIf] Can not senm=0x50d2dcc,bG | 11:00INFO  | INFO  | 11:00:dy seINFO  | 11:00:2 itWARN  | 11:00:2riority=120)Router] Found eINFO  | 11:00:2acket record (3 Ch=0x0 Portnuemoved=1 
+DEBS 
+DEBUG | 11:fr=0xcc to=0IgINFO  | 11:00:28 38 alreDEBUG | 11:00:283839 [RouterINFO  | 11:00:2! 
+DEBUG | 11=0xb22485f4,to=BUG | 11:00:2 rINFO  | 11:00:2we've alrReceived MQTT t4595INFO  | 11:00: 27e6c, id=0xee, HopLimDEBUG | 11:00:As a routINFO  | 11:00:(id=0x0abf5e30 ,id=0x4253b938rINFO  | 11:00:29 3e alINFO  | 11:00:en iINFO  | 11:00:29portnum=5, paESP32 crypt fr=rxSNR=14.25 HopINFO  | 11:00:29portnum=4, pck=0, HoDEBUG | 11:003 len=62 
+DEBUGequestId=5ce923=0xe0, Wa DEBUGDEBUG | 11:00:2ng message wang incoming msg41 [RoutINFO  | 11:00:2!o=0xff, WantAortnum=3 rxtimUG | 11:0ININFO  | 11:00:30 3841dy seen it (i938 
+DEBUG | 1ora RX (id=0xbecauINFO  | 11:00:30e we'DEBUG | 11INFO  | 11:00:30 38o=0xfINFO  |INFO  | 11:00:30 38 it (id=0Received MQTT toRouter] POSITsniffing (id=0xRouterINFO  | 11:00:o=0xff, WantAck0x0 Portnum=4sting packet reSize=27, timecrypted rxSNR=16fdc 
+DEBUG ord for fr=0x50eINFO  | 11:00o=0xff, WantAck0x0 PortnuINFO  |INFO  | 11:00:31 3842rd for frDEBUG | 11:00:3142 [Router] ast/!95aa7c50, ortINFO  | 11:00 it (INFO  | 11:00:3y sINFO  | 11:00:31 it INFDEBUG | 11:00:31HopLim=DEBUG | 11:0INFO  | 11:00:31 3843 e alrINFO  | 11:00 it (INFO  | 11:00:en iINFO  | 11:00:32seenINFDEBUG | Received MQTT to4595ddf fr=0xc msh/2/c/Mediu8c,INFINFO  | 11:00:32 38id=0DEBUG | 11:00:32 3843 [RadioIf] Completed sending (id=0Can not send yet, busyRx 
+DEBUG | 11:00:32 3DEBUG | 11:00:32 3844 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSizer] Add packtINFINFO  | 1INFO  | 11:00:33 384! 
+DEBUG | 11:r=0xb22485f4,BUG | 11:00:33  requestId=366b9b9f2 rxtimerived : 336mso router, settiTT topic msh/crypt fr=b22485 
+DEBUG | 11:00INFO  | 11:00:33(id=0x0abf5e3,id=0x4253b93aEediumFast/!2Ack=0,INFO  | 11:00:33 384we'INFO  | 11:00:33we've already r] Found exist=INFO  | 11:00:3we've alreadyx6d088448,to=0DEBU(bw=250DEBUG | 11:00:3EBUG | 11:00:rd (id=0xINFO  | 11:00:fwe'vINFO  | 11:00:34we'veINFO  | 11:00:we've already rAPI] PACKET  
+DEBUG | 11:00[Router] Add SL TIME  
+INFO HopLim=0 Ch=pddf 
+DEBUGeINFO  | 11:00:dy seen it (idisting packet rINFO  | 11:00:(id=INFO  | 11:00:we'veINFO  | 11:00:34we've alread0x6d088448,to=INFO  | 11:00:hwe'vINFO  | 11:00:35(id=DEBUG | 11:0DEBUG | 11:00:35 433 21e4/21Bdcasting recei=70INFO  | 11:00:(id=0x0abf5e30 fr=0xcc tDEBUG | 11:00:3 868/DTU 
+DEBeived floodmsg =15DEBUGReceived MQTT tUG | 11:00:35 3stId=abf5e30spLimINFO  | 11:00:3(id=0x0abf5e30 0 fr=0xe0 tINFO  | 11:00:35 3! 
+DEBUG | 11:0stId=36b9b9f2 for fr=0x25DEBUG | 11:00:3847 [Router] FT topiDEBUG | 11:INFO  | 11:00:3dy INFO  | 11:00:3portnum=4, payl=0, HopL[3848263][E][WiFiClient.cpp:422] write(): fail on fd 52, errno: 11, "No more processes" 
+[3849263][E][WiFiClient.cpp:422] write(): fail on fd 52, errno: 11, "No more processes" 
+[3850263][E][WiFiClient.cpp:422] write(): fail on fd 52, errno: 11, "No more processes" 
+[3851263][E][WiFiClient.cpp:422] write(): fail on fd 52, errno: 11, "No more processes" 
+[3852263][E][WiFiClient.cpp:422] write(): fail on fd 52, errno: 11, "No more processes" 
+[3853263][E][WiFiClient.cpp:422] write(): fail on fd 52, errno: 11, "No more processes" 
+[3854263][E][WiFiClient.cpp:422] write(): fail on fd 52, errno: 11, "No more processes" 
+[3855263][E][WiFiClient.cpp:422] write(): fail on fd 52, errno: 11, "No more processes" 
+[3856263][E][WiFiClient.cpp:422] write(): fail on fd 52, errno: 11, "No more processes" 
+DEBUG | 11:00:44 3856 [Router] Expanding short PSK #1 
+DEBUG | 11:00:44 3856 [Router] Using AES128 key! 
+DEBUG | 11:00:44 3856 [Router] ESP32 crypt fr=95aa79a0, num=7aebf853, numBytes=58! 
+DEBUG | 11:00:44 3856 [Router] enqueuing for send (id=0x7aebf853 fr=0xa0 to=0xe0, WantAck=0, HopLim=4 Ch=0x1f encrypted rxtime=1678791636 priority=70) 
+txGood=1529,rxGood=1698,rxBad=1 
+DEBUG | 11:00:44 3856 [Router] Module 'routing' considered 
+DEBUG | 11:00:44 3856 [RadioIf] Completed sending (id=0x1b808552 fr=0xe4 to=0xe0, WantAck=0, HopLim=4 Ch=0x1f encrypted rxtime=1678791635 priority=70) 
+Battery: usbPower=0, isCharging=0, batMv=4168, batPct=96 
+INFO  | 11:00:44 3856 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7c50, len=110 
+DEBUG | 11:00:44 3856 [Router] Add packet record (id=0x2ce198db fr=0x50 to=0xe0, WantAck=0, HopLim=5 Ch=0x0 Portnum=4 requestId=abf5e30 rxtime=1678791630 priority=70) 
+handleReceived(REMOTE) (id=0x2ce198db fr=0x50 to=0xe0, WantAck=0, HopLim=5 Ch=0x0 Portnum=4 requestId=abf5e30 rxtime=1678791644 priority=70) 
+Module 'nodeinfo' wantsPacket=1 
+INFO  | 11:00:44 3856 [Router] Received nodeinfo from=0x95aa7c50, id=0x2ce198db, portnum=4, payloadlen=50 
+DEBUG | 11:00:44 3856 [Router] old user !95aa7c50/IW1PPB-03 GW 868 7C50/7c50 
+DEBUG | 11:00:44 3856 [Router] updating changed=0 user !95aa7c50/IW1PPB-03 GW 868 7C50/7c50 
+DEBUG | 11:00:44 3856 [Router] Module 'nodeinfo' considered 
+DEBUG | 11:00:44 3856 [Router] Module 'routing' wantsPacket=1 
+INFO  | 11:00:44 3856 [Router] Received routing from=0x95aa7c50, id=0x2ce198db, portnum=4, payloadlen=50 
+DEBUG | 11:00:44 3856 [Router] Routing sniffing (id=0x2ce198db fr=0x50 to=0xe0, WantAck=0, HopLim=5 Ch=0x0 Portnum=4 requestId=abf5e30 rxtime=1678791644 priority=70) 
+Rebroadcasting received floodmsg to neighbors 
+INFO  | 11:00:44 3856 [Router] Should encrypt MQDEBUG | 11:00:45 3857 [Router] Expanding short PSK #1 
+DEBUG | 11:00:45 3857 [Router] Using AES128 key! 
+DEBUG | 11:00:45 3857 [Router] ESP32 crypt fr=95aa7c50, num=2ce198db, numBytes=59! 
+E (794) esp_core_dump_flash: No core dump partition found! 
+[    12][D][esp32-hal-cpu.c:244] setCpuFrequencyMhz(): PLL: 480 / 2 = 240 Mhz, APB: 80000000 Hz 
+ 
+//\ E SDEBUG | ??:??:?? 0 DEBUG | ??:?DEBUG DEBUGDEBUG | ??:??:?? 0DEBUG |INFO  | ??:??:?tOUT_ABORT fail?:INFO  INFO INFO  INFO INFO  | ??:??:INFO  INFO  | ??:INFO  | ??:DEBUG INFO  | ??DEBUG | ??:??:?? 0 Read RTC time as 1678791621 
+DEBUG | ??:??:?? 0 WANT GPS=1 
+WARN  | ??:??:?? 2 Failed to find UBlox & MTK GNSS Module 
+DEBUG | ??:??:?? 2 GxGSA NOT available 
+INFO  | ??:??:?? 2 External Notification Module Disabled 
+INFO  | ??:??:?? 2 Turning on screen 
+DEBUG | ??:??:?? 2 Module wants a UI Frame 
+DEBUG | ??:??:?? 2 Module wants a UI Frame 
+INFO  | ??:??:?? 2 Starting meshradio init... 
+DEBUG | ??:??:?? 2 (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=0, time 61 ms 
+DEBUG | ??:??:?? 2 (bw=250, sf=9, cr=4/8) packet symLen=->freqSDEBUG | ??:??:DEBU[  248[  2579][D][WiFiGeneric.cpp:931] _event?:?? INFO  | ?INFO  | ??:??:?? 7 [PowerFSM] Enter state: ON 
+INFO  | ??:??:?? 7 [Screen] Done with boot screen... 
+DEBUG | ??:??:?? 7 [Screen] showing standard frames 
+DEBUG | ??:??:?? 7 [Screen] Showing 0 module frames 
+DEBUG | ??:??:?? 7 [Screen] Total frame count: 83 
+DEBUG | ??:??:?? 7 [Screen] Added modules.  numframes: 0 
+DEBUG | ??:??:?? 7 [Screen] Finished building frames. numframes: 3 
+DEBUG | ??:??:?? 7 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=37, time 197 ms 
+DEBUG | ??:??:?? 7 [RadioIf] Lora RX (id=0x6375cf23 fr=0x70 to=0xff, WantAck=0, HopLim=5 Ch=0x1f encrypted rxSNR=13.25 rxRSSI=-57) 
+AirTime - Packet received : 197ms 
+DEBUG | ??:??:?? 7 [Router] Add packet record (id=0x6375cf23 fr=0x70 to=0xff, WantAck=0, HopLim=5 Ch=0x1f encrypted rxSNR=13.25 rxRSSI=-57) 
+Using channel 0 (hash 0x1f) 
+DEBUG | ??:??:?? 7 [Router] Expanding short PSK #1 
+DEBUG | ??:??:?? 7 [Router] Using AES128 key! 
+DEBUG | ??:??:?? 7 [Router] ESP32 crypt fr=9ccaf70, num=6375cf23, numBytes=21! 
+DEBUG | ??:??:?? 7 [Router] decoded message (id=0x6375cf23 fr=0x70 to=0xff, WantAck=0, HopLim=5 Ch=0x0 Portnum=67 rxSNR=13.25 rxRSSI=-57) 
+handleReceived(REMOTE) (id=0x6375cf23 fr=0x70 to=0xff, WantAck=0, HopLim=5 Ch=0x0 Portnum=67 rxSNR=13.25 rxRSSI=-57) 
+Module 'DeviceTelemetry' wantsPacket=1 
+INFO  | ??:??:?? 7 [Router] Received DeviceTelemetry from=0x9ccaf70, id=0x6375cf23, portnum=67, payloadlen=17 
+INFO  | ??:??:?? 7 [Router] (Received from ???): air_util_tx=4.488944, channel_utilization=30.366669, battery_level=0, voltage=0.000000 
+DEBUG | ??:??:?? 7 [Router] updateTelemetry REMOTE node=0x9ccaf70  
+DEBUG | ??:??:?? 7 [Router] er] Finished bD67, payloadl?:??:?? 8 [Rout?:?? 8 [Routeonnected, queu delayDEBUG | ??:??:?[  8377][D][WiFiGeneric.cpp:931] _eventCallback(): ArdDEBUG | Starting low level send (id=0x5f0278ed fr=0x7DEBUG | ??:??:?? 8 [RadioIf] Completed sending (id=0x5f0278ed fr=0x78 to=0x70, WantAck=0, HopL(bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=66, time 303 ms 
+DEBUG | ??:??:?? 9 [RadioIf] Lora RX (id=0x5f0278ed fr=0x78 to=0x70, WantAck=0, HopLim=3 Ch=0x1f encr0278ed 
+DEBUGDEBUG | ?DEBUG | ??:??:?? 9 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=67, time 305 ms 
+DEBUG | ??:??:?? 9 [RadioIf] Luter] Using num=4, payloadltAck=0, HopLi' consideDEBUG | ??:??:?? 10 [RadioIf] Completed sending (id=0x5f0278ed fr=0x78 to=0x70, WantAck=0, HopL(bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=67, time 305 ms 
+DEBUG | ??:??:?? 10 [RadioIf] Lora RX (id=0x6375cf24 fr=0x70 to=0x78, WantAck=0, HopLim=4 Ch=0x1f encrypted rxSNR=13.50x70 to=DEBUG | ??:??:?? 11 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=37, time 197 ms 
+DEBUG | ??:??:?? 11 [cket recDEBUG | ??:??:?? 11 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=67, time 305 ms 
+DEBUG | ??:??:?? 11 [RadioIf] Lora RX (id=0x6375cf24 fr=0x70 to=cket reco[ 12921][D][WiFiGeneric.cpp:931] _eventCallback(): Arduino Event: 7 - STA_GOT_IP 
+[ 12922][D][WiFiGeneric.cpp:996] _eventCallback(): STA IP: 192.168.1.5, MASK: 255.255.255.0, GW: 192.168.1.1 
+DEBUG | ??:??:?? 12 WiFi-Event 7: Obtained IP address: Starting network services 
+INFO  | ??:??:?? 12 mDNS respoINFO  | ??:??INFOINFO  | ??:??:?? 13 MQTT conINFDEBUG | ??:??:?? 13 [WifiConnect] Updating NTP time from 0.pool.ntp.org 
+DEBUG | ??:??:?? 13 [WifiConnect] NTP Request Success - Setting RTCQualityNTP if needed 
+DEBUG | 11:00:33 13 [WifiConnect] Upgrading time to RTC 16INFO  | 11:01:04 17 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aaaf48, len=120 
+DEBUG | 11:01:04 17 [Router] Add packet record (id=0x0286a3bf fr=0xc8 to=0xe0, WantAck=0, HopLim=1 Ch=0x0 Portnum=4 requestId=abf5e30 rxtime=1678791659 rxSNR=-8.25 rxRSSI=-127) 
+handleReceived(REMOTE) (id=0x0286a3bf fr=0xc8 to=0xe0, WantAck=0, HopLim=1 Ch=0x0 Portnum=4 requestId=abf5e30 rxtime=1678791664 rxSNR=-8.25 rxRSSI=-127) 
+Module 'nodeinfo' wantsPacket=1 
+INFO  | 11:01:04 17 [Router] Received nodeinfo from=0xa3fb77c8, id=0x286a3bf, portnum=4, payloadlen=46 
+DEBUG | 11:01:04 17 [Router] old user // 
+DEBUG | 11:01:04 17 [Router] updating changed=1 user !a3fb77c8/IW6NXR-M01_77c8/FS01 
+DEBUG | 11:01:04 17 [Router] Node status update: 0 online, 3 total 
+DEBUG | 11:01:04 17 [Router] showing standard frames 
+DEBUG | 11:01:04 17 [Router] Showing 0 module frames 
+DEBUG | 11:01:04 17 [Router] Total frame count: 83 
+DEBUG | 11:01:04 17 [Router] Added modules.  numframes: 0 
+DEBUG | 11:01:04 17 [Router] Finished building frames. numframes: 5 
+DEBUG | 11:01:04 17 [Router] Module 'nodeinfo' considered 
+DEBUG | 11:01:04 17 [Router] Module 'routing' wantsPacket=1 
+INFO  | 11:01:04 17 [Router] Received routing from=0xa3fb77c8, id=0x286a3bf, portnum=4, payloadlen=46 
+DEBUG | 11:01:04 17 [Router] Routing s0 
+DEBUG | 11:01:0ttINFO  | 11:01:04 186909206, portn
+
+DEBUG | 11:0 
+INFO  | 11:0101:04INFO  | 11:01:04 18=3, payloadl4 18 [Router] Fiouter] ShouldDEBUG | 11:01:04 658 priority=11:01:04 18 [Rter] Received o neighbors 
+I1:01:04 18 [Rouoved=0DEBUG | 11:01:0=m=1 Ch=0INFO  | 11:01=5, payloadlen=ow, sendi0DEBUG | 11:01DEBUG | 11:01LON MSL TIME  
+r] Providing SI=-1DEBUG | 11:01:05etting tx del19 [Router] ForequestId=abfEBUG Received MQTT topReceived fro01:05 19 [Routeh/2/c/MediumF=67 rxtime=1678ered 
+WARN  |Router] ReceDEBUG | 11:011:01:05 19 [Rou:05 19 [RouteModule 'routinDEBUG | 11:01DEBUG | 11:01:cket record (idtime=16787916nI=72780000 
+Douter] Receivouter] UsiDEBUG | 11:01:06 20 e33 rxtime=167)nline, 11 to6, payloadlDEBUG | 11:0DEBUG | 11:01:m=2 Ch=xINFO  | 11:01:eadyDEBUG | 11:01:06l] Found exisbt/!25a77e80, l ChINFO  | 11:01r=0x48 to=0xff, - Packet trag, because we'vcket record 7 20 [Router] F3d5Received MQTT  fr=0x10 to=0xediumFast/!95ae=INFO  | 11:01:070xeINFO  | 11:01:INFO  | 11:01:0Routing sniffer] enqueuing f-Starting low nd existing pINFO  | 11:01:(id=INFO  | 11:01:07d=0xINFO  | 11:01uINFO  | 11:01:0Routing snifer] enqueuing f=-10.5 rxRSSIx0abINFO  | 11:01:07f5e31 fr=0xe05aab7e0,to=0x6INFO  | 11:01:e34 INFO  | 11:01:0d=0x0b9e58c4 Ch=0x1f encrypt=3 requestId=ng' wantsPackeNhort PSK #1 
+er] Module 'ro already seenet record for fd 0x50d2dcceady seeDEBUGDEBUG | 11:01:25 rxRSSI=-40) 22 [Router] 0x50d2bf8, id=0 | 11:01:08 22INFO  | 11:01 id=0x9f41771, umframes: 7 
+
+
+DDEBUG | 11:01:08tDEBUG | 11:01:mRouter] Found 1INFO  | 11:01:0ady sINFO  | 11:01d=0x2de31c0b, pilding framescrDEBUG | 11:01:09ttDEBUG rx_snr found. h0, HopLim=4 Ch=MQTT topic mto=0xe0, WantAc
+
+pLim=2 Ch=0xSSI=-63) 
+AirTirequestId=abf23 [Router] Nox9ccb68c, id=m 11:01:09 23 INFO  | 11:01:/eady seen it (cket record fage was filtere 11:01:09 23
+
+DEBUG | 11:01:] rxINFO  | 11:01ut (iDEBUG | 11:01:10G | 11:01:10 d MQTT topic msc81288, num=Bouter] Add pac-Received MQTTfr=0x88 to=0xe00, HopLim=2 izeINFO  | 11:01:10ady sINFO  | 11:01e(id=INFO  | 11:01:11:10 24 [Routn0x9f41771 
+DEBisting packetDEBUG |Received MQTT fr=0x88 to=0xe0ck=0, HopLim=2 
+INFO  | 11:0ready seen it 95aab7e0,id=0 DEBUG | 11:01:1| 11:01:11 INFO  | 11:01:1ady sIINFO  | INFO  | 11:01:11 25 [t (INFO  | 11:01:1f5e3INFO  | 11:01:eady seen Received MQTT Ack=0, HopLim=rtnum=3 WAWARN  | 11:01: 
+DEBUG | 11:01ccb68c,id=0xb[mqtt] ReceiveQ to=0x8c, WanopLim=2 CINFO  |INFO  |DEBUG | 11:01:11 25acket recoINFO  | 11:01:12 25 [1:12 25 [Routx9f41771 
+DDEBUG | 11:01:1G | 11:01:12 5a77e80, len=11x0INFO  | 11:01:dy s6INFO  | 11:01(id=INFINFO  | INFO  | 11:01:12 26 ady seen irx_snr found. h=0, HopLiINFO  | 1INFO  | INFO  | 11:01:12 26ady seen it (ccb68c,id=0xb9eBUG | 1INFO  eINFO  | 11:01:12 26 f5e3INFINFO  | 11:01:12 261:13 26 [Rout=0x9f41771 
+DEB.750000 
+DEBUGestId=abf5e30 DEBUG | 11:01:1gINFO  | 11:01:ady sDEBUG | 11:01:UG | 11:01:13 ved MQTT topintAINFO  | 11:01:1ady sINFINFO  |INFO  | INFO  | 11:01:13 2713 27 [Router] 5cf25 
+DEBUG91Received MQTT tfr=9ccaf70, n[Router] ADEBUG | 11:01:13G | 11:01:1INFO  | 11:01:13seenINFO  | 11:01:seen INFINFO  | INFO  | 11:01:14 27 dy seen iReceived MQTT 2r=0xfINFO  | 11:01:14 2ady 7DEBUG | INFO  | INFO  | 11:01:14 28 dy seINFO  | 11:01dy seINFO  | 11:01:14adINFOINFO  | 11:01:14 28 [adyINFDEBUG | 11:01:14  packet recoruter] ResendingrxRSSI=-58) 
+we've alreaINFO  | 11:01:14adINFO  | 11:01:14 seen it (id=0e0,id=0x508d56fuDEBUG | 11:01d=abf5e33 rxtim1648 rDEBUG | 11:DEBUG | 11:01:1stId=abf5e33 879164INFO  | 11:01:15dy sINFO  | 11:DEBUG | 11:01:1 setting tx e11:0Starting low levd existing paINFO  | 11:01:15 29m=4, payloadlenBUG | 11:01:15cDEBUG | 11:01:]opReceived MQTT fr=0INFO  | 11:01:ceadyINFO  | 11:01:15ady sINFO  | 11:01:it (DEBUG | 11:01:16] Found existINFO  | 11:01:16 30 [madyINFO  | 11:01:16it (INFO  | 11:01:ady sINFINFO  | 11:01:16 30ady seen Received MQTT to
+
+fr=INFO  | 11:01:16 30f5e33 fr=0xINFO  | 11:01:16 30  =3, payloadle9f4 fr=0DEBUG | 11:01:1| 11:01:16 3bfINFO  | 11:01:16f5e33 fr=0xe0 b 
+DEBUG | 11:0d2c, len=110requestId=abf5entAck=INFO  | 11:01:1=3, payloadle17 31 [Router] Router] ShoulWARN  | 11:01:17 70) 
+Ignoringexisting packe | 11:01:17 31 =0x36b9b9f4 xAck=0, HopLim=rter] ShowingantAck=0, HopLi=0xDEBUG | 11:01:17 lt record (INFO  | 11:01:17 31t (iINFO  | 11:01t (idDEBUG | 11:INFO  | 11:01:17 3t (iINFO  | 11:01:18t INFO  | 11:01:1cf5e33 frReceived MQTT to=0x04 to=0xeINFO  | 11:01=3, payloadlen=18 32 [RouterRouter] Should tingReceived MQTT tofr=0x88 to=0xeting packet reDEBUG | 11:01:1er] Found exit/!25c221e4, le=0INFO  | 11:01t (idINFO  | 11:01:1ready seReceived MQTT to=0xe0,INFO  | 11:01:18 t (iINFO  | 11:01:t (id=0x5cb7880x1b808553 
+DcominINFO  | 11:01:19t (iDEBUG | 11:01:1r] Found existiINFO  | 11:01:19 33ady INFO  | 11:01:readDEBUG | 11:01:19 =4 ChDEBUG | 11:0INFO  | 11:01:19 y seINFO  | 11:01:19=3, payloadle:19 33 [Routerg[Router] ShoutingReceived MQTT top=0xe0, WantAcLim=4 ChINFO  | 11:01:1t (INFO  | 11:01:1t (idDEBUG | 11:01:] Found existININFO  | 11:01:20 33=3, payloadlen=8dc frDEBUG | 11:01:2opReceived MQTT=0xe0, WantAcke=120) 
+ModurDEBUG | 11:01:2QTT topic mshto=0xe0, WaDEBUG | 11:01:2036b9b9f4 fr=0 packet record 8 
+DEBUG | 1bf5e33 rxtime=1679 prioDEBUGDEBUG | 11:01:2sINFO  | 11:01:it (INFO  | 11:01:20idINFO  | 11:01:21 3y seINFO  | 11:01:f5e33 INFO  | 11:01:2:21 34 [Route91679 rxSNR=-12und existing s, payloadSize==-41) 
+txGooUc msh/2/c/Medi] POSITION noposition' consi80a78, 65 bDEBUG | 11:01:2er] Found exis2/c/MediumFast=4 INFO  | 11:01lready seReceived MQTT top=0xe0, WantA79 bytes 
+DEBUGuter] Add pDEBUG | 11:01:2tId=abf5e33 r78791680 pINFO  | 11:01:22 3t (id=0x4aa63d,b9e58c5 
+DEBU, len=79 
+DEBUrtnum=3 request5e33 INFO  | 11:01:22t (iINFO  | 11:01:it (INFO  | 11:01:22ready seen it0x95aab7e0,id=rh/2/c/MediumtAck=0,INFO  | 11:01:22 3it (idINFO  | 11:01:2eady seen it 95aab7e0,id=0xbMediumFast/!1x0 PoINFO  | 11:01:22 readyINFO  | 11:01:23y seINFO  | 11:01:t (iDEBUG | 11:01:23r] Found exINFO  | 11:01:24eaINFO  | 11:01:2t (id=0x5Received MQTT /=0xINFOINFO  | 11:01:23 37readINFWARN  INFO  | 11:01id=0INFO  | 11:01:23it (INFO  INFO  | 11:01:237:23 37 [Rout82 rxSNR=-13 rx:23 37 [Routex2c to=0xe0, Wad for fr=0x9INFO  | 11:01eady INFO  | 11:01:2id=INFO  | 11:01:24e34 fr=0xe0 tBUG | 11:01:24 8 
+DEBUG | 1bf5e33 rxtime=16660 priority=7cket record f [mqtt] Receive, WantAck=0, rd (id=0x0abf5epLim=4 Ch=0xo=0aINFO  | 11:01:2idINFO  | 11:01:24r=0xINFO  | 11:01:2y seDEBUG | 11:01:24 er] Found exi/MediumFast/!95HopINFO  | 11:01:it (id=0IgnoINFO  | 11:01:25 38t (id=0x63dINFO  | 11:01ady INFO  | 11:01:25ready seen it5aab7e0,id=0x7a5aab7e0,id=0x WantAck=0, Hog time=167879odmsg to neighb,rxBad=0 
+DEB0x9f41772 
+DEBU0000 
+DEBUG d=abf5e33 rxtimab7e0,to=0x509 [RadioIf] Lor:01:25 39 [Rorypted rxSNR=10rt PSK #1 
+DERouter] FoundINFO  | 11:01:2eady seen it packet record fssage was fiG | 11:01:26 39EBUG | 11:01:TT topic msh/2/AckINFO  | 11:0126 40 [Router] d=0x9f41772DEBUGDEBUG | 11:01:26ge was filterng msINFO  | 11:01:eadyINFO  | 11:01:26ady sDEBUG | 11:01:EBUG | 11:01:26eived MQTT to=0x88 to=0xe0, 80a78, 79 bytt. As a router181288 
+DEBUGfr=0x70 to=INFO  | 11:01:26 40y seINFO  | 11:01:27dy sINFO  | 11:01:2y seINFO  | 11:01:ady sDEBUG | 11:01:27 | 11:01:27 4 MQTT topic mshLim=4INFO  | 11:01:27 41id=0x0b9eReceived MQTT =0x88 to=0xe0INFO  | 11:01t (iINFO  | 11:01:27
+
+DEBUG | 11:0, HopLim=5 Ch=ntAck=0, HopLIgINFO  | 11:01:27 41 [5e3INFO  | 11:01:27aady INFO  | 11:01:t (iWARN  |INFO  | 11:015e35 fr=0xe0 to 
+DEBUG | 11:8553 
+DEBUDEBUG | 11:01:2e34 fr=0xe0 Router] Found DEBUG | 10INFO  | 11:01:28 42 [me34 INFO  | 11:01r=0xINFODEBUG |Received MQTT r=0xa8DEBUG | 11:01kcoming messaINFO  | 11INFO  INFO  | 11:01:28 42 [mady INFDEBUG | 11:01:28 pLim=4 CINFO  | 11:01eadyINFO  | 11:01:28ady sINFO  | 11:01:29 42 [mt (iDEBUG | 11:01:25 priority=1) 
+und existingO  INFO  | 11:01:29 43 'ady INFO  | 11:01:29dy INDEBUG INFINFO  | 11:01:29 43ady sINFINFO  | 11:01:29 43 ady seen it (i95aab7e0,id=0xc/MediumFast/ rxtime=1678791rd for fr=0x5iltered 0x50d23 becaIINFO  | 11:01:29 43 [ady seenReceived MQTT tor=0x88 to=0xe0k=0, HoINFO  | 11:01:300xeINFO  | 11:01:3ady seen it (id95aab7e0,id=2INFO  | 11:01:30 44 [e34 INFO  | 11:01:30ady INFO  | 11:01:ady seen it (id95aab7e0,id=0c/MediumFast/!2, HopLim=2 Ctnum=3 rINFO  | 11:01:3ady seen it (ket record for =0x70 to=0xeabf5e33 rxtime=DEBUG | 11:01:sage was filterng msINFO  | 11:01:seenINFO  | 11:01:3seenDEBUG | 11:01:3INFO  | 11:01:31 44 [ady INFINFO  | 11:01:31 45seen it (iReceived MQTT HopLim=2 Ch=0x0equestId=abf5msg 
+INFO  | 11 11:01:31 45xe0, WantAcDEBUG | 11:01:31 INFO  | 11:01t (iINFO  | 11:01:seenINFO  | 11:01:31seen it (id=0,id=0x36b9b9f4,id=0x36b9b9e7e0,id=0x508d5INFO  | 11:01:seenINFO  | 11:01:32 ound existin 172 ms 
+DEBUG |5 rxRDEBUG | 11:01er] Found existiumFast/!1d49LimINFINFO  | 11:01:32 40xe0 to=0xINFO  | INFO  | 11:01:32 4ar=0INFO  | 11:01:32dy INFO  | 11:01:32ady INFWARN  | 11:01:32 DEBUG | 11INFDEBUG | 11:01:32 packet record (r] Resending SSI=-58) 
+txGoove already sx0abf5e32ININFO  | 1INFO  | 11:01:33 46ady seen iINFO  | 11:01:seenWARN  | 11:01:DEBUG | 11:01:3RX (id=0x36b9've alrINFO  | 11INFO  | INFO  | 11:01:33 47seenDEBUG | 11:01:3outer] Found extilization=2678791693 prioremetryModule](hash 0x1f) 
+DE pINFO  | 11:01:33 4dy seINFO  | 11:01:33adINFO  | 11:01:33seenINFO INFO  DEBUG | 11:01:3DEBUG | 11:01:d=abf5e33 rxti1664 rxSNINFO  | 11:01:34 47seen it (Received MQTT tofr=0x8INFO  | 11:01:34 48 t (idINDEBUG | 11:01:34 4UG | 11:01:34 4vINFO  | INFO  | 11:01:34 48dy seen itReceived MQTTHopLim=2 Ch=0INFO  | 11:01ady sINFO  | 11:01:3434 48 [Routercf25 
+DEBUG | 1Received MQTT x70 to=0xe0, Wa HopLim=2INFO  | 11:01:35 48 seenIINFO  | 11:01:35 48 [mseenINFO  | 11:01:30xe0 to=0xff, W:35 49 [RoutINFO  | INFO  | 11:01:35 49seenINFO  | 11:01:359 [Router] FINFO  | 11:01:35seen it (id=7e0,id=0x36b9INFO  | 11:01:35 49 [mqttady sINFO  | 11:01dy seINFO  | 11:01:335 49 [Router]cf25 
+DEBUG | EBUG | 11:01:Expanding short01:36 49 [Ro cr=4/8DEBUG | 11:01:3 
+DEBUG | 1INFO  | 11:01:36seenDEBUG |DEBUG | 11:01:Al=5 TIME  
+DE5e34 rxtime=16 encrypteINFOINFO  | 11:01:36 50seen INFO  | 11:01 seenINFO  | 11:01:36 seINFO  | 11:01:36seen INFINFO  | 11:01:36 50seenINFO  | 11:01:seen it (id=0x6ord for fr=0x0x25c221e4 
+WA0x5ce9230e 
+Disting packet rgINFO  DEBUGDEBUG | 11:01nsagINFO  | 11:01:37 5seen INFO  | 11:01:37dy sINFO  | 11:01:dy seen it (id=t record for INFO  | 11:01:3seen it (id=00,id=0x5ce9230eINFO  | 11:01:37 51 [Router] FouINFO  | 11:01:t (id=0x7f0c41c to=0xe0, Wacrypted rxSNR=1=0, HopLim=2 estId=abf5e30 =0x9ccb68c,INFO  | 11:01:37t (id=0x36bINFO  | 11:01:38 51 [seen it (DEBUG | 11:01:38cket record (Found existing iumFast/!95a2 CINFO  | 11:01:38t (iDEBUG | 11:01:38 52 [Ra 11:01:38 52  topic msh/2/c/WanDEBUG | 11:01:38 52Starting low level send (id=0x36b9bINFO  | 11:01:38 52 [mqtt] Received MQTT topic mshRady seen Received MQTT topic m=0xeWARN  | 11:01:39 52 [RadioIf] Can not send yet,INFO  | 11:01:39 53 [mqtt] dy sINFO  | 11:01:ady seen it (idaab7e0,id=0x2id=0x63INFO  | 11:01:39 53 [mqtt]seen DEBUG | 11:01:39 53 [RStarting low level sendINFO  | 11:01:39 53 [mqtt] Received MQTT topit (id=0Received MQTT topic msh/2/c/MediumFast/!25c221e4, len=77 
+DE=0xDEBUG | 11:01:40 53 [RadioIf] (bw=250et record (id=0 existing INFO  | 11:01:40 54 [mseINFO  | 11:01:40 54 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa79a0, len=92 
+D=0x49feac74,oadlen=18 
+DEBU77a10, num=49s, payloadSizef encINFO  | 11:01:40ady INFINFO  | 11:01:40 54 [mqtt] Received MQTT topic msh/t (id=0x2ce1980x5ce9230e 
+DEDEBUG | 11:01:4equestId=INFO  | 11:01:41ady sINFO  | 11:01t (idINFO  | 11:01t (idINFO  | 11:01:4t (id=0xReceived MQTT t=0xe0, WantAckLim=4 Ch=0x0 Pket record foINFO  | 11:01:4595de0, portnframes: 0 
+DE neighbors 
+INF
+
+DEBUINFO  | 11:DEBUG | 11:01:4ting tx delay1:41 55 [RadioIrd (idINFINFO  | 11:01:42 55 [m:42 55 [Rout74595de0 
+DEININFO  | 11:01:42 55lreadINFO  | 11:01t (id=0x1b80855for fr=0xb2248red 0xb22485f4e0,id=0x74595dDEBDEBUG | 11:01:4gINFO  | 11:01:y seINFO  | 11:01:42 y seINFINFO  | 11:01:42 56t (iINFO  | 11:01:t (iINFO  | 11:01:4t (id=0x7aebfWantAck=0, HopL toINFO  | 11:01:42lreaINFO  | 11:01:readyINFO  | 11:01:4t (id=0x7f0c40, WantAck=0, H.750000 
+DEBU filtered 0x60e we've alreard (id=0x4DEBUG | 11:01:43 57 [RadioIf] (bw=250, sf=9, cr=4/8) pacor fr=0x60580a7ived MQTT top0, WantAck=0, 1 Ch=0x0 Por=INFO  | 11:01:43 57 [mqttready seen it (0x95aab7e0,DEBUG | 11:01:44 57 [RadioIf] Starting low leveINFO  | 11:01:44 57 [mqtt] Received MQreaDEBUG | 11:01:44 5INFO  | 11:01:44 58 [mqtt] Received MQTT topicady seen Received MQTT topic msh/2/c/MediumFast/!050DEBUG | 11:01:4ting tx delay:1:44 58 [Radio580a78,to=0x9INFO  | 11:01:y seen it (id=0de0 fr=0xWARN  | 11:DEBUG | 11:01:45 58 [RadioIf] (bw=250, sf=9, cr=4/8) or fr=0x60580a7 for fr=0x605 rxRSSIDEBUG | 11:01e3INFO  | 11:01:45 59 [mqtt] Receit (id=0x6(bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=42, time 215 ms 
+DEBUG | 11:01:45 59 [Radir=0x2INFO  | 11:01:45 59 [mqtt] Receiady sINFO  | 11:01:45t (iDEBUG | 11:01:45 59 [RadioIf] SINFO  | 11:01:46 59 [mqtt] Received Mnt (iDEBUG | 11:01:Received MQTT topic msh/2/c/MediumFast/!25a74d2c, len=79 
+Ddc fWARN  | 11:01:46ter] Rx someognoriDEBUG | 11:INFO  | 11:01:46 60 [mqtt] Receady sINFO  | 11DEBUG | 11:01:4etting tx del:01:Received MQTT t=0xe0, WanDEBUG | 11:01:4t record for wINFO  | 11:01:4t (id=0x2ce19=0x6375cf25 
+DEINFO  | 11:01:47 60readINFO  | 11:01:47y WARN  | 11:01:47 61 [RadioIf] Can not send yetitt] Received0278ee fr=0x78 er] Add paDEBUG | 11:DEBUG | 11:01:4quINFO  | 11:01:47 61eadyDEBUG | 11:01Starting low level send (id=0x6375cf25 fr=0x70 to=0xe0, xiDEBUG | 1DEBUG | 11:01:47 61 [RadioIf] CompReceived MQTT topic msh/2/c/MediumFastDEBUG | 11:01:etting tx delaINFO  | 11:01lreadINFO  | 11:01:48y seINFO  | 11:01:4y seen it (id=0ab7e0,id=0x6oINFO  | 11:01:48 y seen it (id=0rd for fr=0x5 rx_snr found.ck=0, HopINFO  | 11:01:48 62 [mqtt]y seWARN  | 11:01:4uter] Found exi74d2c 
+INFO 've already seINFO  | 11:01:49 62 [mqtt] Received MQTT topic msh/2/ready seenBatINFO  | 11:01:49 63 [mqtt] Received MQTT topic msh/2/c/MediumFaeady seen it (iaab7e0,id=0x6INFO  | 11:01:49 63 [mqtt] Received MQTT topic msh/2/c/Mediuy seeWARN  | 11:01:49 63 [RadioIfDEBUG | 11:01:49 654 fr=0xa0 to=-39) 
+Ignoringuter] AddINFO  | 11:01:50 63 [mqtt] Received MQTT topic msh/2/c/Mediy seen it (idaab7e0,id=0x7aec/MediumFast/HopINFO  | 11:01:50 64 [mqtt] Received MQTy seen it (iaab7e0,id=0x7aec/MediumFast/, HWARN  | 11:INFO  | 11:01:50 64 [ady sDEBUG | 11:01:50 64 [Rad packet rINFO  | 11:01:51 64 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25c221e4, len=106 
+DEBUG | 11:01:51 64 [Router] Found existing packet 5e35DEBUG | 11:01:51 65 [Racket recINFO  | 11:01:51 65 [mqtt] Received MQTT topic msh/2/c/MediumFa5e35DEBUG | 11:01:51 65 [R packet reco791711 priorityus update: 4 1:01:51 65 [Rou1:01:51 65 [Ronce we just s2msINFO  | 11:01:51 65 r=0xINFINFO  | 11:01:51 65r=0x80 tReceived MQTT topic msDEBUG | 11:01:52 66 [RadioIf] Starting low level send (id=0x6375cf25INFO  | 11:01:52 66 [mqtt] Received MQTT topiDEBUG | 1Received MQTT topic msh/2/c/MediumFast/!25a7DEBUG | 11:01etting tx delayINFO  | 11:01:y seINFO  | 11:01:52y sINFO  | 1INFO  | 11:01:53 66 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a74d2c, len=79y seeDEBUG | 11:01:53  | 11:01:53DEBUG | 11:01:53 67 [RadioIf] CompletStarting low level sendINFO  | 11:01:53 67 [mqtt] Receieady seDEBUG | 11:0Starting low level send (INFO  INFO  | 11:01:53 67 [mqtt] Received MQTT topic msh/2/c/MediumFaseady seenRecINFO  | 11:01:54 67 [mqtt] Received MQTT topic msh/2/c/MediumFast54 67 [Routerx9f41772 
+DEBINFO  | 11:01:54 68y seeINFINFO  | 11:01INFO  | 11:01:54 68 [y sDEBUG | 11:01INFO  | 11:01:54 68 y seeINFO  | 11:01:54 68 [mqtt] Receivey seen it Received MQTT =0x88 to=0xe0, 0, HopLINFO  | 11:01:54 68 [mqtt] y sWARN  | 11:01:55 68 [RadioIf] Can not send yDEBUG | 11:01:55 68 [Rcket record (id91705DEBUG | 11:01:55 69 [RadioIf] Completed sending (id=0x74595de0 fr=0xf4 to=0xe0,Starting low level send (id=0x74595de0 fr=0xf4 toINFO  | 11:01:55 69 eadINFO  | 11:01:5seen DEBUG | 11:01:55 69 [RadioIf] CompleReceived MQTT topic mck=0DEBUG | 11:01:56 69 [RadioIf] Starting low level sINFO  | 11:01:56 69 [mqtt]seen INFO  | 11:01:5e35INFO  | 11:01:56y seINFO  | 11:01:y seen itRecINFO  | 11:01:56 70 y seINFO  | 11:01:56 70 [mqtt] Received MQTT topic msh/2/c/MediuseenDEBUG | 1INFO  | 11:01:56 70 [mqttDEBUG | 11:01:56 70 [RadioIf] Completed sendinRecDEBUG | 11:01:57 70 [RadioIf] StartINFO  | 11:01:57 70 [mqtt] Received MQTT topDEBUG | 11StartingINFO  | 11:01:57 71 [mqtt] Received MQTT topic msh/2/y seen Received MQTT topic msh/2/c/MediumFast/!95aaaf48, len=79 
+DEBUG | 11:01:5x70 to=0xe0, HopLim=2 CWARN  | 11:01:57DEBUG | 11:01:57 71 [Rpacket recordr] Found existiediumFast/!95=4INFINFO  | 11:01:58 71 [mqtt] Received MQTTDEBUG | 11:01:58 71 [RadioIf]packet rINFO  | 11:01:58 72 [mqtt] Received MQTT topicWARN  | 11:01:58 72 [PositionModule] Channel DEBUG | 11:01:58 72 [Radio packet rINFO  | 11:01:58 72 [mqtt] Received MQTT topicINFO  | 11:01:58 72 [mqtt] INFO  | 11:01:58 725e3INFO  | 11:01:59 72 [mqtt] Received MQTT topic msh/2/c/MediumFast/seenWARN  WARN  | 11:01:59 73DEBUG | 11:01:59 73 [RadioIf] (bw=250,packet rDEBUG | 11:01:59 73 [RadioIf] Starting low level send (id=0x7aebf854 fr=0xDEBUG | 11:01:59 73 [RadioIf] Completed sending (Received MQTT topic msh/2INFO  | 11:02:00 73 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77b70, len=65INFO  | 1INFO  | INFO  |DEBUG | 11:02:00 74INFO  | 11:02:00 74 [mqtt] ReceivDEBUG | 11:02:00 74 [RadioIf]Received MQTT topic msh/2/c/MediumFast/!95aaaf4DEBUG | 11:02:00 74 [RadiINFO  | 11:02:00 74 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7c50, seenINFO  | 11:02:seen it (Received MQTT topic msh/2/c/MediumFast/!25a74d2x70DEBUG | 11:02:01 75 [RadioIf] (bw=250,et recorINFO  | 11:02:01 75 [mqtt=0x4ININFO  | 11:02:01 75 [mqtt] Received MQTT topic msh/2/c/MediumFasINFO  | 1INFO  | 11:02:01 75 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7c54aa63WINFDEBUG | 11:02:02 75 [RadioIf] (bw=250, acket reINFO  | 11:02INFO  | INFO  | INFO  | 11:02:02 76seenINFO  | 11:02:02 76 [mqtt] Received MQTT INFO  | 11:02:02 76 [seeINFDEBUG | 11:02:02 76 fr=0xe0 to=0x
+
+IgnorINFO  | 11:02:02INFO  | 11:02:02 76seenINFO  | 11:02:02 76 [mqtt] Received MQTT topic msh/2/c/MediumFastseeINFO  | 11:02:03 76 [mqtt] Received MQTT topic msh/2/c/MediumDEBUG | 11:02:03 7uter] Found ediumFast/!95aam=2INFO  | 11:02:seenINFO  | 11:02:03INFO  | 11:02:03 77 seen it (RWARN  | DEBUG | 11:02DEBUG | 11:02:03 77 [RadioIf] Completed sending (id=0x4aa63d9fReceived MQTT topic msh/2/c/MediumFast/!25a74d2c, len=65 
+INFO  | 11:02:04 77 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa79aseen INFO  | 11:02:04 78 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a74d2c, seen INFO  | 11:02:04seenINFO  | 11:02:seenINFO  | 11:02:seen INFINFO  | 11:02:04 78seenINFO  | 11:02:04 (hash 0x1f)xRSSI=-56) 
+Modoadlen=42 
+D7ccaf70, num=631d49f208, lenPortnum=3 reqe33 rxtINFDEBUG | 11:02:05 78packet rINFO  | 11:02:05 79 seenINFINFO  | DEBUG | 11:02:05 79 [RadioIf] rx_INFO  | 11:02:05 79 2:05 79 [Rout,0x6375cf26 
+DEisting packetgDEBUG | 11:02:05iUG | 11:02:0=1678791726 rxSring incoming?: 0 
+DEBUG | 2x_snr:13.750mestIINFO  | 11:02:05 79 ady seeeIgINFO  | 11:02:06 79 [msadDEBUG | 11:02:06G | 11:02:06INFINFO  | 11:02:06 79 [ady INFO  | 11:02:0 readINFO  | 11:02:ady sINFDEBUG | 11:02:Received MQTT topic mx70 WARN  | 11:02:06 80 [RadioWARN  | 11:02:06 80 [RadioIf] INFO  | 11:02ady seen it (idfffffff,id=0x/DEBUG | 11:02:06 80 [RadioIf] INFO  | INFO  | 11:02:07 80 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77e80, leINFO  DEBUG | 1Received MQTT topic msh/2/c/MediumFast/!25a77b70, len=65 
+INFO  | 11:02:07INFO  | INFO  | DEBUG | 11:02:07 81 [RadiIINFO  | 11:02:07 81 [mqtt]INFO  | 11:02:07 81 [adINFO  | 11:02:07 DEBUG | 11:02:07 81 [RadioIf] ComplnReceived MQTT INFO  | 11:02:08 82 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a74INFO  | 11:02:08 82 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7c50, len=79 
+DEB seenWARN  | 11DEBUG | 11:02:08 82 [RadioIf] (bw=250, sf=acket reINFO  INFO  | INFO  | 11:02:08 82 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77b70, seeINFO  | 11:02:0teadyINFO  | 11:02::09 82 [Router]74595de0DEBINFINFO  | 11:02:09 83 [my sINFO  | 11:02:09y se ININFO  |WARN  | 11:02:09 80 len=98 
+DEB=3 reqDEBUDEBUG | 11:02:as filtered 0xOseen it (id=0INFO  | 11:02y seINFO  | 11:02:ady sINFO  | 11:02:09y seINFINFO  | 11:02:09 83Mseen it (ReINFO  | 11:02:09 83 oseenINFINFO  | 11:02:10 83ady sINFO  | 11:02:10 84 [mqtt] Received MQTT topicseen it (id=0x2r=0x70 to=0xe02:10 84 [RouINFO  | 11:02:10 84 [mqtt] Received MQTT topic msh/2/c/MediumFastINFO  | 11:02:10 84 [mqtt] Received MQTT topic msh/2/c/Me1seeINFO  | 11:02:1:10 84 [Router74595de0 
+ININFO  | 11:02:10 84 [mqtt]ey seINFO  | 11:02:11y  DEBUG | 11:02:11 84 [RadINFO  | 11:02:11 85 [mqtt] Received y seDEBUG | 11:02:11 85 [RadioIf] CompletedReceived MQTT topic msh/2/c/MediumF=0xf4 to=0xe0580a78, 98 byte. As a route85f4 
+INFO  | 1already seen x74595de0INFOINFO  | 11:02:11 85y seeDEBUG | 11:02:11| 11:02:11 85oINFO  | 11:02:11 8fy seINFINFO  | 11:02:12 85 [y sINFDEBUG |Received MQTT topic msh/2/c/MediumFast/!95a=0xf4 to=0xem0, HopLim=INFO  | 11:02:12 86 [mqtt] Received MQTINFO  |INFO  | 11:02:12 86 [seINFO  | 11:02:12 86 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77b70, len=79 
+1seINFO  | 11:02:13 87 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25c221e4, len=98 
+DEBUG | 11:02:13 87 [Router] Found existing packety seeINFO  | 11:02:13 87 [mqtt] Received MQTT topic msh/2/c/MediWARN  | 11:02:1INFO  | 11:02:13 87 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aaaf48, len=79 
+y seINFO  | 11:02:14 87 [mqtt] Received MQTT topic msh/2/c/MediumFast/!y seINFO  | 11:02:14 88 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7INFO  | 11:02:14 88 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a74d2c, ady INFO  | 11:02:y seeINFO  | 11:02:14 88 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77b70, len=79 
+DEBUG | 11:02:14 88 [Router] Found existingseINFO  | 11:02:15 89 [mqtt] Received MQTT topic msh/2/c/MediumFast/!1d49f208, len=79 
+Dy INFO  | 11:02:15ady fINFINFO  | 11:02:15 89 [mqtt] Received MQTT topic mshseen INFO  | 11:02:15 89 [mqtt] Received MQTT topic msh/2/c/MediumFast/!2DEBUG | 11:02:ting tx delay:INFO  | 11:025y seDEBUG | 11:INFO  | 11:0INFO  | 11:02:16 89 y seINFO  | 11:02:16r=0INFO  | 11:02:9y seINFO  | 11:02:1y seen itReceived MQTT topic ms=0xoINFO  | 11:02:16 90 [mqtt] Received MQTT topic msh/2/c/MediumFr:16 90 [Router74595de0 
+DEBng packet reco=INFOINFO  | 11:02:16 90y seINFO  | 11:02:y seeDEBUG | 11:0INFO  | 11:02:16 9y seINFO  | 11:02:16y sINFO  | 11:02:1Qy seINFOINFO  | 11:02:17 90y seen it Received MQTT topic msh/2/c/MediumFast/!95aaaf48, len=79 
+INFO  | 11:02:17 91 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25c221e4, len=73 
+DEBUG | 11:02:17 91 [Router] Found existing packet record for r=0INFO  | 11:02:18 91 [mqtt] Received MQTT topic msh/2/c/MediumFast/!y seeINFO  | 11:02:18 92 [mqtt] Received MQTT topic msh/2/c/MediuINFO  | 11:02:18 92y seINFO  | 11:02:18 92 [mqtt] Received MQTT topic msh/2/c/MediumFast/y seINFO  | 11:02:y seINFO  | 11:02:18r=0xINFO  | 11:02:18 92 [mqtt] Received MQTy seeINFO  | 11:02:1y seeINFO  | 11:02:19 92 [mqtt] Received MQTT topic msh/2/c/Mediy INFO  | 11:02:19 93 [mqtt] Received MQTT topic msh/2/c/MediumFast/!1d49fy seeINFO  | 11:02:19 93 [mqtt] Received MQTT topic msh/2/c/MediumINFO  | 11:02:19 93 [mqtt] Received MQTT topy seINFO  | 11:02:19 93 [mqtt] Received MQTT topic msh/2/INFO  | 11:02:1Routing snifer] enqueuing f0xe0, WantAck=0Router] Moduc/MediumFast/!6EiumFast/!25am=2 Ch=0x0 PorINFO  | 11:02:20 f5e3INFOINFO  | INFO  | 11:02:20 94f5e3INFO  | 11:02:2y seen itReceived MQTT topic msh/2/c/MediumFast/!05=0INFO  | 11:02:20y seINFO  | 11:02:t (iDEBUG | 11:02:20 94 [RadioIf] StINFO  | 11:02:20 94 [mqtt] Received MQTT topic msh/y seDEBUG |Received MQTT topic msh/2/c/Medium=0x8DEBUG | 11:02:21 95 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=39, time 26 fr=0xe0 to=x-60)INFO  | 11:02:21 95y seeDEBUG | 11:02:21 95 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 mcket reINFO  | 11:02:21 95 lreadINFO  | 11:02:22 95 [mqtt] Received MQTDEBUG | 11:02:22 95 [RadioIf] (bw=250, sf=9, cr=4/8) packacket record (He=INFO  | 11:02:22 96 4 
+INFO  | 11:0 96 [Router] :02:22 96 [Routode 0xb224851) 
+Should encreop_limit:3 Received MQTDEBUG | 11:02:etting tx delaINFO  | 11:02vy seINFO  | 11:02:22 :22 96 [RoutP0x74595de1INFO  | 11:027y seen it (id=e80,id=0xabf580,id=0xabf5e3677e80,id=0xabfIINFO  | INFO  | 11:02:23 97 :23 97 [Router0x74595de1 
+DEB(id=0x4aa63da already seen ixf4 to=0xINFO  | 11:02:23 97 745INFO  | 11:02:27459WARN INFO  | 11:02:23 97 7459INFO  | 11:02:y seen it (id=0xt record for22485f4 
+DEBUG er] Add packe3 97 [Router] FINFO  | 11:02:23 9ady seen it (iINFO  | INFO  | 11:02:24 9774595de1 fr=0x6e36 
+DEBUG |aDEBUG | 11:02INFO  | 11:02:24 r=0xINFO  | 11:02:7459INFOINFO  | 11:02:24 98y seen iReceINFO  | 1INFO  | INFO  |INFO  | 11:02:24 98 [r=0DEBUG | 11:02INFO  | 11INFO  | 11:02:24 98 [mqtt] ReceiveDEBUG | 11:02:24 98 [RadiReceived MQTT topic msh/2/c/MediumFast/!25a74dWARN  | 11:02:25 99 [RadioIf] Can not send yet, busyRx 
+DEBUG | 11:02:25 99 [RINFO  | 11:02:y seINFO  | 11:02:y se
+
+INFO  | 11:02:2e
+
+INFO  | 11:] RoutingDEBUG | 11:02:2delay:336 
+DE0aab7e0,to=0x25r fr=0x95aa7bDEBUG | 11:02:25 99 [RadioIfINFO  | 11INFO  | 1INFO  | 11:02:25 9y seeDEBUG | 11:02:26 99 [RadioIf] INFO  |INFO  | 11:02:26 99r=0INFO  | 11:02:cb78DEBUG | 11:02:26 100 [Received MQTT toINFO  | 11:02:26 100 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7c50, len=79 
+DEBready seen it0xffffffff,idINFO  | 11:02:26 100 [mqtt] Received MQTT topic msh/2/c/M | 11:02:26 10095aab7e0,id=0outer] Found ex6INFO  | 11:02:d=0xINFO  | 11:02:7alreINFINFO  | 1WARN  | 11:INFO  | 11:02alreaDEBUG | 11:02:27 f5e36 fr=0xe0 iRSSI=-56) 
+I7 101 [RoutDEBUG | 11:02:27 101 [RadioIf]INFO  | 11:02:27 101 [mqtreadINFINFO  | 11:02:27 105alreDEBUG Received MQTT topic msh/2/c/MediumFast/!9526 fr=DEBUG | 11:02:28 102 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=43, time 219 ms 
+DEBUG | 11:02:28 102 [RadioIf] Lodd packet rec=2 INFO  | 11:02:28 102 [mqtt] Received MQTT topic msh/2/c/MediumFas | 11:02:28 1x95aab7e0,id=0[Router] Found e=167Ignoring downlink message we origiINFO  | 11:02:28 102 alreDEBUG | 11:INFO  | 11:02:29 102 [mqtt] Received MQTT topic msh/2/c/alreaINFO  | 11:02readyDEBUDEBUG | 11:02:29 10Received MQTT topic mINFO  | 11:02:29 103| 11:02:29 1030x95aa79a0,idx_snr:13.750000ortnum=4 requet record for fze=39, time  pted rINFOINFO  | 11:02:29 10alreaINFO  | 11:02:29sseeINFINFO  | WARN  | 11:02:30 103 [RadioIf] Can not send yet, busyRx 
+DEBUG | 11:02:30 103 [Rad3 [Router] Fou0DEBUG | 11:02:30 104 [RadioIf] Starting low level send (id=0x5cb7884d fr=0xb8 to=0xa0, WantAck=0, HopLim=2 Ch=0x1f encrypted rxtime=16787DEBUG | 11:02:30 104 [RadioIf] Completed sending (id=0x5cb7884d fr=0xb8RecDEBUG | 11:02:31 104 [RadioIf] Starting low level send (id=0x74595de1 fr=0xDEBUG | 11:02:31 105 [RadioIf] Completed sending (id=0x74595de1 fr=0Received MQTT tINFO  | 11:02:31 105 [mqtt] Received MQTT topic msh/2/c/MediumFasINFO  | 1INFO  | 11:02:31 105 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25aDEBUG | 11:02:31] Add packet re1 105 [RouteDEBUG | 11:02:32 105 [RadioIINFO  | 11:02:32 105 [mqtalreaDEBUG | 11:02:32 106 [RadioIf] Completed Received MQTT topic msh/2/c/26 fDEBUG | 11:02:32 106 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms] Add packeINFO  | 11:02:32 19f fINFO  | 11:02:32reaINFO  | 11:02:32 1DEBUG | 11:DEBUG | 11:02:33 106 [RadioIf] Completed sending (id=0x5cb7884d fr=0xb8 to=0x11:02:33 106bfDEBUG | 11:02:33 107 [RadioIf] Completed sending (id=0x5f0278f0 fr=0x78 to=0xf4, WantAcpLim=2 CINFO  | 11:02:33 107 [mqtt] Received MQTTINFO  | DEBUG | 11:02:33 107 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payload] Add pacDEBUG | 11:02:3ueINFO  | 11:02:34 107 [mqtt] Received MQTT toINFO  | INFO  | 11:02:34 108 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aDEBUG | 11:02:3or fr=0x60580a7cord for fr=0acket record f375cf26 fr=0xortnum=4 reINFO  | 11:02:34 1alreaINFINFO  | 11:02:34 10alreaINFO  | 11:02:3| 11:02:34 10xffffffff,id=0xadioIf] Lora0xb22485f4,idINFO  |INFO  | 11:02:35 10alreaINFO  | 11:02:d=0xINFO  | 11:02:35d=0xINFINFO  |INFO  | 11:02:35 109 ready seen it fr=0x78 to=0xfn itINFO  | 11:02 d=0xINFO  | 11:02:alreaINFO  | 11:02:3d=0xINFO  | 11:02:35alreINFO  | 11:02:3d=0WARN  | 11:02:3595de0 
+DEBINFO  | 11:02:d=0x74595de1 f, WantAck=0, r:12.750000 
+DEageDEBUG | 11:02:36 109 [RadioIINFO  | 11:02INFO  | 11:02:36 10readDEBUG | 11:02:36 110 [RadioIf] Completed sending (id=0x5INFO  | 11:02:36 110 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7bb8,WARN  | 11:02:36 110 [RadioIf] Can not send yet, busyRx 
+DEBUG | 11:02:INFO  |DEBUG | 11:02:37 110 [RadioIf] (bw=250, sf=9, crd for fr=0xINFO  | 11:02:37 110 [mqtt] Rece | 11:02:37 111[x95aab7e0,idINFO  | 11:02:37 111reaINFINFO  | 11:02:37 111 [alrINFO  | 11:02:37alreINFtINFO  | 11:02:37 11already seeINFO  | 11:02:DEBUG | 11:02:37 111 [RadioIf] (bw=250, sf=9, cr=or fr=0x605INFO  | 11:02:37 111 [mqtt] RecalreaINFO  | 11:02:readyINFO  | 11:02:38 112 [mqtt] Received MQTT topic msh/2/c/MealreaINFODEBUG | 11:02:38 112 [RadioIf] Starting low level sINFO  | 11:02:38 112 [mqtt] Received MreadyDEBUG | 11:02:38 112 [RadioIf] Completed sending (Received MQTT t26 fDEBUG | 11:02:3INFO  | 11:02:38 112 [mqtt] Received MQTT topreDEBUG | 11:02:39 112 [RadioIf] Completed sending (id=0xReceived MQTT topic ms fr=0xf4 to=0-127) 
+Module ' payloadleDEBUG | 11:02outer, setting DEBUG | 11:02: 
+DEBUG | 11:02] Received MQxffINFINFO  | 11:02:39 11id=0INFO  | 11:02:39=0x5INFO  | 11:02:already seIgnINFO  | 11:02:39 113id=0INFOINFO  | 11:02:39 1readyINFINFO  | 11:02:40 114 [mqtt] Received MQTT topic msh/2/c/MediumFasWARN  | 11:02:40 114 [RadioIf] Can not send yet, busyRDEBUG | 11:02:40 114 [RAdd packeINFO  | 11:02:40 114 [mqtt] Received MQTT tox0abINFO  | 11:02:40 114 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aaaf48, len it (id=0xffff,id=0x286a3eDEBUG | 11:02:41 114 [RadioIf] Starting low level send (iINFO  | 11:0INFO  | 11:02:41 115 reINFO  | 11:02:41 115 [mqtt] Received MQTT topic msh/2/c/MediumFastready seenReceived MQTT topic msh/2/c/MediumFast/!25a74d2c, len=98 
+DEBUG | 11:02:41 115 [Router] Found existing packet record for fr=0xb22485f4 fr=DEBUG | 11:02:42 115 [RadioIf] (bw=250, sf=9, crcord for fr=0packet recoINFO  | 11:02:42 116 [mqtt] Received MQTT tx0abWARN  | 11:02:42 116 [RadioIf] Can not send yet6INFO  | 11:02:42 1seen INFODEBUG | 11:02:42 114Add packINFO  | 11:02:42 116 [mqtt] Recei| 11:02:42 11xffffffff,iDEBUG | 11:02116 [Router] Foc/MediumFast/x0INFO  | 11:02:4d=0x74595de1 xf4 to=0xffINFO  | DEBUG | 11Received MQTT topic msh/2/c, WantAck=0, Hoim=2 Ch=INFO  | 11:02:43 117 [mqtt] Received MQTT topic msh/2/c/MreadyINFO  | 11:02readyWARN  | 11:02:43 117 [RadioIf] Can not sk=0, HopLim=2ng packet reco1:02:43 117 [ (id=0x7INFO  | 11:02:4d=0INFO  | 11:02DEBUG | 11:02:44 117 [RadioIf] CompleteReceived MQTT topic msh/2/c/MediumFast/!9INFO  | 1INFO  | 11:02:44 11readDEBUG | 11:02:44 DEBUG | 11:02eceived MQTT t crypt fr=b22UG | 11:02:44INFO  | 11:02:44 1d=0x74595Starting low level sendINFO  | 11:02:44 118 d=INFINFO  | 1DEBUG | 11:02:44 118 [RadioIf] CoReceived MQTT topic msh/2/c/, WantAck=0, im=2 ChINFO  | 11:02:45 119 [mqtt] Received MQTT topicDEBUG | 11:02:45 119 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadcord for fr=0INFO  | 11:02:d=0x745INFO  | 11:02:45 119 [mqtt] Received MQTT topic msh/d=0x74595de1 frxf4 to=INFO  | 11:02:45 119 [mqtt] Received MQTT topic msh/2/c/MreadINFO  | 11:02:46 120 [mqtt] Received MQTT topic msh/2/c/MediumFast/INFO  | INFO  | 11:02:46 120 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95INFO  | INFO  | 11:02:46 120 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7c50, len=98 
+DEBUG | 11:02:46 120 [Router] FounreadyINFO  | 11:02:47 120 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25alre7INFO  | 11:02:47 121 [mqtt] Received MQTT topic msh/2/c/MediumFa4=0x5INFO  | 11:02:47 121 [mqtt] Received MQTTINFO  | 11:02:47 121readINFOINFO  | 11:02:47 12en iINFO  | 11:02:4alreaINFO  | 11:02:47 121 [mqtt] ReceivalreaINFO  | 11:02:47 121 [mqtt] Received MQINFO  | 11:02:48 122 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa79a0, len=98 
+DEBUG | 11readINFO  | 11:02:48 122 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a74d2c, len=7x0abINFO  | 11:02:48 122 [mqtt] Received MQTT topic msh/2/INFO  | 11:02:49 122 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a74d2c, len=78 
+DEBen iDEBUG | 11:02:49 123 [Power] Battery: usbPower=0, isChargiINFO  | 11:02:49 123 [mqtt] Received MQTT topic msh/2/c/MediumFa| 11:02:49 123 0xfffffffINFINFO  | 11:02:49 123 d=INFDEBUG | 11:02:49 123 INFO  | 11:02:49 123 [mqtt] Received d=0xINFO  | 11:02:49id=0INFO  | 11:02:already seReceived MQTT , WantINFO  | 11:02:50 1d=0xINFO  | 11:02:50 124 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25c221e4, =0x5cINFO  | 11:02:50 124 [mqtt] Received MQTT topic msh/2/c/MediumFseenINFO  | 11:02:50d=0xINFO  | 11:02:readyINFO  | 11:02:50 124 [mqtt] Receive| 11:02:50 120xffffffff,INFO  | 11:02d=0xINFO  | 11:02:50d=0x7INFO  | 11:02:d=0xINFO INFO  | 11:02:51 12x0abINFO  | 11:02:5d=0xINFO  | 11:02:5en iINFO  | 11:02:d=0xDEBUG | 11:02:51 DEBUG | 11:0DEBUG | 11:02:51 125 [RadioIf] Completed sending (iReceived MQTT topic msh/2/c/Me26INFO  | 11:02:51 125 [mqtt] Received MQTT d=0xINFO  | 11:02:52 125 [mqtt] Received MQTT topic msh/2/c/MediINFO  | 11:02:52 12d=0xINFO  | 11:02:52d=INFO  | 11:02:52 126 [mqtt] Received MQTT INFO  | 11:02:52 126 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a74d2cINFO  | 1INFO  | 11:02:52 126 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7INFO  |INFO  | 11:02:52 126 d=0xINFO  | 11:02:53 127 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa79a0, len=93 
+DEBUG | 11:02:53d=0xINFO  | 11:02:53 127 [mqtt] alreINFO  | 11:02:53 127 [mqtt] Received MQTT topic msh/2/c/MediumFast/INFO  INFO  | 11:02:53 127 [mqtt] Received MQTT topic msh/2/c/MediumFasINFO  | 11:02:53 127 reaINFO  | 11:02:53d=0xINFO  | 11:02:54 127 [mqtt] Received MQTT topix0abINFO  | 11:02:54d=INFO  | 11:02:54d=0xINFO  | 11:02:en itINFO  | 11:02:5d=0xINFO  | 11:02:5seenINFO  | 11:02:54 128 [mqtt] Received MQTT topic msh/2/INFO  | INFO  | 11:02:54 12readyINFO  | 11:02:54 128 [mqtt] Received MQTT INFO  | 11:02:55 128 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7bb8INFO  | INFO  | 11:02:55 129 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa79a0, len=1INFO  | 11:02:55 129 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aab7e0, len=101 
+INFO  | 11:02:55 129 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7c50, ld=0xINFOINFO  | INFO  | 11:02:56 129 [mqtt] Received MQd=INFO  | 11:02:56 129 [mqtt] alreaINFO  | 11:02:56 130 [mqtt] Received MQTT topic msh/2/c/Mednum=67, payloaEnvironmentTeiumFast/!60580a_snr found injust INFO  | 11:02:56 alreaINFO  | 11:02d=0x7INFINFO  | 1INFO  | 11:02:56 130=0x5DEBUG | 11:02:5DEBUG | 11:02:5pic msh/2/c/MLiINFO  | 11:02:56id=0DEBUG | 11:02:57 130 Received MQTT topic msh/2/c/MediumFINFO  | 11:02:INFO  | 11:02:57 131 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25t (idINFO  | 11:02:57 131 [mqtt] Received MQTT topic msh/ed=0x74INFO  | 11:02:57 131 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25calreaINFO  | 11:02:57reINFO  | 11:02:57alreaINFO  | 11:02:58 131 [mqtt] Receilrtnum=3, payl (id=0x7aebf85ter] enqueuin
+
+DEBUG | 11:02:] Lora RX (i msg, because wecord (id=INFO  | 11:02een it (idINFO  | 11:02:58een iINFINFO  | 11:02:58 132d=0gINFO  | 11:02:58ready seen i to=0xffffffffINFO  | 11:02:58 132 [mqtt] RecseenDEBUG | 11:02:58 132 [RadioIf] StarINFO  | 11:02:59 132 [mqtt] Received M
+
+d=0xINFDEBUG |Received MQTT topic msh/2/c/MediumFast/!95aa79a0, len=116 
+DEBUG | 1126 fINFO  | 11:02:59 133 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7c50, len=101 
+DEBUG | 11:02:59 133 [RadioIf] (bw=25aebf855 fr=0x12.25 WARN  | 11:03:00 133 [RadioIf] Can not send yeINFO  | 11:03already seen it,to=0x95aa7bGoDEBUG | 11:03:0 rWARN  | 11:03:00 134 [RadioIf] Can noINFO  | 11:03:00 134 [mqtt]85f4, id=0x74niffing (id=0x8Ack=0DEBUDEBUG | 11:03:00sINFO  | 11:03:00 134ve alINFINFO  | 1WARN INFO  | 11:03:0ve already se0,to=0x95aa7bb:95aa79a0,to=4iority=64) 
+(be2 fr=0xfINFO  | 11:03:ve aDEBUG | 11:03:01 Received MQTT topic msh/295deINFO  | 11:03:]ve aINFO  | 11:03:seenINFO  | 11:03:01alreLINFO  | 11:03ove already see existing 
+
+Incoming messa=0x7aebINFO  | 11:03:01 135 [mqtt] Rea=67, payloadle3fb77c8, id=035 DEBUG | 11:03:0ter, setting30, time 172 msted rxSNR=13.6 
+DEBUG |INFO  | 11:03:01 0x028DEBUG | 11:03:0requestId=5f0rxSNR=-7DEBUG | 11:03:02 EBUG | 11:03:QTT topic msh/2 HoINFO  | 11:03d=0xINFO  | 11:03:0already seReceived MQTT topic msh/2/c/MediumFast/!1d49f208, len=116 
+DEBUG | 11:0326 fDEBUG | 11:03:036 [Router] FoumDEBUG | 11:03:02 136 [RadioIf] Received MQTT topic msh/2/c/MediumFast/!1d49f208, len=93 
+,INFO  | 11:03:03 136 [mqtt] Reciid=0DEBUG | 11:03:03 137 [RLAdd paDEBUG | 11:03:03 137 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=44, timAdd packeINFO  | 11:03:03 137 [mqtt] Received MQTT tINFO  | 11:03:03 137 [mqtt] Received MQTT topic msh/2/c/Mid=0INFO  | 11:03:04 137 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa70alreINFO  | 11:03:49 
+DEBUG | 11 WANTRESP rxt0x1fDEBUG | 11:03:04 Router] FounINFO  | 11:03:04 138 0x0INFO  | 11:03:040x0aINFO  | 11:03:04 138 [mqtt] Receivd=0x745Received MQTT topic msh/2/c/MediumFast/!25a77b70, len=93 
+DEBUG | 11:03:0, WantINFO  | 11:03:05 138 [mqtt] Received MQTT topic msh/2/c/INFO  | 11:03:05 139 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77b70, len=93 
+DEBd=0x74595de170 to=0xeINFO  | 11:03:05 139 [mqtt] Received MQTT topic msh/2/c/MediumFad=0x7INFO  | 11:03:d=0xINFO  | 11:03:05d=0xINFO  | 11:03:c04, id=0x76909iffing (id=0x11:03:05 139INFO  | 11:03een it (id=0x7a804,id=0xabf595aa7804,id=INFO  | 11:03:06 14alreaINFO  | 11:03:06e nWARN  | 11:0INFO  | 11:03:06 140 [mqtte alrDEBUG | 11:03:06 14dd packeINFO  | 11:03:06 140 [mqtt] Received MQTT topic msd=0x7WARN  | 11:03:06 140 [RadioDEBUG | 11:03:0bf5e37 fr=0xe.75 rxRSSI=-65)FO  | 11:03:t0x74INFO  | 11:03:07 140 [mqtt] Received MQTT topic msh/2INFO  | INFO  | 11:03:07 141 td=0x74Received MQTT topf, WantAckINFO  | 11:03:07 141 [mqtt] Receiv='ve INFO  | 11:03:07 141 [mqtt] Received MQTT topic msh/2/c/MediumFastseen it (id=0isting packetINFO  | 11:03ve already see025INFO  | 11WARN  | 1INFO  | 11:03:07 141 vedINFO  | 11:03:08 ve aWARN  | 1DEBUG | 11:03:08Add packet re, 142 [Router]INFO  | 11:03:0ve already secket record (idanged=0 user Should encrypt nd. hop_limi3outer] Found eming message f5e37 
+DEBINFO  | 11:03:ve aINFO  | 11:03:08 already seenfting packet reiltered 0xINFO DEBUG | 11:03:08 142 [Ra packet recorter] Found exINFINFO  | 11:03:09 142d=0xDEBUG | 11:0DEBUG | 11:03:09 143 [PoINFO  | 11:03:09 143 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa0x0286a3cStarting low level send (id=0x2ce198dd fr=0x50 tINFO  | 11:03:09 143 [mqtt] Received MQTT topic msh/2/c/MediumFast/!1d49f208, len=116 
+DE've DEBUG | 11:Received MQTT topic msh/2/c/MediumFast/!25a77b70,  WaINFO  | INFO  | 11:03:10 144 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25c221e4, len=93 
+DEd=DEBUG | 11:03:10 144 [RadioIf] 98dd fr=0x50 toI=-40DEBUG | INFO  | 11:03:10 144 INFO  | 11:03:10 144 [mqtt] Received MQTT topic msh/2/c/MediumFast/!1d49f208d=0x7459Received MQTT t26 fDEBUG | 11:03:11 145 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, payloadSize=70, time 317 ms 
+DEBUG | 11:03:11 145 [RadioIf] Lora RX (] Add paINFO  | 11:03:11 145 [mqtid=0INFO  | 11:03:11 145 [mqtt] Received MQTT topic alLINFO  | 11:03:11 145 [mqtt] Received MQTT topic msh/2/c/Medd=0xINFO  | 11:03:12 145 [mqtt] Receiveid=0x76909207 f=0x2ce198d
+
+INFO  | 11:03:12 146 [mq=49 
+DEBUG | 114, Want9DEBUG | 11:03INFO  | 11:03:12 146 [mqtt] Recedd=0x3WARN  | 11:03:12 146 [RadioIf] Can not seINFO  | 11:03:12 1INFO  | 11:03:12 14d=0x36b9b9f5 fr=0x2ce198dd|5d6e614,id=0x2c5aaaf48,to=0INFO  | 11:03:1id=0tDEBUG | 11:03:13 147 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 m Add packet rec47 [Router] FaINFO  | 11:03:13 147 [mqtt] Received MQTT topic msh/id=0x74595de170 to=0xe0, DEBUG | 11:03] Add pacINFO  | 11:03:13 147 [mqtt] Received MQTT topic msh/2/c/MediumF seeDEBUG | 11:03:14 147 [RadioIf] (bw=250, sf=9, cr=4/8) packe [Router] Usid=0x5ce92311, pemetry from=  | 11:03:14 14l11:03:14 1485f0278f0, removouter] Found BUG | 1INFO  | 11:03:14 148 [mqtt] Received Mseen INFO  | 11:03:x5ceDEBUG | 11:03:14 148 [RadioIf] (bw=] Add packet  148 [Router]INFO  | 11:03:1d=INFO  | 11:03:d=0x74595de1 c to=0xnDEBUG | 11:03:15 148 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, p1Add paINFO  | 11:03:INFO  | 11:03:15 149 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a7INFO  | 11:03:DEBUG | 11:03:15 149 [RadioIf] (bw=250, sf=9, cr=4/8) packet sAdd packeINFO  | 11:03:15 149 [mqtt] Receivedd=0x7DEBUG | 11:03:15 149 [RadioIf] Start 149 [Router] topic msh/2/c/HoINFO  | 11:03:16 150 [mqtt] Received MQTT topic msh/f 11:03:16 150 fffffff,id=0x7Received MQTT top95de2 fr=0xf==0x78, WantAck=ck0INFO  | 11:03:ve auINFO  | 11:03:=0x5ceINFO  | 11:03:16 150 =0x5ce923RecINFO  | 11:03:16 150ve alINFO  | 11:03:16ve aINFO  | 11:03:16 150 [mqtt] Received MQTid=0INFO  | 11:03:d=0xINFO  | 11:03:17 151 [mqtt] Received MQTT topic msh/2/c/Medd=0x36b9b9f5 fr=0x76909208INFO  | 11:03:17 151 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7c50,INFO  | 11:03:17 151 [mqtt] Received MQTT topic msh/2/c/MediumFa0x02DEBUG | 11:03:17 151 [RadioIf] SINFO  | 11:03:18 151 DEBUG | 11:03:18 151 [RadioIf] Completed sendReceived MQTT topic msh/2/c/MediumFINFO  | 11:03:18 152G | 11:03:18 1 48,to=0x95INFO  | 11:03:1d=0xINFODEBUG | 11:03:18 1f5 
+DEBUG | 11:eceived MQTT  WaINFO  | 11:03:18dyINFO  | 11:03:18 152 [mqtt] Receivx5ceDEBUG | 1Received MQTT topic msh/2/c/MediumFast/!95aa79a0INFO  | 11:03:19 152 alrDEBUG | 11INFO  | 11:03:19 153 [mqtt] Received MQTT topic msh/2/c/MediumFd=0xDEBUG | 11:03:19 153 [RadioIf] CReceived MQTT topic msh/2/c/MediumFast/0 tmDEBUG | 11:03:19 153 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2 ms, ket record fo9 153 [RouterINFO  | 11:03:20 153 [mqtt] Received MQTT topic msh/2/c/Mve alINFO  | 11:03:0x0aINFO  | 11:03:20d=0xINFO  | 11:03:20 154 [mqtt] Received MQTT topi=0x5ceDEBUG | 11:03:20 154 [RadioIf] (bw=250, sf=9, cr=4/8] Add pacINFO  | 11:03:20 154 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa79a0, len=93 
+DEBUG | 11:03:20 154 [Router] Found exid=0x74595de1 H0x36b9b9f5 
+INFO  | 11:03:21 155 [mqtt] Received MQTT topic mshINFO  | 11:03:21 155 [mqtt] Recee alrINFO  | 11:03:21 155 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25c221e4,ve alINFO  | 11:03:21 155 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25ve alINFO  | 11:03:2ve alINFO  | 11:03:ve alINFO  | 11:03:22 155 [mqtt] Receivedy sINFINFO  | 11:03:22 155ve alINFO  | 11:03:22 156 [mqtt] Received MQTT topic msh/2/c/Med=0xINFO  | 11:03:22 156 [mqtt] Received MQTT topic msh/2/c/MediumFave alINFO  | 11:03:22 156 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77b70, nalrINFO  | 11:03:2d=0xINFO  | 11:03:ve alINFO  | 11:03:23 157 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25c221e4, len=93 
+DEBUG | 11:03:23 157 [Router] Found existing packet record for fr=0xa3fb7o0x02INFO  | 11:03:2INFO  | 11:03:23 157 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aaaf48, len=107 
+Dd=0xINFO  | 11:03:24 157 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aab7e0,ve alINFO  | 11:03:24 158 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aad=0x7INFO  | 11:03:24 158 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa79a0, len=101 
+INFO  | 11:03:25 158 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77b70, len=115 
+DEBUG | 11:03:25 158 [Router] Found existiid=0xINFO  | 11:03:25 159 [mqtt] Received MQTT topic msh/2/c/Medid=0INFO  | 11:03:25 159 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a74d2c, len=101 
+INFO  | 11:03:26 159 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25c221e4, len=106 
+DEBUG | 11:03:26 159 [Router] Found existing packet record for fr=0x95aab7e0,to=0x95aa780x0aINFO  | 11:03:26 160 [mqtt] Received MQTT topic msh/2/c/MediINFO  | 11:03:26 160 [mqtt] Received MQTT topic msh/2/c/MediumFast/!1d49f208, INFO  | 11:03:27 161 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aaaf48, len=86 
+DEBUG | 11:03:27 161 [Router] Found existing packet record for fr=0x9ccb68c,to=0xffffffff,id=0x5ce92311 
+DEBUG | 11:03:27 161 [Router] Found existing pax5cINFO  | 11:03:27 161 [mqtt] Received Mid=0INFO  | 11:03:27 161 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25c221e4, len=119 
+DEBUG | 11:03:27 161 [Re alrINFO  | 11:03:28 161 [mqtt] Received MQTT topic msh/2/c/MediumFas/d=0xINFO  | 11:03:28 162 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa79a0, len=96 
+DEBUid=0INFO  | 11:03:28 162 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aINFO  | INFO  | 11:03:28 162 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aaaf48=0x5DEBUG | 11:03:29 163 [Power] Battery: usbPower=0, isCharging=0, batMv=4100, batPct=89 
+INFO  | 11:03:29 163 [mqtt] Received MQTT topic msh/2/c/MediumFast/!1d49f208, len=118 
+DEBUG | 11:ve aINFO  | 11:03:29 163 [mqtt] ReceivedINFO  | 11:03:29 16een iINFO  | 11:03:29 163 [mqtt] Received MQTT topic msh/2/c/MediumFasve INFO  | 11:03:2id=0xINFO  | 11:03:30 163 [mqtt] Received MQTT topicINFO  | 11:03:30 163 ve INFO  | 11:03:30ve alINFO  | 11:03:30 164 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77b70, len=93 
+DEBUd=0xINFO  | 11:03:30 164 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25c221e4, len=107 
+DEBUG | 11:0d=0xINFO  | 11:03:31 165 [mqtt] Received MQTT topic msh/2/c/MediumFast/!1d49f208, len=93 
+DEBUG | 11:03:31 165 [Router] Found existi0x02INFO  | 11:03:31 165 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7c50, len=65 
+DEBUG | 11:03:31een INFO  | 11:03:31 165 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a74d2c,ve alINFO  | 11:03:32 165 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77e80, lve INFO  | 11:03:32ve alINFO  | 11:03mve aINFO  | 11:03:32ve INFO  | 11:03:31ve aINFO  | 11:03:ve alINFO  | 11:03:32 166 [mqtt] Received MQTT INFO  | 11:03:32 16ve alINFO  | 11:03:32 166 [mqtt] Received MQTT topic msh/2/c/MediumFasve alINFO  | 11:03:33 166 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa79a0,ve alINFO  | 11:03:33 167 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95ave alINFO  | 11:03:33 167 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7c50, ve INFO  | 11:03:33 167 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77ve alINFO  | 11:03:ve aINFO  | 11:03:33ve INFO  | 11:03:34d=0xINFO  | 11:03:ve alINFO  | 11:03:34 168 [mqtt] Received MQTT topicve INFO  | 11:03:34 168 [m0x02INFO  | 11:03:34 168 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a77b70,d=0xINFO  | 11:03:,ve aINFO  | 11:03:35 168 [mqtt] Received MQTT topic msh/2/c/MediumFast/!1d49f208, len=119 
+DEBUG | 11:03:35 168 [Router] Founde alrINFO  | 11:03:35 169 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25c221e4, len=86 
+DEBUG | 11:03:35 169 [Router] Found existing packet record for fr=0x9ccb68c,tox5ceINFO  | 11:03:36 169 [mqtt] Received MQTT topic msh/2/c/MediumFast/!95aa7c50, len=91 
+DEBUG | 11:03:36 169 [Routeortnum=3, paylEBUG | 11:03:
+
+DEBUG | 11:03:router, settr=0x78 to=0x8DEBUG | 11:INFO  | 11:03: 11:03:36 170 [1816 INFO  | 11:03:3 11:03:36 170 1816 rINFO  | 11:03:36num=3, payloa
+
+DEBUG | 11:0363da3, numByt[RINFINFO  | 11:03:36 170enum=3, paylo(id=0x2ceDEBUG | 11:03
+
+DEBUG | 11:03::03:36 170 [d=0x09f41Received MQTT t, WantAck=0, 1 bytes 
+DEBUG  [Router] Add8,to=0xfffffff| 11:03:37 17:ceived routing8 key! 
+DEINFO  | 11:03:0x0abf5e37 fr=0x4aa63da3 
+Dnally senINFO  | 11:03:3en iINFO  | 11:03:37 um=3, payloadEBUG | 11:03:3738, numBytIgnINFO  | 11:03:37 171 [num=3, paylo
+
+DEBUG | 11:03:37884e, numBy for fr=0x95aa7QTT topic mshWantAck=0, Hop Ch=0x0 Portnket received : SIDEBUG | 11INFO  | 11:03:38 17en itINFO  | 11:03:en iINFO  | 11:03:3en INFO  | 11:03:38 it (id=0Received MQTT t toDEBUG | 11:03:3outer] Found INFO  | 11:03:ve alINFINFO  | 11:0Received MQTT t to=0xff, WantA, HopLim=4 Ch8,id=0x5cb7884e11:03:38 172 dy seen it (id2ce198de fr=00x1f encrypted 81288,id=0xaINFO  | 11:03:39 170x0aINFO  | 11:03:en it (id=0x4aa1288,id=0xb9eediumFast/!25a Ch=0INFO  | 11:03:39 1en it (id=0x4aaG | 11:0INFO  | 11:03:39ve alINFDEBUG | 11:03:39 packet record r] Found exINWARN INFO  | 11:03:en itINFO  | 11:03:3=0x5INFINFO  | 11:03:39 173 ready seen it=0x55c81288,idh/2/c/MediumFLimINFO  | 11:03:40en iINFINFO  INFO  | 11:03:40 174 [ve already sx5cb7884e 
+INFO  | 11:03it (iINFO  | 11:03:40e already sedx2ce198dd 
+DEBU (id=0x0abf5ter] Found exis0INFO  |INFO  |INFO  | 11:03:40 174 e already see,to=0x55c81288,sINFO  | 11:03:40 1740x0aINFO  | 11:03:en iINFO  | 11:03:40 11:03:41 1741819 rDEBUG | 11:03:outer] Found exiumFast/!95aaa node=95aaaf4Portnum=3 requeck=0, HopLim=ing packet reco80, len=65 
+D requestId=9f4i78791INFO  | 11:03:en it INFO  | 11:03:en iINFO  | 11:03:41ve alINFO  | 11:03:4en it (id=0x09f81288,id=0xabc/INFO  | 11:03:41 17en iINFO  | 11:03:41ve alINFO  | 11:03en it (id=0x09f1288,id=0xb9eediumFast/!95aa=0,DEBUG | 11:03:4INFO  | 11:03:42 1en iINFO  | 11:03:42e alrIDEBUGReceived MQTT to, WantAck=0,  Ch=0x0 Portnumet record foINFO  | DEBUG | 11:03:42outer] FoundamFast/!95aaaf40x0DEBUG | 11:03:Received MQTT topic msh/2/c/MediumFast/INFO  | 11:03:42 17en itWARN  |DEBUG | 11:03:43 176 [Radiob9b9f6 fr=0x.5 rxRSSI=-70)11:03:43 17WARN  | 11:DEBUG | 11:03:43 177 [Ra] Add paINFO  | 11:03:43 177 [mqtt] Recu4, id=0x678015es.  numframeived floodmsg tood=1DEBUG | 11:03:43 177cb7884e fr=0x13.25 INFO  | 11:03:43 aINFINFO  | 11WARN  | 11:03:43 177 [RadiINFO  | 11:03:43c, id=0xeea5.  numframes: 0 floodmsg to 8,rxGooDEBUG | 11:03:44 1] Add packet re178 [RouterINFINFO  | DEBUG | 11:03:44 1b9b9f6 fr=0x48 5 rxRSSI=-32)3:44 178 INFO  | 11:03:44num=3, payloa
+
+DEBUG | 11:03:c4186, numBytet received : SSI=-41) 
+Inc70) 
+IINFO  | 11:03:4d=0INFO  | 11:03:4en itINFDEBUG | 11:03:4 Add packet rec78 [Router]INFO  | 11:03:4ed=0x36b9b9f5:03:45 178 DEBUG | 1INFO  | 11:03x95aa7bb8,to=0xexisting paWARN  | 11:03:45 179 [RadioIf] Can not INFO  | 11:03:4=0x5ce92311 ftAck=0, HopLim=80a78,to=INFO  | 11:03:45 179 [mqtt] Received MQTT topi alrDEBUG | 11:03:45 179 [RadioIf] (bw=250, sdd packetDEBUG | 11:03:46 179 [RadioIf] (bw=250, sf=9, cr=4/8) packet sycord for fr=INFO  | 11:03:46d=0x49b46fdf, numframes: 0 
+loodmsg to nerxGood=169,rxBa, WantAcIINFO  | 11:03:46 180 en it (id=0x788,id=0x36b9b9f7f0c41INFO  | 11:03:46 180 [mqtt] Received MQTT topix5ceINFINFO  | 11:03:46 18d=0x36b9bReceived MQTT t84e fr=0xb8 to=3 rxtime=1671:03:46 180 [Ro58e9 fr=0DEBUG | 11:03router, setting1:03:47 180 INFO  | 11:03:4x5ce92311 fr=6b9b9f6 
+DEBUG 88,id=0x36b9b,to=0x55c81288c 
+WARN  INFO  | 11:03:47 18ve aINFO  | 11:03:lready seen it =0x55c81288,ib8,to=0x55INFO  | 11:03:47 18ve alINFDEBUG | 11:03:47 181 [RadioIf] (bw=250, sf=9, dd packeINFO  | 11:03:47 1ve alINFO  | 11:03:48c, id=0x45f70tnum=3, payload ESP32 crypWARN  |INFO  | 11:03:48 for fr=0xINFO  | 11:03:48ve aINFmINFO  | 11:03:48 182 [mqtt] Received  already seen 0,to=0x55c81INFO  | 11:03:48 182 [mqtt] Received MQTT topic msh/2/c/dy sINFO  | 11:03:48 ve already s7bb8,to=0x55c81 low level sesting packetINFO  | 11:03:=0x5INFO  | 11:03:49 alreINFO  | 11:03 =0x5ce923Received MQTT topic msh/2/c/MediumFfr=0xWARN  | 11:03:49 1DEBUG | 11:03:49 1INFO  | 11:03:49 183 [ alDEBUG | 11:03:49 183 [RadioIf] Starting low level send (id=0x09f41773 fr=0x88 to=0xff,DEBUG | 11:03:50 183 [RadioIf] Completed sending (id=0x09f41773 fr=0x88Received MQTT topic m to=DEBUG | 11:0INFO  | 11:03:50 184 [mqtt] Received MQTT tove alINFO  | 11:03:50alreadyReceived MQTT topic msh/2/c/MediumFast/!95 WantAck=DEBUG | 11:03:50 184 [RadioIf] (bw=250, s50 184 [Router]eived positio 
+DEBUG | 11:038c, num=5ce95t/!25a74d2c, l=0x0 PortnINFO  | 11:03:50 184 [mqtt] Re0x0abf5e37 fr=09f41773 
+DEBUDEBUG | 11:03:51 184INFO  | 11:03:51 185 [mqtt] Received MlreDEBUG | 11:03:51 185 [RadioIReceived MQTT topic msh/2/c/MediumFast/!1d49f20895deINFO  | 11:03:5dy sINFO  | 11:03:51lready seen i=0x55c81288,id=2/c/MediumFasck=INFO  | 11:03:51 18 alreDEBUG | 11DEBUG | 11:03:52 185 [RadioIf] Completed sending (id=0x09f41773 fr=0x88Received MQTT topic msh/2/c/MediumFast/!95aaaf48, len=90 
+DEBUG | 11:03:52 186 [Router] Found existing packet record forfr=0x6c to=0x88 encrypted rxm=3 requestId=9ule 'routing' uter] Expandio62 
+DEBUG | 11rxSNRININFO  | 11:03:52 186 [dy seen iINFO  | 11:03:52 186 [mqtt] Rece 11:03:53 186 [5c81288,id=0x11:0DEBUG | 11:03:53ssage was fiter] Using AES1 record forINFINFO  | 11:03:53 187 ready seen itxffffffff,id=0MediumFast/!92 Ch=0x0 INFOINFO  | 11:03:53 18ve already seen68c,to=0x55DEBUG | 11:03:53 187 [RadioIf] (bw=250, sf=9, cr=4/8) packet symLen=2or fr=0x60580veDEBUG | 11:03:5 requestId=5f3 rxtimINFO  | 11:03:54 188 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25a7ve already s48,to=0x55c812INFO  | 11:03:54 18alreDEBUG | 11:INFO  | 11:03:54 188 [mqtt] Received MQTT lreadDEBUG | 11:03:54 188 [Starting loDEBUG | 11:03:54 188 [RadioIf] Completed sending (id=0x09f41773 fr=0Received MQTT topic msh/2/c/MediumFast/!25a77b70, len=107 
+DEBUG | 11:03:55 189 [Router] Found existing packet record for , WantAck=0,  189 [RouterDEBUG | INFO  | 11:03:55 189 [mqtt] Recve alDEBUG | 11:03:55 189 [RadioIf] Received MQTT topic msh/2/c/MediumFast/!98e9 WARN  | 11:03:55 189 [RadioIf] Can nDEBUG | 11:03:56 189 [RadioIf] (bdd packeINFO  | 11:03:56 189 [mqtt] Received MQTT topic mslreadDEBUG | 11:03:56 190 [Rad packet rDEBUG | 11:03:56 WARN  | 11:03:56 190 [RadioIf] Can not send yet, busyRxDEBUG | 11:03:56 190 dd packetWARN  | 11:03:56 190 [RadioIf] Can not send yet, busyRxINFO  | 11:03:ve already see,to=0x55c8128INFO  | 11:03:57 190 [mqt/ alrDEBUG | 11:03:57 190 [RadioIf] Starting loDEBUG | 11:03:57 191 [RadioIf] Completed sending (id=0x0abf5e38 fr=Received MQDEBUG | 11:03:[uter, setting INFO  | 11:03:readyWARN  | 11:03:57 191 [RadioIfDEBUG | 11:03:57 191bAdd packet rec  rxRSSI=-70 id=0x6375cDEBUG | 11:03:57 191 [RadioIf] CoReceived MQTT topic msh/2 fr=DEBUG | 11:03:58 192 [RadioIf] Starting low level send (id=0x36b9b9f6 fr=0x48 to=0x88, WantAck=0, HopLim=2 Ch=0x1f 192 [Router] iDEBUG | 11:03:58 192 [RadioIf] Starting low level send (id=0x5cb7884e fr=0xb8 to=0x88, WantAck=0, HopLim=2 Ch=0eReceived(REM26 total 
+DEBUGter] publish 192 [Router] r 8/VLGW 
+DDEBUG | 11:03uting tx deReceived MQTT0, HoINFO  | 11:03:59 19M8DEBUG | 11:03DEBUG | 11:03:59 193 [RadioIf] Completed sending (id=0x5cb7884e fReceiINFO  | 11:03:59 19lreadINFO  | 11:03:5ve ayDEBUG | 11DEBUG | 11:03:59 193 [RadioIf] Completed sending (id=0xReceived MQTT toINFO  | 11:04:00 193 [mqtt] ReceiDEBUG | 11:04:00 193 [RadioIf] Starting low level sendDEBUG | 11:04:00 194 [RadioIf] Completed sending (id=0x5f02780, HopLINFO  | 11:04:00 194 [mqtt] Received MQTT topicen iINFO  | 11:04: 11:04:00 194 [5c81288,ioDEBUG | 11:04:00 
+DEBUG | 11: Received MQTT 8 tINFnINFO  | 11:04:00 19readINFO  | 11:04:ve alreadyReceived MQTT 0, HopLim=2 Ch=num=3 requestr fr=0xb2248INFO  | 11:04:01 195 [mqtt] Received MQTTen iINFO  | 11:04:ve alDEBUG | 11:04:EBUG | 11:04:01ceived MQTT to=0x88INFO  | 11:04:01 195ten it (RecINFO  | 11:04:01 195 [mqtt] Received MQTTDEBUG | 11:04:01 195 [RadioIf] StINFO  | 11:04:02 195 [mqtt] Received MQTT topic msh/2/c/en it (idRecINFO  | 11:04:02 196 [mqtt] Received MQTT topic msh/2/c/MediumFast/!25 11:04:02 196 ffffffff,iDEBUG | 11:04:0EBUG | 11:04:T topic msh/2/cntAck=0, Hop eReceived(REMOupdate: 11 ont MQTT?: 0 
+DEBred 
+IgnINFO  | 11:04:02 196x88, WantAck=INFO  | 11:04:iumFast/!60580iDEBUG | 11:0INFO  | 11:04:03f, WantAck=0,INFO  | 11:04:03 196 [f, WantAck=DEBUG | 11:04:03outer] recent | 11:04:03 1976 fr=0xa0 to=ayloadlen=5 
+INebf856DEBUG | 11:04:03AIgINFO  | 11:04:03 197f, WantAck=0, xINFO  | 11:04:03 197f, WantAck=0,INFO  | 11:04:x88, WantAckDEBUG | 11:0INFO  | 11:04:03 198, WantAck=INFO  | 11:04:03x88, WantAck=, Received MQTT top0x0 Portnum=3[Router] Found ize=74 
+DEBU As a router, serecord (id=09, cr=4/8) packmplicit ack fpacket record (n=78 
+DEBUG |iority=70) 
+reIfININFO  | 11:04:04 19x88, WantAck=INFO  | 11:04:f, WantAck=0, HadSize=42, t2c,to=0x55c8128 11:04:04 198ck=0, HopLimINFO  | 11:04:04 x88, WantAcINFO  | 11:04:0xff, WantAck=0198 [Router] Fts size=74 
+D0, DEBUG | 11:04:05 199 [Router11:04:05 199 [Rr clearing e=0x88 to=0xff, Wet record fo78DEBUG | 11:04:05DEBUG |DEBUG | 11:04INFO  | 11:04:0 WantAck=0,INFINFO  | 1DEBUG |Starting loINFO  | INFO  | INFO  | 11:04:05 19UG | 11:04:05 15653 
+DEBUG |o neighbors 
+I,rxBad=0 
+Received MQTT t0 Portnum=3 W[Router] Found outer] Using3 requestId=9fINFO  | 11:04:06 2diumFast/!60580DEBUG | 11:04DEBUG | 11:0INFO  | 11:04:06 208, WantAck=0INFO  | 11:04:f, WantAck=0, Hen=77 
+DEBUGriority=70) 
+red MQTT topic =5 requestId=9fcentPackets siId=9f41773 rxacket=1 
+INFO  |
+
+DEBUG | 11:1846 INFO  | 11:04x88, WantAck=INFO  | 11:04:07 
+
+DEBUG | 11:0
+
+DEBUG | 11:04:neighbors 
+IN4,rxBad=0 
+DEBU201 [Router] acket=1 
+INFO tive_humidity7 201 [Router] r] rx_snr fouG | 11:04:07 20 Received MQ=0x0 Portnum=3 DEBUGDEBUG | 11:04:7 201 [Router]  11:04INFO  | 11:04:07 201 [8, WantAck=INFO  | 11:04:07f, WantAck=0,en=78 
+DEBUG |riority=70)INFO  | 11:040x78, WantAck=0n=2 ms, paylor=0x25a74d2c,tINFO  | 11:04:xff, WantAck=0INFO  INFO  |INFO  | 11:04:08 202 8, WantAckINFINFO  | 1INFO  | 11:04:08 208, WantAck=0, , payloadSizefloodmsg 
+DEBUG2 fr=0x2c ININFO  | 11:04:08 202 [x88, WantAINFO  | 11:04:08 x88, WantAcINFO  | 11:04:08x88, WantAINFO  | 11:04:098, WantAck=0, ms, payloadSizr=0x25c221e4, 
+INFO  | 11:0=0x88, WantAcWARN  |DEBINFO INFO  | 11:0DEBUGDEBUG | 11:04: 
+DEBUG |ININFO  | 11:04:09 20diumFast/!6058_snr found in e already seeINFO  | 11:04:09 2x88, WantAck=0,adSize=30, tsg 
+DEBUG | 11:r=0xa0 to=DEBUG | 11:04:0o 
+DEBUG | 11: expired INFO  | INFO  | 11:04:10 20f, WantAck=0, H,Received MQTT toDEBUG | 11:04:et record (idDEBUG | 11:04INFO  | 11:04:10 x88, WantAckINFO  | 11:04:x88, WantAck=0,, Received MQTT t0x0 Portnum=3 [Router] Found:04:10 2INFO  | 11:04f, WantAck=0, Hen=72 
+DEBUG tPackets size=0, DEBUG | 11:04DEBUG | 11:04:1x delay:420 
+r=0x88 to=0xfINFINFO  | 11:04:11 20 WantAck=0, Hopze=40, time 0x55c81288,id=INFINFO  |INFO  | INFO  | 11:04:11 205 x88, WantAcWARN  | 11:04:1ze=78 (after n it (id=0x19d68,id=0x286a3cUG | 11:04:11 2e INFINFO  |INFO  | INFO  | 11:04:11 20diumFast/!60580_snr found ine alreadyReceived MQTT toDEBUG | 11:04ter, setting txe3 fr=0xf4 to22485f4,to=0x55centPackets s  | 11:04:12 2o WantAck=0, ayloadSize=30, 1e4,to=0x55c8:12 206 [mqtt] 0, HopLim=INFO  | 11:04:124:12 206 [Routs) 
+DEINFO  | 11:04:1m0x78, WantAcn=2 ms, payloadr=0x25a74d2c,  | 11:04:12 20 WantAck=0INFO  | 11:04:12iumFast/!605804:12 206 [Rou2 206 [RadioIf]acket recordINFINFO  | DEBUG | 11:04:ts) 
