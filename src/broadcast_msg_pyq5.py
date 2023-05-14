@@ -1394,18 +1394,19 @@ class callDB(QThread):
                             umid = ' '
                             if('humidity' in info):
                                 umid = str(round(info['humidity'],1))
+                            voltage = ' '
                             if('voltage' in info):
                                 voltage =  str(round(info['voltage'],2))
+                            corrente = ' '
                             if('corrente' in info):
                                 corrente = str(round(info['corrente'],2))
-                            if(tdiff < 600):    #ultimo msg non più vecchio di 10min
-                                try:
-                                    qr += str(info['nodenum'])+"','"+info['user']+"','"+str(round(info['chutil'],2))+"','"+ \
+                            if(tdiff < 606):    #ultimo msg non più vecchio di 10min
+                                qr += str(info['nodenum'])+"','"+info['user']+"','"+str(round(info['chutil'],2))+"','"+ \
                                     str(round(info['airutil'],2))+"','"+str(info['battlv'])+"','"+press+"','"+tempr+"','"+umid+"','"+voltage+"','"+corrente+"')"
-                                    self.insertDB(qr)
-                                    print("Aggiornato AirUtilTX di "+info['user'])
-                                except:
-                                    print("Non aggiornato AirUtilTX per user null.")
+                                self.insertDB(qr)
+                                print("Aggiornato AirUtilTX di "+info['user'])
+                                #print(info)
+
             if(len(self.arraypdict) == 0):  
                 continue
             else:
