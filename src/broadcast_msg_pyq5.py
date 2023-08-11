@@ -1212,11 +1212,12 @@ class meshInterface(QThread):
 
     def setInterface(self):    
         try:
-            self.interface = meshtastic.serial_interface.SerialInterface()
+            self.interface =  meshtastic.serial_interface.SerialInterface()
             pub.subscribe(self.onReceive, "meshtastic.receive") 
             print("Set interface..")
             return True
-        except:
+        except Exception as err:
+            print(f"Unexpected {err=}, {type(err)=}")
             print("Time out in attesa meshtastic.SerialInterface")
             ex.log.append("Errore time-out sulla seriale: STACCARE E RICOLLEGARE il device verificare poi che CLI meshtastic --info funzioni e quando OK rilanciare applicazione.")
             return False
