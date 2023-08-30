@@ -1080,8 +1080,11 @@ class App(QWidget):
                 if('user' not in info):
                     self.nodeInfo[i].update({'user': self.findUser(nodenum)})
                 if(battlv == ' '):
-                    if('voltage' in self.nodeInfo[i]):
-                        carica = ((self.nodeInfo[i]['voltage']-3.6)/0.6)*100
+                    if('voltage' in self.nodeInfo[i]): # se controlliamo batteria da 12V / solar panel
+                        if(self.nodeInfo[i]['voltage'] > 10.4):
+                            carica = ((self.nodeInfo[i]['voltage']-10.5)/2.3)*100 # carica a 100% se batt = 12.8V
+                        else:   # batteria interna a Tlora
+                            carica = ((self.nodeInfo[i]['voltage']-3.6)/0.6)*100
                         battlv = round(carica,1)       
                 self.nodeInfo[i].update({'battlv': battlv})
                 self.nodeInfo[i].update({'chutil': round(chanutil,2)})
