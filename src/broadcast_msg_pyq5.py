@@ -404,6 +404,9 @@ class App(QWidget):
         qr = "delete from connessioni where data < '"+prvdate+"'"
         cur.execute(qr)
         conn.commit()
+        qr = "delete from origmsg where data < '"+prvdate+"'"
+        cur.execute(qr)
+        conn.commit()
         cur.close()
         conn.close()  
         print("Rimossi record vecchi piu di "+str(ng)+" giorni.")
@@ -731,13 +734,27 @@ class App(QWidget):
                 print(record)
                 self.log.append(record)
             self.count += 1
+            print("ID and FROM")
+            print(packet['id'])
+            msgID = packet['id']
+            print(packet['from'])
+            orig = packet['from']
+            if(self.testMsgOrig(msgID,orig) == True):
+                print("POSSO INSERIRE msgID e ORIGINE")
+                longname = self.findUser(orig)
+                ora = datetime.datetime.now().strftime("%T")
+                data = datetime.datetime.now().strftime("%y/%m/%d")
+                qr = "insert into origmsg (data,ora,msgid,origin,longname,tipmsg) \
+                    values('"+data+"','"+ora+"','"+str(msgID)+"','"+str(orig)+"','"+longname+"','"+tipmsg+"')"
+                self.insertDB(qr)
+
         else:
             tipmsg = 'NON_GESTITO'
         user = self.findUser(from_)
         if(user == None):
             user = "unknown"
         if(len(user) > 20):
-            user = user[0:20]
+            user = user[:20]
         while(len(user) < 20):
                 user += ' '
         self.logpMsg(dachi,user,achi,tipmsg)
@@ -843,6 +860,21 @@ class App(QWidget):
                     self.table1.setItem(r,13,item13)
                 r += 1
     
+    def testMsgOrig(self,msgID,orig):
+        qr = "select count(*) from origmsg where msgid='"+str(msgID)+"' and origin='"+str(orig)+"'"
+        self.calldb.dbbusy = True
+        conn = dba.connect('meshDB.db')
+        cur = conn.cursor()
+        rows = cur.execute(qr)
+        datas = rows.fetchall()
+        #print(datas)
+        cur.close()
+        conn.close()
+        self.calldb.dbbusy = False
+        if(datas[0][0] == 0):
+            return True
+        return False
+
     
     def insertDB(self,query):
         timstr = time.perf_counter_ns()
