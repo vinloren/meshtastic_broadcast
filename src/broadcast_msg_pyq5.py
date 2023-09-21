@@ -740,13 +740,16 @@ class App(QWidget):
             print(packet['from'])
             orig = packet['from']
             if(self.testMsgOrig(msgID,orig) == True):
-                print("POSSO INSERIRE msgID e ORIGINE")
+                #print("POSSO INSERIRE msgID e ORIGINE")
                 longname = self.findUser(orig)
                 ora = datetime.datetime.now().strftime("%T")
                 data = datetime.datetime.now().strftime("%y/%m/%d")
                 qr = "insert into origmsg (data,ora,msgid,origin,longname,tipmsg) \
                     values('"+data+"','"+ora+"','"+str(msgID)+"','"+str(orig)+"','"+longname+"','"+tipmsg+"')"
                 self.insertDB(qr)
+            else: 
+                msg = msgID+" da "+orig+" duplicato"
+                self.log.append(msg)    
 
         else:
             tipmsg = 'NON_GESTITO'
