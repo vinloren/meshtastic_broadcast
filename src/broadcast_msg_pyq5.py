@@ -748,7 +748,7 @@ class App(QWidget):
                     values('"+data+"','"+ora+"','"+str(msgID)+"','"+str(orig)+"','"+longname+"','"+tipmsg+"')"
                 self.insertDB(qr)
             else: 
-                msg = msgID+" da "+orig+" duplicato"
+                msg = str(msgID)+" da "+str(orig)+" duplicato"
                 self.log.append(msg)    
 
         else:
