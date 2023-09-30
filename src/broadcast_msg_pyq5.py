@@ -1402,8 +1402,8 @@ class callDB(QThread):
         while(True):
             time.sleep(0.5)
             self.slptcnt += 1
-            #ogni 10 minuti salva valori chanUtil e AirUtilTX di mioGW
-            if(self.slptcnt % 1200 == 0):
+            #ogni 5 minuti salva valori chanUtil e AirUtilTX di mioGW
+            if(self.slptcnt % 600 == 0):
                 myair = ex.airustx.text()
                 myair = myair[0:len(myair)-1]
                 myair = float(myair)/10
@@ -1421,30 +1421,30 @@ class callDB(QThread):
                 for info in ex.nodeInfo:
                     qr = "insert into airtx (data,ora,nodenum,longname,chanutil,airutiltx,battlv,pressione,temperatura,umidita,voltage,corrente) values('"\
                         +data+"','"+ora+"','"
-                    if('tsTl' in info):
-                        if('chutil'in info and 'airutil' in info and not info['user'] == 'mioGW'):
-                            tdiff = tstamp - info['tsTl']
-                            press = ' '
-                            if('pressione' in info):
-                                press = str(round(info['pressione'],1))
-                            tempr = ' '
-                            if('temperatura' in info):
-                                tempr = str(round(info['temperatura'],1))
-                            umid = ' '
-                            if('humidity' in info):
-                                umid = str(round(info['humidity'],1))
-                            voltage = ' '
-                            if('voltage' in info):
-                                voltage =  str(round(info['voltage'],2))
-                            corrente = ' '
-                            if('corrente' in info):
-                                corrente = str(round(info['corrente'],2))
-                            if(tdiff < 606):    #ultimo msg non più vecchio di 10min
-                                qr += str(info['nodenum'])+"','"+info['user']+"','"+str(round(info['chutil'],2))+"','"+ \
-                                    str(round(info['airutil'],2))+"','"+str(info['battlv'])+"','"+press+"','"+tempr+"','"+umid+"','"+voltage+"','"+corrente+"')"
-                                self.insertDB(qr)
-                                print("Aggiornato AirUtilTX di "+info['user'])
-                                #print(info)
+                    #if('tsTl' in info):
+                    if('chutil'in info and 'airutil' in info and not info['user'] == 'mioGW'):
+                        #tdiff = tstamp - info['tsTl']
+                        press = ' '
+                        if('pressione' in info):
+                            press = str(round(info['pressione'],1))
+                        tempr = ' '
+                        if('temperatura' in info):
+                            tempr = str(round(info['temperatura'],1))
+                        umid = ' '
+                        if('humidity' in info):
+                            umid = str(round(info['humidity'],1))
+                        voltage = ' '
+                        if('voltage' in info):
+                            voltage =  str(round(info['voltage'],2))
+                        corrente = ' '
+                        if('corrente' in info):
+                            corrente = str(round(info['corrente'],2))
+                        #if(tdiff < 500):    #ultimo msg non più vecchio di 10min
+                        qr += str(info['nodenum'])+"','"+info['user']+"','"+str(round(info['chutil'],2))+"','"+ \
+                                str(round(info['airutil'],2))+"','"+str(info['battlv'])+"','"+press+"','"+tempr+"','"+umid+"','"+voltage+"','"+corrente+"')"
+                        self.insertDB(qr)
+                        print("Aggiornato AirUtilTX di "+info['user'])
+                        #print(info)
 
             if(len(self.arraypdict) == 0):  
                 continue
