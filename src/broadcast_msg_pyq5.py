@@ -959,6 +959,7 @@ class App(QWidget):
         for info in self.nodeInfo:
             if(info['nodenum'] == nodenum):
                 if('user' in info):
+                    info['user'] = info['user'].replace("'",' ')
                     return (info['user'])
                 else:
                     return("unknown")
