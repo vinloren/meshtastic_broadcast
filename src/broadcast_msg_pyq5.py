@@ -277,7 +277,7 @@ class App(QWidget):
             for node in self.nodeInfo:
                 if(node['user'] == None):
                     continue
-                if('lat' in node and 'GW' in node['user']):
+                if('lat' in node and 'GW' in node['user'].upper()):
                     dist = self.haversine([self.homeLoc['lat'],self.homeLoc['lon']],[node['lat'],node['lon']])
                     dist = dist/1000.0
                     dist = round(dist,1)
@@ -379,7 +379,7 @@ class App(QWidget):
             #print(record[3])
             if(record[3]== None):
                 continue
-            if('GW' not in record[3]):
+            if('GW' not in record[3].upper() ):
                 self.combonode.addItem(record[3])    
         cur.close()
         conn.close()  
@@ -535,8 +535,8 @@ class App(QWidget):
 
         self.table.setItem(r,7,item7)
         if ('decoded' in packet):
-            tipmsg = packet['decoded']['portnum']
-            row[3] = packet['decoded']['portnum']+';'
+            tipmsg = str(packet['decoded']['portnum'])
+            row[3] = tipmsg+';'
             item3 = QTableWidgetItem()
             item3.setText(tipmsg)
             self.table.setItem(r,3,item3)
@@ -865,18 +865,27 @@ class App(QWidget):
     
     def testMsgOrig(self,msgID,orig):
         qr = "select count(*) from origmsg where msgid='"+str(msgID)+"' and origin='"+str(orig)+"'"
-        self.calldb.dbbusy = True
-        conn = dba.connect('meshDB.db')
-        cur = conn.cursor()
-        rows = cur.execute(qr)
-        datas = rows.fetchall()
-        #print(datas)
-        cur.close()
-        conn.close()
-        self.calldb.dbbusy = False
-        if(datas[0][0] == 0):
-            return True
-        return False
+        self.calldb.dbbusy = True  
+        try:
+            conn = dba.connect('meshDB.db')
+            cur = conn.cursor()			
+            rows = cur.execute(qr)
+            datas = rows.fetchall()
+            #print(datas)
+            cur.close()
+            conn.close()
+            self.calldb.dbbusy = False
+            if(datas[0][0] == 0):
+                return True
+            return False
+        except dba.Error as er:
+            print('SQLite error: %s' % (' '.join(er.args)))
+            print("Exception class is: ", er.__class__)
+            print(qr)
+            cur.close()
+            conn.close()
+            self.calldb.dbbusy = False
+            return False
 
     
     def insertDB(self,query):
