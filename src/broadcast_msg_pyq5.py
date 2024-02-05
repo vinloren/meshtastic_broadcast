@@ -91,10 +91,10 @@ class App(QWidget):
         self.combomap.addItem("CartoDB dark_matter")
         self.lblcbnode = QLabel("Map node:")
         self.combonode = QComboBox(self)
-        self.combonode.addItem("map solo i GW")
+        self.combonode.addItem("map tutti i nodi")
         self.combonode.setMinimumWidth(130)
         self.combonode.setMaximumWidth(140)
-        hhome = QHBoxLayout()
+        hhome = QHBoxLayout() 
         hhome.addWidget(mylatlbl)
         hhome.addWidget(self.mylat)
         hhome.addWidget(mylonlbl)
@@ -277,7 +277,7 @@ class App(QWidget):
             for node in self.nodeInfo:
                 if(node['user'] == None):
                     continue
-                if('lat' in node and 'GW' in node['user'].upper()):
+                if('lat' in node): # and 'GW' in node['user'].upper()): marca tutti i nodi indifferentemente
                     dist = self.haversine([self.homeLoc['lat'],self.homeLoc['lon']],[node['lat'],node['lon']])
                     dist = dist/1000.0
                     dist = round(dist,1)
@@ -285,7 +285,7 @@ class App(QWidget):
                     segndist = "None"
                     if ('snr' in node):
                         segndist = str(node['snr'])  
-                    if(dist > 0.01):
+                    if(dist > 0.01 and 'GW' in node['user'].upper()):
                         folium.Marker([node['lat'],node['lon']],
                             icon = folium.Icon(color='red'),
                             popup = node['user']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;<br>ora: '+ \
@@ -294,6 +294,15 @@ class App(QWidget):
                         folium.Marker([node['lat'],node['lon']],
                         icon=folium.DivIcon(html=f"""<div style='font-size: 12px; font-weight: normal;'>{node['user']}</div>""")
                     ).add_to(self.map1)
+                    elif(dist > 0.01):
+                        folium.Marker([node['lat'],node['lon']],
+                            icon = folium.Icon(color='green'),
+                            popup = node['user']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;<br>ora: '+ \
+                                ora+'<br>snr: '+segndist+'<br>Km: '+str(dist),
+                        ).add_to(self.map1)
+                        folium.Marker([node['lat'],node['lon']],
+                        icon=folium.DivIcon(html=f"""<div style='font-size: 12px; font-weight: normal;'>{node['user']}</div>""")
+                    ).add_to(self.map1)	
                 elif('lat' in node and not self.combonode.currentText() == 'map solo i GW'):
                     if(node['user'] == None):
                             continue   
