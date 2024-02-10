@@ -725,6 +725,7 @@ class App(QWidget):
                 if('qsl?' in packet['decoded']['text'] and self.rbtn4.isChecked()):
                     rmsg = self.qsl.text()
                     rmsg = rmsg + packet['decoded']['text']+" da "+msgda
+                    rmsg = rmsg.replace('?',' ')  #replace ? with ' ' to avoid mesh flooding if 2+ broadcast_msg_pyq5 running in mesh
                     self.callmesh.sendImmediate(rmsg)
             
             if(self.rbtn2.isChecked()):
