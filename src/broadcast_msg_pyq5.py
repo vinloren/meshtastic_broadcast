@@ -94,7 +94,7 @@ class App(QWidget):
         self.combonode.addItem("map tutti i nodi")
         self.combonode.setMinimumWidth(130)
         self.combonode.setMaximumWidth(140)
-        hhome = QHBoxLayout() 
+        hhome = QHBoxLayout()
         hhome.addWidget(mylatlbl)
         hhome.addWidget(self.mylat)
         hhome.addWidget(mylonlbl)
@@ -561,7 +561,7 @@ class App(QWidget):
                 self.table.setItem(r,5,item5)
                 self.insertUser(from_,packet['decoded']['user']['longName'],packet['fromId'])
                 pdict = {}
-                nome = packet['decoded']['user']['longName']
+                nome = packet['decoded']['user']['longName'].replace("'",' ')
                 pdict.update({'longname': nome})
                 pdict.update({'chiave': from_})
                 self.calldb.InsUpdtDB(pdict)
@@ -961,18 +961,30 @@ class App(QWidget):
 
 
     def max_IdDB(self):
-        qr = "select max(_id) from connessioni"
-        self.calldb.dbbusy = True
-        conn = dba.connect('meshDB.db')
-        cur = conn.cursor()
-        rows = cur.execute(qr)
-        datas = rows.fetchall()
-        print(datas)
-        nr = datas[0][0]
-        cur.close()
-        conn.close()
-        self.calldb.dbbusy = False
-        return nr
+        nr = -1
+        while(nr<0):
+            try:
+                qr = "select max(_id) from connessioni"
+                self.calldb.dbbusy = True
+                conn = dba.connect('meshDB.db')
+                cur = conn.cursor()
+                rows = cur.execute(qr)
+                datas = rows.fetchall()
+                print(datas)
+                nr = datas[0][0]
+                cur.close()
+                conn.close()
+                self.calldb.dbbusy = False
+                return nr
+            except dba.Error as er:
+                print('SQLite error: %s' % (' '.join(er.args)))
+                print("Exception class is: ", er.__class__)
+                print(qr)
+                cur.close()
+                conn.close()
+                self.calldb.dbbusy = False
+                time.sleep(1)
+			    
 
     def findUser(self,nodenum):
         for info in self.nodeInfo:
