@@ -719,14 +719,20 @@ class App(QWidget):
             elif (packet['decoded']['portnum'] == 'TEXT_MESSAGE_APP'):
                 tipmsg = 'TEXT_MESSAGE_APP'
                 msgda = self.findUser(from_)
-                testo = datetime.datetime.now().strftime("%d/%m/%y %T") + \
-                    " "+packet['decoded']['text']+" de "+msgda
-                self.ricevuti.append(testo) 
-                if('qsl?' in packet['decoded']['text'] and self.rbtn4.isChecked()):
-                    rmsg = self.qsl.text()
-                    rmsg = rmsg + packet['decoded']['text']+" da "+msgda
-                    rmsg = rmsg.replace('?',' ')  #replace ? with ' ' to avoid mesh flooding if 2+ broadcast_msg_pyq5 running in mesh
-                    self.callmesh.sendImmediate(rmsg)
+                snr = packet['rxSnr']
+                rssi = packet['rxRssi']
+                try:
+                    testo = datetime.datetime.now().strftime("%d/%m/%y %T") + \
+                            " "+packet['decoded']['text']+" snr:"+str(snr)+",rssi:"+str(rssi)+" de "+msgda
+                    self.ricevuti.append(testo) 
+                    if('QSL?' in testo.upper() and self.rbtn4.isChecked()):
+                        rmsg = self.qsl.text()
+                        rmsg = rmsg + packet['decoded']['text']+" snr:"+str(snr)+",rssi:"+str(rssi)+" da "+msgda
+                        gitrmsg = rmsg.replace('?',' ')  #replace ? with ' ' to avoid mesh flooding if 2+ broadcast_msg_pyq5 running in mesh
+                        self.callmesh.sendImmediate(rmsg)
+                except:
+                     testo = datetime.datetime.now().strftime("%d/%m/%y %T")+" "+msgda+" Dati sporchi in packet[decoded][text]"
+                     self.ricevuti.append(testo)
             
             if(self.rbtn2.isChecked()):
                 i = 0
@@ -744,23 +750,25 @@ class App(QWidget):
                 print(record)
                 self.log.append(record)
             self.count += 1
-            print("ID and FROM")
-            print(packet['id'])
-            msgID = packet['id']
-            print(packet['from'])
-            orig = packet['from']
-            longname = self.findUser(orig)
-            if(self.testMsgOrig(msgID,orig) == True):
-                #print("POSSO INSERIRE msgID e ORIGINE")
-                ora = datetime.datetime.now().strftime("%T")
-                data = datetime.datetime.now().strftime("%y/%m/%d")
-                qr = "insert into origmsg (data,ora,msgid,origin,longname,tipmsg) \
-                    values('"+data+"','"+ora+"','"+str(msgID)+"','"+str(orig)+"','"+longname+"','"+tipmsg+"')"
-                self.insertDB(qr)
-            else: 
-                msg = datetime.datetime.now().strftime("%d/%m/%y %T")+" "+str(msgID)+" da "+longname+" duplicato"
-                self.log.append(msg)    
-
+            try:
+                print("ID and FROM")
+                print(packet['id'])
+                msgID = packet['id']
+                print(packet['from'])
+                orig = packet['from']
+                longname = self.findUser(orig)
+                if(self.testMsgOrig(msgID,orig) == True):
+                    ora = datetime.datetime.now().strftime("%T")
+                    data = datetime.datetime.now().strftime("%y/%m/%d")
+                    qr = "insert into origmsg (data,ora,msgid,origin,longname,tipmsg) \
+						values('"+data+"','"+ora+"','"+str(msgID)+"','"+str(orig)+"','"+longname+"','"+tipmsg+"')"
+                    self.insertDB(qr)
+                else: 
+                    msg = datetime.datetime.now().strftime("%d/%m/%y %T")+" "+str(msgID)+" da "+longname+" duplicato"
+                    self.log.append(msg)    
+            except:
+                print("packetId mancante")
+				
         else:
             tipmsg = 'NON_GESTITO'
         user = self.findUser(from_)
@@ -861,7 +869,10 @@ class App(QWidget):
                     self.table1.setItem(r,10,item10)
                 if('pressione' in info):
                     item11 = QTableWidgetItem()
-                    item11.setText(str(round(info['pressione']*10)/10))
+                    if(isinstance(info['pressione'], str)):
+                        item11.setText(info['pressione'])
+                    else:
+                        item11.setText(str(round(info['pressione']*10)/10))
                     self.table1.setItem(r,11,item11)
                 if('temperatura' in info):
                     item12 = QTableWidgetItem()
@@ -869,7 +880,10 @@ class App(QWidget):
                     self.table1.setItem(r,12,item12)
                 if('humidity' in info):
                     item13 = QTableWidgetItem()
-                    item13.setText(str(round(info['humidity']*10)/10))
+                    if isinstance(info['humidity'],str):
+                        item13.setText(info['humidity'])
+                    else:
+                        item13.setText(str(round(info['humidity']*10)/10))
                     self.table1.setItem(r,13,item13)
                 r += 1
     
@@ -1458,19 +1472,31 @@ class callDB(QThread):
                         #tdiff = tstamp - info['tsTl']
                         press = ' '
                         if('pressione' in info):
-                            press = str(round(info['pressione'],1))
+                            if(isinstance(info['pressione'], str)):
+                                press = info['pressione']
+                            else:
+                                press = str(round(info['pressione'],1))
                         tempr = ' '
                         if('temperatura' in info):
                             tempr = str(round(info['temperatura'],1))
                         umid = ' '
                         if('humidity' in info):
-                            umid = str(round(info['humidity'],1))
+                            if isinstance(info['humidity'],str):
+                                umid = info['humidity']
+                            else:
+                                umid = str(round(info['humidity'],1))
                         voltage = ' '
                         if('voltage' in info):
-                            voltage =  str(round(info['voltage'],2))
+                            if(isinstance(info['voltage'], str) == True):
+                                voltage = info['voltage']
+                            else:
+                                voltage =  str(round(info['voltage'],2))
                         corrente = ' '
                         if('corrente' in info):
-                            corrente = str(round(info['corrente'],2))
+                            if(isinstance(info['corrente'], str) == True):
+                                corrente = info['corrente']
+                            else:
+                                corrente = str(round(info['corrente'],2))
                         #if(tdiff < 500):    #ultimo msg non più vecchio di 10min
                         qr += str(info['nodenum'])+"','"+info['user']+"','"+str(round(info['chutil'],2))+"','"+ \
                                 str(round(info['airutil'],2))+"','"+str(info['battlv'])+"','"+press+"','"+tempr+"','"+umid+"','"+voltage+"','"+corrente+"')"
