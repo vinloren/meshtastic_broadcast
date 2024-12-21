@@ -208,6 +208,12 @@ class App(QWidget):
         conn = dba.connect('meshDB.db')
         cur = conn.cursor()
         cur.execute(qr)
+        if(cur.rowcount < 1):
+            data = datetime.datetime.now().strftime("%y/%m/%d")
+            ora =  datetime.datetime.now().strftime("%T")                
+            qr = "insert into meshnodes (data,ora,longname,lat,lon) values('"+data+ \
+            "','"+ora+"','mioGW',"+mylat+","+mylon+")"
+            cur.execute(qr)
         conn.commit()
         cur.close()
         conn.close()
