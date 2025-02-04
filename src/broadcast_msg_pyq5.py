@@ -24,6 +24,7 @@ class Interceptor(QWebEngineUrlRequestInterceptor):
 class App(QWidget):
     
     RUNNING = False
+    port = None
     rigacsv = 0
     mynodeId = 0
     count = 0
@@ -35,10 +36,11 @@ class App(QWidget):
     dataDB   = pyqtSignal(object)
 
 
-    def __init__(self):
+    def __init__(self,port):
         super().__init__()
         self.title = 'Meshtastic data show'
         self.interceptor = Interceptor()
+        self.port = port
         self.initUI()
         
     def initUI(self):
@@ -1299,11 +1301,13 @@ class meshInterface(QThread):
     sendtx   = True
     secondi  = 0
     lastcnt  = -1
+    port = None
 
     def setInterface(self):    
         try:
-            self.interface =  meshtastic.serial_interface.SerialInterface()
-            pub.subscribe(self.onReceive, "meshtastic.receive") 
+            print(f"Port: ",ex.port)
+            self.interface =  meshtastic.serial_interface.SerialInterface(ex.port)
+            pub.subscribe(self.onReceive, "meshtastic.receive")
             print("Set interface..")
             return True
         except Exception as err:
@@ -1333,6 +1337,7 @@ class meshInterface(QThread):
     
     def run(self):
         print("meshInterface started..")
+
         if(self.setInterface() == False):
             return
         
@@ -1526,7 +1531,12 @@ class callDB(QThread):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = App() 
+    port = sys.argv[1] if len(sys.argv) > 1 else None
+    print("Port")
+    # Crea la finestra principale e passale il parametro port
+    ex = App(port)
+    print(ex.port)
     ex.loadHist()
     ex.loadPeers()
+    ex.show()
     sys.exit(app.exec_())  
