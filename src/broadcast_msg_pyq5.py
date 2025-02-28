@@ -714,14 +714,19 @@ class App(QWidget):
                             voltage = packet['decoded']['telemetry']['environmentMetrics']['voltage']  
                         if('current' in packet['decoded']['telemetry']['environmentMetrics']):
                             current =packet['decoded']['telemetry']['environmentMetrics']['current'] 
-                        self.updateSensors(packet['from'],temperatura,pressione,humidity,voltage,current)
-                        self.showInfo()
-                        pdict ={}
-                        pdict.update({'pressione': pressione})
-                        pdict.update({'temperat': temperatura})
-                        pdict.update({'umidita': humidity})
-                        pdict.update({'chiave': from_})
-                        self.calldb.InsUpdtDB(pdict)
+                        try:
+                            self.updateSensors(packet['from'],temperatura,pressione,humidity,voltage,current)
+                            self.showInfo()
+                            pdict ={}
+                            pdict.update({'pressione': pressione})
+                            pdict.update({'temperat': temperatura})
+                            pdict.update({'umidita': humidity})
+                            pdict.update({'chiave': from_})
+                            self.calldb.InsUpdtDB(pdict)
+                        except:
+                            testo = datetime.datetime.now().strftime("%d/%m/%y %T")+" "+msgda+" Dati sporchi in packet[decoded]telemetry]"
+                            self.ricevuti.append(testo)
+
                         
 
             elif (packet['decoded']['portnum'] == 'TEXT_MESSAGE_APP'):
