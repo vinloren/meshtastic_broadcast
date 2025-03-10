@@ -22,7 +22,17 @@ class send_node():
     def manda_nodo(self,data):
         url = "http://localhost:5000/add_node"
         nodo = {}
-        nodo['node_id'] = '!12345678'
+        # trasforma nodenum da decimale a esadecimale = from_id
+        node_id = ['!','\0','\0','\0','\0','\0','\0','\0','\0']
+        trd = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+        j = 8
+        x = int(data['nodenum'])
+        while(j>0):
+            y = x%16
+            node_id[j] = trd[y]
+            j -= 1
+            x = int(x/16)
+        nodo['node_id'] = "".join(node_id)
         nodo['nome'] = data['nome']
         date = data['dataora'].split()
         ymd = date[0][6:8]+"/"+date[0][3:5]+"/"+date[0][0:2]
@@ -877,6 +887,7 @@ class App(QWidget):
                     self.table1.setItem(r,1,item1)
                     found += 1
                     unode['nome'] = info['user']
+                    unode['nodenum'] = info['nodenum']
                 item2 = QTableWidgetItem()
                 if('alt' in info):
                     item2.setText(str(info['alt']))
