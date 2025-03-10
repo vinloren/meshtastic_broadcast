@@ -14,7 +14,36 @@ import meshtastic.serial_interface
 from pubsub import pub
 import time
 from time import sleep
-import datetime
+import datetime, requests
+
+
+class send_node():
+    # Invia la richiesta POST
+    def manda_nodo(self,data):
+        url = "http://localhost:5000/add_node"
+        nodo = {}
+        nodo['node_id'] = '!12345678'
+        nodo['nome'] = data['nome']
+        date = data['dataora'].split()
+        ymd = date[0][6:8]+"/"+date[0][3:5]+"/"+date[0][0:2]
+        print(ymd)
+        print(date[1])
+        nodo['date'] = ymd
+        nodo['ora'] = date[1]
+        nodo['lat'] = data['lat']
+        nodo['lon'] = data['lon']
+        nodo['alt'] = data['alt']
+    
+        response = requests.post(url, json=nodo)
+
+        # Controlla la risposta
+        if response.status_code == 200:
+            print("Richiesta inviata con successo!")
+            print("Risposta del server:", response.json())  # Se la risposta è in formato JSON
+        else:
+            print(f"Errore nella richiesta: {response.status_code}")
+            print("Dettagli errore:", response.text)
+
 
 
 class Interceptor(QWebEngineUrlRequestInterceptor):
@@ -470,7 +499,7 @@ class App(QWidget):
             self.nodeInfo.append(info)
         cur.close()
         conn.close()  
-        #self.showInfo()
+        #self.showInfo(False)
 
     def chusageGreen(self):
         self.chusage.setStyleSheet("QProgressBar::chunk "
@@ -573,7 +602,7 @@ class App(QWidget):
                 pdict.update({'longname': nome})
                 pdict.update({'chiave': from_})
                 self.calldb.InsUpdtDB(pdict)
-                self.showInfo()
+                self.showInfo(False)
             
             elif (packet['decoded']['portnum'] == 'ADMIN_APP'):
                 tipmsg =  'ADMIN_APP'
@@ -636,7 +665,7 @@ class App(QWidget):
                             pdict.update({'alt': 0})
                             pdict.update({'chiave': from_})
                             self.calldb.InsUpdtDB(pdict)
-                    self.showInfo()
+                    self.showInfo(True)
                     
                 if('rxSnr' in packet):
                     item11 = QTableWidgetItem()
@@ -648,7 +677,7 @@ class App(QWidget):
                     pdict.update({'snr': packet['rxSnr']})
                     pdict.update({'chiave': from_})
                     self.calldb.InsUpdtDB(pdict)
-                    self.showInfo() 
+                    self.showInfo(False) 
                 
             elif (packet['decoded']['portnum'] == 'TELEMETRY_APP'):
                     tipmsg = 'TELEMETRY_APP'
@@ -688,7 +717,7 @@ class App(QWidget):
                         else:
                             try:
                                 self.updateTelemetry(packet['from'],battlvl,chanutil,airutil) 
-                                self.showInfo()
+                                self.showInfo(False)
                                 pdict ={}
                                 pdict.update({'batt': battlvl})
                                 pdict.update({'chanutil': chanutil})
@@ -716,7 +745,7 @@ class App(QWidget):
                             current =packet['decoded']['telemetry']['environmentMetrics']['current'] 
                         try:
                             self.updateSensors(packet['from'],temperatura,pressione,humidity,voltage,current)
-                            self.showInfo()
+                            self.showInfo(False)
                             pdict ={}
                             pdict.update({'pressione': pressione})
                             pdict.update({'temperat': temperatura})
@@ -829,31 +858,43 @@ class App(QWidget):
             self.csvFile.close()
             self.log.append("File meshtastic_data.csv pronto per uso.")
 
-    def showInfo(self):
+    def showInfo(self,opt):
         r = 0
         self.table1.setRowCount(r)
         for info in self.nodeInfo:
+            found = 0
+            unode = {}
             if('ts' in info):
                 self.table1.setRowCount(r+1)
                 item0 = QTableWidgetItem()
                 item0.setText(info['time'])
                 self.table1.setItem(r,0,item0)
+                found += 1
+                unode['dataora'] = info['time']
                 item1 = QTableWidgetItem()
                 if('user' in info):
                     item1.setText(info['user'])
                     self.table1.setItem(r,1,item1)
+                    found += 1
+                    unode['nome'] = info['user']
                 item2 = QTableWidgetItem()
                 if('alt' in info):
                     item2.setText(str(info['alt']))
                     self.table1.setItem(r,2,item2)
+                    found += 1
+                    unode['alt'] = info['alt']
                 if('lat' in info):
                     item3 = QTableWidgetItem()
                     item3.setText(str(info['lat'])[0:8])
                     self.table1.setItem(r,3,item3)
+                    found += 1
+                    unode['lat'] = info['lat']
                 if('lon' in info):
                     item4 = QTableWidgetItem()
                     item4.setText(str(info['lon'])[0:8])
                     self.table1.setItem(r,4,item4)
+                    found += 1
+                    unode['lon'] = info['lon']
                 if('battlv' in info):
                     item5 = QTableWidgetItem()
                     item5.setText(str(info['battlv']))
@@ -898,6 +939,12 @@ class App(QWidget):
                     else:
                         item13.setText(str(round(info['humidity']*10)/10))
                     self.table1.setItem(r,13,item13)
+                if found == 5:
+                    if opt:
+                        try:
+                            send_node.manda_nodo(None,unode)
+                        except:
+                            print("Remote server failed")
                 r += 1
     
     def testMsgOrig(self,msgID,orig):
@@ -983,7 +1030,7 @@ class App(QWidget):
                 self.insertDB(qr)
                 self.nodeInfo[i]['_id'] = self.max_IdDB()
             self.nodeInfo[i]['ts'] = datetime.datetime.now().timestamp()
-            self.showInfo()     # insert data in Table1 and set marker on geomap
+            self.showInfo(False)     # insert data in Table1 and set marker on geomap
             print(self.nodeInfo[i])
 
 
