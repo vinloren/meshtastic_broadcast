@@ -435,7 +435,7 @@ class App(QWidget):
         conn.close()  
 
     def removeOld(self):
-        #trova data minore di 7gg rispetto oggi
+        #trova data minore di 10gg rispetto oggi
         try:
             ng = int(self.numgg.text())
         except:
@@ -1527,7 +1527,14 @@ class callDB(QThread):
         while(True):
             time.sleep(0.5)
             self.slptcnt += 1
-            #ogli 10 minuti manda di tab meshnodes data,ora,nodenum,longname,alt,lat,lon 
+            #ogni 24 ore controlla rimozione dati vecchi oltre 10gg
+            #ciò nel caso broadcast sia attivo h24 altrimenti la 
+            #pulizia avviene ad ogni chiusura di applicazione
+            if(self.slptcnt % 172800 == 0):
+                ex.removeOld()
+                msg = datetime.datetime.now().strftime("%T")+" Rimossi record vecchi oltre 10gg"
+                ex.ricevuti.append(msg)
+            #ogni 10 minuti manda di tab meshnodes data,ora,nodenum,longname,alt,lat,lon 
             # a swrver flask per elaborazione locale
             if(self.slptcnt % 1200 == 0):
                 self.callFlask()
