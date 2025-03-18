@@ -54,3 +54,6 @@ Il 16 GFeb 2023 sono stati fatti aggiornamenti per supportare il livello 2.x.x d
 Il 19 Settembre modificato applicazione per rendere possibile il log dei messaggi originati da ciascun nodo nel mesh scartando le ritrasmissioni fatte in rete. Aggiunta tabella origmsg in meshDB che poi può essere elaborata separatamente dall'applicazione.
 Il 19 Dicembre 2024 aggiunto accettazione di qsl? per richiesta ack da parte del ricevente comunque sia scritto qsl o QSL o Qsl etc. Aggiunto display di rssi e snr 
 ricevuti in risposta
+Il 18 Marzo aggiunta interfaccia per invio ogni 10min verso server Flask i riferimenti 
+posizionali e di orario per mappare ciascun nodo in rete e rendere la mappa visibile a
+chi è iscritto alla rete stessa.
