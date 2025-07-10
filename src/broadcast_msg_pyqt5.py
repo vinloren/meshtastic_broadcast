@@ -20,7 +20,7 @@ import datetime, requests
 class send_node():
     # Invia la richiesta POST
     def manda_nodo(self,datas):
-        url = "https://vinmqtt.hopto.org:5000/add_node"
+        url = "https://"+ex.flasksrv.text()+"/add_node"
 
         for data in datas:
             nodo = {}
@@ -129,6 +129,9 @@ class App(QWidget):
         self.combonode.addItem("map tutti i nodi")
         self.combonode.setMinimumWidth(130)
         self.combonode.setMaximumWidth(140)
+        self.lblflask = QLabel("Flask srv")
+        self.flasksrv = QLineEdit()
+        self.flasksrv.setText("vinmqtt.hopto.org")
         hhome = QHBoxLayout()
         hhome.addWidget(mylatlbl)
         hhome.addWidget(self.mylat)
@@ -143,11 +146,11 @@ class App(QWidget):
         hhome.addWidget(self.combomap)
         hhome.addWidget(self.lblcbnode)
         hhome.addWidget(self.combonode)
-        hhome.addWidget(voidlbl)
+        hhome.addWidget(self.lblflask)
+        hhome.addWidget(self.flasksrv)
         hhome.addWidget(voidlbl1)
         hhome.addWidget(voidlbl2)
         hhome.addWidget(voidlbl3)
-        hhome.addWidget(voidlbl4)
         self.layout = QVBoxLayout(self)
         self.setWindowTitle(self.title)
         self.tabs = QTabWidget()
@@ -757,7 +760,7 @@ class App(QWidget):
                             pdict.update({'chiave': from_})
                             self.calldb.InsUpdtDB(pdict)
                         except:
-                            testo = datetime.datetime.now().strftime("%d/%m/%y %T")+" "+msgda+" Dati sporchi in packet[decoded]telemetry]"
+                            testo = datetime.datetime.now().strftime("%d/%m/%y %T")+" Dati sporchi in packet[decoded]telemetry]"
                             self.ricevuti.append(testo)
 
                         

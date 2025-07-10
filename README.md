@@ -51,9 +51,8 @@ I dati mostrati in tabella appaiono una sola volta (l'ultima presente) se la pos
 ### Note
 Il programma è stato provato con meshtastic Python API 1.1.50 e node firmware 1.1.50 e poi successivamente aggiornato per supportare il nuovo ambiente 1.2.xx (ultimo aggiornamento verificato 1.2.17)
 Il 16 GFeb 2023 sono stati fatti aggiornamenti per supportare il livello 2.x.x di Meshtastic
-Il 19 Settembre modificato applicazione per rendere possibile il log dei messaggi originati da ciascun nodo nel mesh scartando le ritrasmissioni fatte in rete. Aggiunta tabella origmsg in meshDB che poi può essere elaborata separatamente dall'applicazione.
+Il 19 Settembre 2023 modificato applicazione per rendere possibile il log dei messaggi originati da ciascun nodo nel mesh scartando le ritrasmissioni fatte in rete. Aggiunta tabella origmsg in meshDB che poi può essere elaborata separatamente dall'applicazione.
 Il 19 Dicembre 2024 aggiunto accettazione di qsl? per richiesta ack da parte del ricevente comunque sia scritto qsl o QSL o Qsl etc. Aggiunto display di rssi e snr 
 ricevuti in risposta
-Il 18 Marzo aggiunta interfaccia per invio ogni 10min verso server Flask i riferimenti 
-posizionali e di orario per mappare ciascun nodo in rete e rendere la mappa visibile a
-chi è iscritto alla rete stessa.
+Il 18 Marzo 2025 aggiunta interfaccia per invio ogni 10min verso server Flask i riferimenti posizionali e di orario per mappare ciascun nodo in rete e rendere la mappa visibile a chi è iscritto alla rete stessa.
+il 10 Luglio 2025 aggiunto campo input precaricato con url server flask di destinazione vinmqtt.hopto.org modificabile per puntare a server alternativi.
