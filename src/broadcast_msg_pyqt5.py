@@ -7,6 +7,8 @@ from PyQt5.QtWebEngineCore import QWebEngineUrlRequestInterceptor
 from PyQt5.QtGui import QIcon
 import folium
 from PyQt5 import QtWidgets, QtWebEngineWidgets
+from PyQt5.QtGui import QFont
+
 
 import sqlite3 as dba
 import meshtastic
@@ -84,6 +86,7 @@ class App(QWidget):
         self.csvFile = open('meshtastic_data.csv','wt')
         mylatlbl = QLabel("Home lat:")
         mylonlbl = QLabel("Home lon:")
+        mylonlbl.setMaximumWidth(50)
         voidlbl = QLabel("")
         voidlbl1 = QLabel("")
         voidlbl2 = QLabel("")
@@ -96,15 +99,15 @@ class App(QWidget):
         voidlbl3.setMinimumWidth(22)
         self.mylat = QLineEdit()
         self.mylon = QLineEdit()
-        self.mylat.setMaximumWidth(70)
-        self.mylon.setMaximumWidth(70)
-        mylatlbl.setMaximumWidth(60)
-        mylonlbl.setMaximumWidth(60)
-        mapbtn =  QPushButton("SHOW MAP",self)
+        mylatlbl.setMaximumWidth(44)
+        mylonlbl.setMaximumWidth(44)
+        mapbtn =  QPushButton("MAP",self)
+        mapbtn.setMaximumWidth(32)
         self.radiob = QRadioButton('Storico giorno:')
+        self.radiob.setMaximumWidth(88)
         self.combobox = QComboBox(self)
-        self.combobox.setMinimumWidth(90)
-        lblmant = QLabel("Mantieni ultimi gg in DB")
+        self.combobox.setMinimumWidth(70)
+        lblmant = QLabel("Ultimi gg in DB")
         self.numgg = QLineEdit()
         self.numgg.setText('10')
         self.numgg.setMaximumSize(24,22)
@@ -117,20 +120,22 @@ class App(QWidget):
         self.mylon.setMinimumWidth(70)
         self.mylat.setText('45.641174')
         self.mylon.setText('9.114828')
-        lblmap = QLabel("Tipo Map")
+        lblmap = QLabel("Mappa")
         self.combomap = QComboBox(self)
         self.combomap.addItem("OpenStreetMap")
         self.combomap.addItem('Stamen Terrain')
         self.combomap.addItem("Stamen Toner")
         self.combomap.addItem("CartoDB positron")
         self.combomap.addItem("CartoDB dark_matter")
+        self.combomap.setMaximumWidth(100)
         self.lblcbnode = QLabel("Map node:")
         self.combonode = QComboBox(self)
         self.combonode.addItem("map tutti i nodi")
-        self.combonode.setMinimumWidth(130)
-        self.combonode.setMaximumWidth(140)
+        self.combonode.setMinimumWidth(90)
+        self.combonode.setMaximumWidth(100)
         self.lblflask = QLabel("Flask srv")
         self.flasksrv = QLineEdit()
+        self.flasksrv.setMinimumWidth(94)
         self.flasksrv.setText("vinmqtt.hopto.org")
         hhome = QHBoxLayout()
         hhome.addWidget(mylatlbl)
@@ -148,9 +153,9 @@ class App(QWidget):
         hhome.addWidget(self.combonode)
         hhome.addWidget(self.lblflask)
         hhome.addWidget(self.flasksrv)
-        hhome.addWidget(voidlbl1)
-        hhome.addWidget(voidlbl2)
-        hhome.addWidget(voidlbl3)
+        #hhome.addWidget(voidlbl1)
+        #hhome.addWidget(voidlbl2)
+        #hhome.addWidget(voidlbl3)
         self.layout = QVBoxLayout(self)
         self.setWindowTitle(self.title)
         self.tabs = QTabWidget()
@@ -159,18 +164,19 @@ class App(QWidget):
         self.tab3 = QWidget()
         self.inText = QLineEdit()
         self.inText.setMaximumWidth(250)
-        self.inText.setText("Test mesh da IU2RPO_GW_868")
+        self.inText.setText("Test mesh da IU2RPO_0970")
         label2 = QLabel("Dati inviati: ")
         label2.setMaximumWidth(70)
-        self.rbtn1 = QCheckBox('Solo ricezione') 
-        self.rbtn3 = QCheckBox('Mess. immediato')
-        self.rbtn2 = QCheckBox('Genera csv file')
+        self.rbtn1 = QCheckBox('Solo rcv') 
+        self.rbtn3 = QCheckBox('Msg imm.')
+        self.rbtn2 = QCheckBox('Gen csv file')
         self.rbtn4 = QCheckBox('Autorisposta')
         self.qsl = QLineEdit()
-        self.qsl.setText('RX qsl de IU2RPO_GW_868 a: ')
-        self.rbtn1.setMaximumWidth(95)
-        self.rbtn2.setMinimumWidth(95)
+        self.qsl.setText('RX qsl de IU2RPO_0970 a: ')
+        self.rbtn1.setMaximumWidth(90)
+        self.rbtn2.setMinimumWidth(90)
         startb = QPushButton("START",self)
+        startb.setMaximumWidth(44)
         startb.clicked.connect(self.start_click)
         self.chusage = QProgressBar(self)
         self.airustx = QProgressBar(self)
@@ -777,7 +783,7 @@ class App(QWidget):
                     if('QSL?' in testo.upper() and self.rbtn4.isChecked()):
                         rmsg = self.qsl.text()
                         rmsg = rmsg + packet['decoded']['text']+" snr:"+str(snr)+",rssi:"+str(rssi)+" da "+msgda
-                        gitrmsg = rmsg.replace('?',' ')  #replace ? with ' ' to avoid mesh flooding if 2+ broadcast_msg_pyq5 running in mesh
+                        rmsg = rmsg.replace('?',' ')  #replace ? with ' ' to avoid mesh flooding if 2+ broadcast_msg_pyq5 running in mesh
                         self.callmesh.sendImmediate(rmsg)
                 except:
                      testo = datetime.datetime.now().strftime("%d/%m/%y %T")+" "+msgda+" Dati sporchi in packet[decoded][text]"
@@ -850,7 +856,8 @@ class App(QWidget):
            lgm = ora+'\t'+dachi+'\t'+user+'\t'+achi+'\t'+tipomsg
         else:
            lgm = ora+'\tNone\t'+user+'\t'+achi+'\t'+tipomsg 
-        self.log.append(lgm)    
+        formatted_lgm = lgm.expandtabs(2)
+        self.log.append(formatted_lgm)    
 
     def handleFile(self):
         if(self.rbtn2.isChecked()):
@@ -1613,6 +1620,9 @@ class callDB(QThread):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    # Imposta un font globale con dimensione 8 (o meno se necessario)
+    font = QFont("Arial", 8)  # Puoi cambiare font family e size Sans Serif
+    app.setFont(font)
     port = sys.argv[1] if len(sys.argv) > 1 else None
     print("Port")
     # Crea la finestra principale e passale il parametro port

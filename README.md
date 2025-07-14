@@ -56,3 +56,4 @@ Il 19 Dicembre 2024 aggiunto accettazione di qsl? per richiesta ack da parte del
 ricevuti in risposta
 Il 18 Marzo 2025 aggiunta interfaccia per invio ogni 10min verso server Flask i riferimenti posizionali e di orario per mappare ciascun nodo in rete e rendere la mappa visibile a chi è iscritto alla rete stessa.
 il 10 Luglio 2025 aggiunto campo input precaricato con url server flask di destinazione vinmqtt.hopto.org modificabile per puntare a server alternativi.
+il 14 Luglio 2025 settato scelta di font Arial 8 globale pyqt5 per omogenizzare la risposta video sia su Windows che su Linux
