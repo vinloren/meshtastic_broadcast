@@ -852,10 +852,12 @@ class App(QWidget):
     
     def logpMsg(self,dachi,user,achi,tipomsg):
         ora = datetime.datetime.now().strftime("%d/%m/%y %T")
-        if(isinstance(dachi,str)):
-           lgm = ora+'\t'+dachi+'\t'+user+'\t'+achi+'\t'+tipomsg
+        if(isinstance(dachi,str)): 
+            while(len(dachi)<9):
+                dachi=dachi+' '   
+            lgm = ora+'\t'+dachi+'\t'+user+'\t'+achi+'\t'+tipomsg
         else:
-           lgm = ora+'\tNone\t'+user+'\t'+achi+'\t'+tipomsg 
+           lgm = ora+'\tNone_____\t'+user+'\t'+achi+'\t'+tipomsg 
         formatted_lgm = lgm.expandtabs(2)
         self.log.append(formatted_lgm)    
 
