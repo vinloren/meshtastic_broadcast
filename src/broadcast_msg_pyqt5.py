@@ -107,7 +107,7 @@ class App(QWidget):
         self.radiob.setMaximumWidth(52)
         self.combobox = QComboBox(self)
         self.combobox.setMinimumWidth(70)
-        lblmant = QLabel("Ultimi gg in DB")
+        lblmant = QLabel("Giorni in DB")
         self.numgg = QLineEdit()
         self.numgg.setText('10')
         self.numgg.setMaximumSize(24,22)
